@@ -11,10 +11,6 @@
 
   programs = {
     chromium.enable = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
     sway = {
       enable = true;
       extraSessionCommands = ''
@@ -41,6 +37,10 @@
   fonts.fonts = with pkgs; [
     fira-code
     font-awesome-ttf
+  ];
+
+  environment.systemPackages = with pkgs; [
+    pinentry
   ];
 
 }

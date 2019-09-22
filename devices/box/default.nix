@@ -33,5 +33,6 @@
     git
     htop
     tig
+    gnupg
   ];
 }
