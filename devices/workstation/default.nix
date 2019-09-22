@@ -11,6 +11,8 @@
   users.users.beinke = {
     packages = with pkgs; [
       vscode
+      signal-desktop
+      tdesktop
     ];
   };
 
