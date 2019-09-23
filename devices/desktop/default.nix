@@ -25,7 +25,7 @@
   };
 
   users.users.beinke = {
-    extraGroups = [ "networkmanager" ];
+    extraGroups = [ "networkmanager" "video" ];
     packages = with pkgs; [
       chromium
       python3
