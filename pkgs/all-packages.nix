@@ -7,8 +7,13 @@ with pkgs;
 # They will be added to `pkgs` or override the existing ones.
 # Of course, packages can depend on each other, as long as there is no cycle.
 let
-  yanerpkgs = rec
-{
-};
+
+  unstable = import <nixos-unstable> {};
+
+  yanerpkgs = rec {
+
+    sway-unstable = unstable.sway;
+
+  };
 
 in yanerpkgs
