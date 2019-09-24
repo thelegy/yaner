@@ -4,6 +4,7 @@
 
   imports = [
     ../box
+    ./pulseaudio.nix
   ];
 
 
@@ -23,8 +24,6 @@
   networking.networkmanager = {
     enable = true;
   };
-
-  hardware.pulseaudio.enable = true;
 
   users.users.beinke = {
     extraGroups = [ "networkmanager" "video" "audio" ];
