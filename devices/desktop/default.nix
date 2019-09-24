@@ -33,6 +33,8 @@
       python3
       kitty
       alacritty
+      mpv
+      youtube-dl
     ];
   };
 
