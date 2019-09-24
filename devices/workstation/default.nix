@@ -13,6 +13,7 @@
       vscode
       signal-desktop
       tdesktop
+      thunderbird
     ];
   };
 
