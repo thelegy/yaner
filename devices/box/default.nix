@@ -29,6 +29,8 @@
     hashedPassword = "$6$rounds=424242$4XeOOipFMr154yFt$duKTFu2mSR9LnrGILjgumlxl8FltvCo9RBjhWi1N56avEVaAJym3LFlw3y2.JMCVYAO2ZpK75eF7B/7cSu5rR0";
   };
 
+  nix.autoOptimiseStore = true;
+
   environment.systemPackages = with pkgs; [
     git
     htop
