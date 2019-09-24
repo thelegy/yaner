@@ -24,8 +24,10 @@
     enable = true;
   };
 
+  hardware.pulseaudio.enable = true;
+
   users.users.beinke = {
-    extraGroups = [ "networkmanager" "video" ];
+    extraGroups = [ "networkmanager" "video" "audio" ];
     packages = with pkgs; [
       chromium
       python3
