@@ -15,7 +15,7 @@
     bc  # For my battery script i use for my sway bar
   ];
 
-  programs.light.enable = true;
+  services.illum.enable = true;
 
   networking.hostName = "th1";
 
