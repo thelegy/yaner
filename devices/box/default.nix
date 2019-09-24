@@ -34,5 +34,6 @@
     htop
     tig
     gnupg
+    inxi
   ];
 }
