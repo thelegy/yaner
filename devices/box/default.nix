@@ -37,5 +37,6 @@
     tig
     gnupg
     inxi
+    lm_sensors
   ];
 }
