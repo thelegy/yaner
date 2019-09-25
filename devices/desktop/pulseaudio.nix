@@ -2,7 +2,10 @@
 
 {
 
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    zeroconf.discovery.enable = true;
+  };
 
   environment.systemPackages = with pkgs; [
     pamixer
