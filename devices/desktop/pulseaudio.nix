@@ -6,7 +6,7 @@
 
   environment.systemPackages = with pkgs; [
     pamixer
-    ncpamixer
+    pulsemixer
   ];
 
   services.acpid = let
