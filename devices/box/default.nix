@@ -6,6 +6,8 @@
   i18n.consoleKeyMap = "de-latin1-nodeadkeys";
   time.timeZone = "Europe/Berlin";
 
+  boot.tmpOnTmpfs = true;
+
   services = {
     openssh.enable = true;
     dbus.enable    = true;
