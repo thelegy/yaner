@@ -14,7 +14,10 @@
       signal-desktop
       tdesktop
       thunderbird
+      steam
     ];
   };
+
+  hardware.steam-hardware.enable = true;
 
 }
