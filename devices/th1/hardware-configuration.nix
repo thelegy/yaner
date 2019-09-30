@@ -16,6 +16,7 @@ let
       "relatime"
       "ssd"
       "space_cache"
+      "compress=zstd"
       "subvolid=${toString subvolid}"
     ];
   };
