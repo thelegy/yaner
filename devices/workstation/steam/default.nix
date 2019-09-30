@@ -2,20 +2,14 @@
 
 {
 
-  imports = [
-    ../desktop
-    ./steam
-  ];
-
   nixpkgs.config.allowUnfree = true;
+
+  hardware.steam-hardware.enable = true;
+  hardware.opengl.driSupport32Bit = true;
 
   users.users.beinke = {
     packages = with pkgs; [
-      vscode
-      signal-desktop
-      tdesktop
-      thunderbird
-      stack
+      steam
     ];
   };
 
