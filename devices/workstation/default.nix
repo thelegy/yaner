@@ -16,6 +16,7 @@
       tdesktop
       thunderbird
       stack
+      all-hies-latest
     ];
   };
 

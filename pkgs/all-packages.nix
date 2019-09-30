@@ -9,11 +9,13 @@ with pkgs;
 let
 
   unstable = import <nixos-unstable> {};
+  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
 
   yanerpkgs = rec {
 
     sway = unstable.sway;
     swaybg = unstable.swaybg;
+    all-hies-latest = all-hies.latest;
 
   };
 
