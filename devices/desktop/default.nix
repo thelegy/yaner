@@ -10,7 +10,7 @@
 
 
   hardware.opengl.enable = true;
-  
+
   hardware.u2f.enable = true;
 
   programs = {
