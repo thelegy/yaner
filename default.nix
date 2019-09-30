@@ -16,8 +16,6 @@ let
         packageOverrides = (import ./pkgs/all-packages.nix) lib;
       };
 
-      nixpkgs.overlays = (import ./overlays) lib;
-
     };
   deviceModules =
     builtins.listToAttrs (map (deviceName: {
