@@ -38,5 +38,6 @@
     gnupg
     inxi
     lm_sensors
+    dmidecode
   ];
 }
