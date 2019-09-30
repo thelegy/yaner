@@ -12,7 +12,8 @@ let
 
   yanerpkgs = rec {
 
-    sway-unstable = unstable.sway;
+    sway = unstable.sway;
+    swaybg = unstable.swaybg;
 
   };
 
