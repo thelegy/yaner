@@ -15,6 +15,7 @@
       tdesktop
       thunderbird
       steam
+      stack
     ];
   };
 
