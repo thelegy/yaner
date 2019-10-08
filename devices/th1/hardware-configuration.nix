@@ -36,6 +36,7 @@ in {
 
   boot.initrd.luks.devices.th1 = {
     device = "/dev/disk/by-uuid/${cryt_uuid}";
+    allowDiscards = true;
   };
 
   fileSystems."/" = root_subvolume 256;
