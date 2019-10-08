@@ -12,10 +12,6 @@ let
     device = "/dev/disk/by-uuid/${root_uuid}";
     fsType = "btrfs";
     options = [
-      "rw"
-      "relatime"
-      "ssd"
-      "space_cache"
       "compress=zstd"
       "subvolid=${toString subvolid}"
     ];
