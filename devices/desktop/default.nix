@@ -35,7 +35,6 @@
 
   fonts.fonts = with pkgs; [
     fira-code
-    font-awesome-ttf
   ];
 
   environment.systemPackages = with pkgs; [
