@@ -4,7 +4,7 @@
 
   imports = [
     ./hardware-configuration.nix
-    ../workstation
+    ../templates/laptop
   ];
 
 
@@ -17,7 +17,6 @@
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  services.illum.enable = true;
 
   networking.hostName = "th1";
 

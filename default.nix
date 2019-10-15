@@ -17,11 +17,11 @@ let
       };
 
     };
-  deviceModules =
-    builtins.listToAttrs (map (deviceName: {
-      name = deviceName;
-      value = makeDevice (./devices + "/${deviceName}");
-    }) (import ./devices/all-devices.nix));
+  hostModules =
+    builtins.listToAttrs (map (hostName: {
+      name = hostName;
+      value = makeDevice (./hosts + "/${hostName}");
+    }) (import ./hosts/all-hosts.nix));
 in
 
-deviceModules
+hostModules

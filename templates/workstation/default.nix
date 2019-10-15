@@ -4,7 +4,7 @@
 
   imports = [
     ../desktop
-    ./steam
+    ../steam
   ];
 
   nixpkgs.config.allowUnfree = true;
