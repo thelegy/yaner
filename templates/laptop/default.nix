@@ -3,8 +3,8 @@
 {
 
   imports = [
-    ./workstation
-    ./amnesia
+    ../workstation
+    ../amnesia
   ];
 
   # Enable brightness switches
