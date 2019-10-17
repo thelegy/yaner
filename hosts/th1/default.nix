@@ -17,9 +17,6 @@
 
   hardware.cpu.intel.updateMicrocode = true;
 
-
-  networking.hostName = "th1";
-
   system.stateVersion = "19.03";
 
 }
