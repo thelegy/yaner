@@ -5,6 +5,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../layers/laptop
+    ../../layers/irb-kerberos
   ];
 
 
