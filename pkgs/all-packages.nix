@@ -9,7 +9,14 @@ with pkgs;
 let
 
   unstable = import <nixos-unstable> {};
-  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+
+  all-hies-repo = fetchFromGitHub {
+    owner = "infinisil";
+    repo = "all-hies";
+    rev = "c4fad117eb79305f5b8bc77a6a28562a5f8d2ca3";
+    sha256 = "19spg5xnb1gdnxal4vp402dknfhbva5jj5yq34qyzvksyn16c3dp";
+  };
+  all-hies = import all-hies-repo {};
 
   yanerpkgs = rec {
 

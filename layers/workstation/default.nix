@@ -11,12 +11,12 @@
 
   users.users.beinke = {
     packages = with pkgs; [
-      vscode
+      all-hies-latest
       signal-desktop
+      stack
       tdesktop
       thunderbird
-      stack
-      all-hies-latest
+      vscode
     ];
   };
 
