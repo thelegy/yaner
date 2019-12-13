@@ -68,6 +68,8 @@
     repo = "ssh://bup@backup.0jb.de/~/th1";
   };
 
+  users.users.beinke.extraGroups = [ "dialout" ];
+
   hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "19.03";
