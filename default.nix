@@ -1,44 +1,67 @@
+# entry point for machine configurations:
+# (import <repo-path>).<netname>.configurations.<hostname>
 
+with builtins;
 let
 
-  # readFilterDir :: ({name:string, path:path, type:string, ...} -> bool) -> path -> [string]
-  readFilterDir = with builtins; lambda: path: let
-    dirContents = readDir path;
-    filterFunc = name: lambda rec {
-      inherit name;
-      path = path + "/${name}";
-      type = dirContents.${name};
-    };
-  in filter filterFunc (attrNames dirContents);
+  # helpers :: { *: ? }
+  helpers = import ./helpers.nix;
 
-  # readVisibleDir :: path -> [ string ]
-  readVisibleDir = readFilterDir ({ name, ... }:
-    (builtins.substring 0 1 name) != ".");
+  # machinesDir :: path
+  machinesDir = ./machines;
 
-  # extraModuleList :: [ path ]
-  extraModuleList = with builtins; map (module: ./modules + "/${module}") (readVisibleDir ./modules);
+  # machineNames :: [ string ]
+  machineNames = with helpers; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
 
-  # makeHost :: { hostName:string, hostPath:path } -> system_config
-  makeHost = 
-    { hostName, hostPath }:
-    { config, pkgs, lib, ... }: {
-      imports = [ hostPath ] ++ extraModuleList;
+  # extraModules :: [ path ]
+  extraModules = with helpers; map (module: ./modules + "/${module}") (readFilterDir (not filterDirHidden) ./modules);
+
+  # channelsDir :: path
+  channelsDir = ./channels;
+
+  # allChannels :: { *: path }
+  allChannels = with helpers; keysToAttrs (channelname: import (channelsDir + "/${channelname}")) (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) channelsDir);
+
+  # mkMachineChannel :: string -> path
+  mkMachineChannel = name:
+    (import (machinesDir + "/${name}/channel.nix")) allChannels;
+
+  # machineChannels :: { *: path }
+  machineChannels = helpers.keysToAttrs mkMachineChannel machineNames;
+
+  # mkMachineConfig :: string -> system_configuration
+  mkMachineConfig = with helpers; name:
+    let
+      path = machinesDir + "/${name}";
+      machineConfigs = foldl' (x: y: x ++ maybeToList (toExistingPath y)) [] [
+        (path + "/configuration.nix")
+        (path + "/hardware-configuration.nix")
+      ];
+    in { pkgs, config, lib, ... }:
+
+    {
+      imports = machineConfigs ++ extraModules;
+
+      lib.helpers = helpers;
+      lib.channels = allChannels;
+
       nixpkgs.config = {
-        packageOverrides = (import ./pkgs/all-packages.nix) lib;
+        packageOverrides = (import ./pkgs/all-packages.nix) { inherit lib config; };
       };
-      networking.hostName = lib.mkDefault hostName;
-      system.stateVersion = lib.mkDefault "19.09";
+
+      nix.nixPath = [ "nixpkgs=${machineChannels.${name}}" ];
+
+      networking.hostName = lib.mkDefault name;
+
     };
 
-  # hostModules :: { *:system_config }
-  hostModules =
-    builtins.listToAttrs (map (hostName: {
-      name = hostName;
-      value = makeHost {
-        inherit hostName;
-        hostPath = (./hosts + "/${hostName}");
-      };
-    }) (readVisibleDir ./hosts));
 in
+{
 
-hostModules
+  # configurations :: { *: system_configuration }
+  configurations = helpers.keysToAttrs mkMachineConfig machineNames;
+
+  # channels :: { *: path }
+  channels = machineChannels;
+
+}
