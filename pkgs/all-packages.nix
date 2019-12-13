@@ -20,8 +20,6 @@ let
 
   yanerpkgs = rec {
 
-    sway = unstable.sway;
-    swaybg = unstable.swaybg;
     all-hies-latest = all-hies.latest;
 
   };

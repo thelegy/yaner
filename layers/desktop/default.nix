@@ -5,7 +5,7 @@
   imports = [
     ../box
     ./pulseaudio.nix
-    ./sway/unstable
+    ./sway
   ];
 
 
