@@ -10,7 +10,12 @@
 
 
   # Fix the LTE modem not being detected
-  systemd.services."network-manager".requires = [ "modem-manager.service" ];
+  systemd.services.NetworkManager = let
+    modemmanager = "ModemManager.service";
+  in {
+    after = [ modemmanager ];
+    requires = [ modemmanager ];
+  };
 
   users.users.beinke.packages = with pkgs; [
     bc  # For my battery script i use for my sway bar
