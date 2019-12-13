@@ -24,6 +24,7 @@
   users.users.beinke = {
     extraGroups = [ "networkmanager" "video" "audio" ];
     packages = with pkgs; [
+      redshift-wlr
       chromium
       python3
       kitty

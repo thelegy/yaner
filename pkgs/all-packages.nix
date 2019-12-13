@@ -20,6 +20,8 @@ let
 
   yanerpkgs = rec {
 
+    redshift-wlr = unstable.redshift-wlr;
+
     all-hies-latest = all-hies.latest;
 
   };
