@@ -10,13 +10,7 @@ let
 
   unstable = import config.lib.channels."nixos-unstable" {};
 
-  all-hies-repo = fetchFromGitHub {
-    owner = "infinisil";
-    repo = "all-hies";
-    rev = "c4fad117eb79305f5b8bc77a6a28562a5f8d2ca3";
-    sha256 = "19spg5xnb1gdnxal4vp402dknfhbva5jj5yq34qyzvksyn16c3dp";
-  };
-  all-hies = import all-hies-repo {};
+  all-hies = import config.lib.channels."all-hies" {};
 
   yanerpkgs = rec {
 
