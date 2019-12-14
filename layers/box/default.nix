@@ -33,8 +33,6 @@
 
   nix.autoOptimiseStore = true;
 
-  nix.nixPath = ["/etc/nixos"] ++ options.nix.nixPath.default;
-
   environment.systemPackages = with pkgs; [
     git
     htop
