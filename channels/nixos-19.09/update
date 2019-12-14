@@ -1,4 +1,14 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i sh -p nix-prefetch-git
+#! nix-shell -i sh -p nix-prefetch-git jq
 
-nix-prefetch-git --rev refs/heads/nixos-19.09 --no-deepClone https://github.com/NixOS/nixpkgs-channels/ > channel.json
+
+url="https://github.com/NixOS/nixpkgs-channels/"
+ref="refs/heads/nixos-19.09"
+
+
+nix-prefetch-git --rev "$ref" \
+                 --no-deepClone \
+                 "$url" \
+  | jq --arg ref "$ref" \
+       '{ref: $ref} + .' \
+  > channel.json

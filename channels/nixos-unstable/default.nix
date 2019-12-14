@@ -1,3 +1,5 @@
+name :
+
 with builtins;
 
 let
@@ -5,7 +7,6 @@ let
   channelDef = fromJSON ( readFile ./channel.json );
 
 in fetchGit {
-  name = "nixpkgs-unstable";
-  ref = "nixos-unstable";
-  inherit (channelDef) url rev;
+  inherit name;
+  inherit (channelDef) url rev ref;
 }

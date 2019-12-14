@@ -1,4 +1,5 @@
 {
+  "ref": "refs/heads/nixos-unstable",
   "url": "https://github.com/NixOS/nixpkgs-channels/",
   "rev": "3140fa89c51233397f496f49014f6b23216667c2",
   "date": "2019-12-05T01:28:43+01:00",
