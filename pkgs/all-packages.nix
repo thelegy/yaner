@@ -8,7 +8,7 @@ with pkgs;
 # Of course, packages can depend on each other, as long as there is no cycle.
 let
 
-  unstable = import <nixos-unstable> {};
+  unstable = import config.lib.channels."nixos-unstable" {};
 
   all-hies-repo = fetchFromGitHub {
     owner = "infinisil";
