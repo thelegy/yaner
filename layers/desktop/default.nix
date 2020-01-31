@@ -31,6 +31,7 @@
       alacritty
       mpv
       youtube-dl
+      qbar
     ];
   };
 

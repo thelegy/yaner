@@ -18,6 +18,8 @@ let
 
     all-hies-latest = all-hies.latest;
 
+    qbar = callPackage ./qbar {};
+
   };
 
 in yanerpkgs
