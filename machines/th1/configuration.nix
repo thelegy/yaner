@@ -4,6 +4,7 @@
 
   imports = [
     ./hardware-configuration.nix
+    ../../layers/t470
     ../../layers/laptop
     ../../layers/irb-kerberos
   ];
@@ -18,7 +19,6 @@
   };
 
   users.users.beinke.packages = with pkgs; [
-    bc  # For my battery script i use for my sway bar
   ];
 
   # Enable the borg backup
@@ -70,7 +70,6 @@
 
   users.users.beinke.extraGroups = [ "dialout" ];
 
-  hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "19.03";
 
