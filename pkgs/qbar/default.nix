@@ -1,7 +1,6 @@
-{ pkgs ? import <nixpkgs> {}
-, fetchgit ? pkgs.fetchgit
-, haskellPackages ? pkgs.haskellPackages
-, callCabal2nix ? haskellPackages.callCabal2nix
+let pkgs = import <nixpkgs> {}; in
+{ fetchgit ? pkgs.fetchgit
+, callCabal2nix ? pkgs.haskellPackages.callCabal2nix
 }:
 
 let

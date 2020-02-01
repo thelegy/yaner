@@ -31,7 +31,7 @@
       alacritty
       mpv
       youtube-dl
-      qbar
+      haskellPackages.qbar
     ];
   };
 

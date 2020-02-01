@@ -14,11 +14,15 @@ let
 
   yanerpkgs = rec {
 
+    haskell = pkgs.haskell // {
+      packageOverrides = self: super: {
+        qbar = self.callPackage ./qbar {};
+      };
+    };
+
     redshift-wlr = unstable.redshift-wlr;
 
     all-hies-latest = all-hies.latest;
-
-    qbar = callPackage ./qbar {};
 
   };
 
