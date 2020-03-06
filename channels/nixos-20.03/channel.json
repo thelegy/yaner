@@ -1,0 +1,8 @@
+{
+  "ref": "refs/heads/nixos-20.03",
+  "url": "https://github.com/NixOS/nixpkgs-channels/",
+  "rev": "04aca9ac24ad24c2dbeb37e1cfa94d8453f07a51",
+  "date": "2020-02-23T09:28:00-05:00",
+  "sha256": "152k3aisxqd219yvcy6xr8frh0yrs9ycaw1ik04c2lp49d21b8nh",
+  "fetchSubmodules": false
+}
