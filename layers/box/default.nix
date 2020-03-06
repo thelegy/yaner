@@ -3,7 +3,7 @@
 {
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  i18n.consoleKeyMap = "de-latin1-nodeadkeys";
+  console.keyMap = "de-latin1-nodeadkeys";
   time.timeZone = "Europe/Berlin";
 
   boot.tmpOnTmpfs = true;

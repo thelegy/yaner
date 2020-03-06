@@ -1,1 +1,1 @@
-channels: channels."nixos-19.09"
+channels: channels."nixos-20.03"

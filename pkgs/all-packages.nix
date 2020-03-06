@@ -20,7 +20,7 @@ let
       };
     };
 
-    redshift-wlr = unstable.redshift-wlr;
+    # redshift-wlr = unstable.redshift-wlr;
 
     all-hies-latest = all-hies.latest;
 
