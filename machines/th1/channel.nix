@@ -1,1 +1,1 @@
-channels: channels."nixos-20.03"
+channels: channels."nixos-unstable"
