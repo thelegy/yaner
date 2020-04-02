@@ -1,6 +1,15 @@
 { config, options, pkgs, ... }:
 
-{
+let
+
+  steam = pkgs.steam.override {
+    extraPkgs = pkgs: with pkgs; [
+      libbsd
+    ];
+    nativeOnly = true;
+  };
+
+in {
 
   nixpkgs.config.allowUnfree = true;
 
@@ -12,8 +21,9 @@
   hardware.pulseaudio.support32Bit = true;
 
   users.users.beinke = {
-    packages = with pkgs; [
-      steam
+    packages = [
+      pkgs.steam
+      steam.run
     ];
   };
 
