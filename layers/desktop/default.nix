@@ -14,7 +14,12 @@
   hardware.u2f.enable = true;
 
   programs = {
-    chromium.enable = true;
+    chromium = {
+      enable = true;
+      extensions = [
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+      ];
+    };
   };
 
   networking.networkmanager = {
