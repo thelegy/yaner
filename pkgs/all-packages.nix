@@ -15,10 +15,12 @@ let
   yanerpkgs = rec {
 
     haskell = pkgs.haskell // {
-      packageOverrides = self: super: {
-        qbar = self.callPackage ./qbar {};
-      };
+      packageOverrides = self: super:
+        ( import ./qbar pkgs self super {} ) // {
+        };
     };
+
+    qbar = haskellPackages.qbar;
 
     # redshift-wlr = unstable.redshift-wlr;
 

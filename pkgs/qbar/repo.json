@@ -1,8 +1,10 @@
 {
   "ref": "refs/heads/master",
   "url": "https://git.c3pb.de/jens/qbar.git",
-  "rev": "18f7a794cfc90bd7b57e3fb65a8711e6735b12b7",
-  "date": "2020-02-24T19:54:50+01:00",
-  "sha256": "10vhjj8vd90fqkhy6498s9slyfmn4xhyfpbh0cmivaajs97jq3x3",
-  "fetchSubmodules": false
+  "rev": "5c8ef1e1adfae4414f11392b63662d2791f45634",
+  "date": "2020-03-19T22:27:09+01:00",
+  "sha256": "0q7ikpscxjrbbxzl5vqbf6szzfc05l4gh4f1x2zdwswny5a5qd93",
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
 }
