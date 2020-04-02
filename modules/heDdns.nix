@@ -44,12 +44,12 @@ let
           OnCalendar value for the systemd-timer. See SYSTEMD.TIME(7).
         '';
       };
-      onBoot = mkOption {
+      onBootSec = mkOption {
         type = with types; nullOr str;
         default = "1min";
         example = "5min";
         description = ''
-          OnBoot value for the systemd-timer. See SYSTEMD.TIME(7).
+          OnBootSec value for the systemd-timer. See SYSTEMD.TIME(7).
         '';
       };
       updateEndpoint = mkOption {
@@ -93,7 +93,7 @@ let
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
       timerConfig = { Unit = "he-ddns-${domainCfg.domain}.service"; }
-        // (optionalAttrs (!isNull domainCfg.onBoot) { OnBoot = domainCfg.onBoot; })
+        // (optionalAttrs (!isNull domainCfg.onBootSec) { OnBootSec = domainCfg.onBootSec; })
         // (optionalAttrs (!isNull domainCfg.onCalendar) { OnCalendar = domainCfg.onCalendar; });
     };
   };
