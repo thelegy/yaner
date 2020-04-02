@@ -1,7 +1,11 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+  security.rngd.enable = lib.mkDefault false;
+
+  # Restore systemd default
+  services.logind.killUserProcesses = lib.mkDefault true;
 
   console.keyMap = "de-latin1-nodeadkeys";
   time.timeZone = "Europe/Berlin";
