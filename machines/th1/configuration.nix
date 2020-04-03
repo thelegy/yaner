@@ -65,7 +65,7 @@
       };
     };
     extraPruneArgs = "--list";
-    repo = "ssh://bup@backup.0jb.de/~/th1";
+    repo = "borg@backup.0jb.de:.";
   };
 
   users.users.beinke.extraGroups = [ "dialout" ];

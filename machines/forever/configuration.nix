@@ -3,6 +3,7 @@
 
   imports = [
     ../../layers/box
+    ./borg-server.nix
   ];
 
   boot.loader.grub.configurationLimit = 3;
