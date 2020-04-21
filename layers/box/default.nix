@@ -52,5 +52,6 @@
     inxi
     lm_sensors
     dmidecode
+    neovim-customized
   ];
 }
