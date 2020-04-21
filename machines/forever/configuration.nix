@@ -63,17 +63,6 @@
     };
   };
 
-  systemd.services.foo = {
-    wantedBy = [ "multi-user.target" ];
-    script = ''
-      false
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      ExecReload = "${pkgs.coreutils}/bin/true";
-    };
-  };
-
 
   system.stateVersion = "19.09";
 
