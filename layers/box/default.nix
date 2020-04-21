@@ -52,6 +52,8 @@
     inxi
     lm_sensors
     dmidecode
+    magic-wormhole
+    ripgrep
     neovim-customized
   ];
 }
