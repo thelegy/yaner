@@ -5,16 +5,8 @@ let
 
   plumbing = (import ./default.nix);
 
-  # channel :: path
+in {
+  system = plumbing.systems.${hostname};
+  iso = plumbing.isos.${hostname};
   channel = plumbing.channels.${hostname};
-
-  # configuration :: system_configuration
-  configuration = plumbing.configurations.${hostname};
-
-  nixos = import "${channel}/nixos" {
-    system = "x86_64-linux";
-    configuration = configuration;
-  };
-
-in
-nixos.system
+}

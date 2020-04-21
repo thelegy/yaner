@@ -30,7 +30,7 @@ let
   machineChannels = helpers.keysToAttrs mkMachineChannel machineNames;
 
   # mkMachineConfig :: string -> system_configuration
-  mkMachineConfig = with helpers; name:
+  mkMachineConfig = with helpers; name: { isIso ? false }:
     let
       path = machinesDir + "/${name}";
       machineConfigs = foldl' (x: y: x ++ maybeToList (toExistingPath y)) [] [
@@ -44,6 +44,7 @@ let
 
       _module.args.helpers = helpers;
       _module.args.channels = allChannels;
+      _module.args.isIso = isIso;
 
       nixpkgs.config = {
         packageOverrides = (import ./pkgs/all-packages.nix) { inherit lib config; };
@@ -55,13 +56,52 @@ let
 
     };
 
-in
-{
+  # mkMachineSystemDerivation :: string -> system_derivation
+  mkMachineSystemDerivation = name:
+    let
+      channel = channels.${name};
+      configuration = configurations.${name} {};
+    in (import "${channel}/nixos" {
+      system = "x86_64-linux";
+      configuration = configuration;
+    }).system;
 
-  # configurations :: { *: system_configuration }
+  # mkMachineIsoDerivation :: string -> system_derivation
+  mkMachineIsoDerivation = name:
+    let
+      channel = channels.${name};
+      configuration = { config, ... }:
+      {
+        imports = [
+          (configurations.${name} { isIso = true; })
+          <nixpkgs/nixos/modules/installer/cd-dvd/iso-image.nix>
+          <nixpkgs/nixos/modules/profiles/all-hardware.nix>
+          <nixpkgs/nixos/modules/profiles/base.nix>
+        ];
+        isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-isohost-${name}.iso";
+        isoImage.volumeID = substring 0 11 "NIXOS_ISO";
+        isoImage.makeEfiBootable = true;
+        isoImage.makeUsbBootable = true;
+        boot.loader.grub.memtest86.enable = true;
+      };
+    in (import "${channel}/nixos" {
+      system = "x86_64-linux";
+      configuration = configuration;
+    }).config.system.build.isoImage;
+
+  # configurations :: { *: ({ ... } -> system_configuration) }
   configurations = helpers.keysToAttrs mkMachineConfig machineNames;
+
+  # systems :: { *: system_derivation }
+  systems = helpers.keysToAttrs mkMachineSystemDerivation machineNames;
+
+  # isos :: { *: iso_derivation }
+  isos = helpers.keysToAttrs mkMachineIsoDerivation machineNames;
 
   # channels :: { *: path }
   channels = machineChannels;
 
+in
+{
+  inherit configurations systems isos channels;
 }

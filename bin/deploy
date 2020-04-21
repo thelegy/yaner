@@ -24,7 +24,7 @@ fi
 source bin/util.zsh
 
 usage() {
-  print "Usage: $cmdname <hostname> [switch|boot|reboot|test|dry-activate|build]" >&2
+  print "Usage: $cmdname <hostname> [switch|boot|reboot|test|dry-activate|build|iso]" >&2
 }
 
 positional=()
@@ -70,7 +70,7 @@ then
   operation="boot"
   set_profile=1
   reboot=1
-elif [[ "$operation" = "test" || "$operation" = "dry-activate" || "$operation" = "build" ]]
+elif [[ "$operation" = "test" || "$operation" = "dry-activate" || "$operation" = "build" || "$operation" = "iso" ]]
 then
   # pass
 else
@@ -90,8 +90,17 @@ fi
 readonly local_temp_dir=$(mktemp --tmpdir --directory phoenix-deploy.XXXXXXXXXX)
 trap "rm -rf $local_temp_dir" EXIT INT HUP TERM
 
+if [[ "$operation" == "iso" ]]
+then
+  print_info "Building iso image"
+  nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-iso-$hostname" iso
+  readonly nixos_iso_path=$(realpath "$local_temp_dir/nixos-iso-$hostname")
+  print $nixos_iso_path
+  exit 0
+fi
+
 print_info "Building target system configuration"
-nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-config-$hostname"
+nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-config-$hostname" system
 readonly nixos_config_path=$(realpath "$local_temp_dir/nixos-config-$hostname")
 
 if [[ "$operation" = "build" ]]
@@ -120,7 +129,7 @@ then
 else
   # remote deploy
 
-  nix copy --file nixos.nix --argstr hostname "$hostname" --to "ssh://root@$hostname"
+  nix copy --substitute-on-destination --file nixos.nix --argstr hostname "$hostname" --to "ssh://root@$hostname" system
 
   # The manual way to do it (this is in theory also supported by nixos-rebuild by using '-I')
 
