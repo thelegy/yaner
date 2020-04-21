@@ -4,6 +4,7 @@
   imports = [
     ../../layers/box
     ./borg-server.nix
+    ./docpages.nix
   ];
 
   boot.loader.grub.configurationLimit = 3;
@@ -40,18 +41,20 @@
 
   systemd.services.nginx.wants = [
     "acme-selfsigned-forever.0jb.de.service"
-    "acme-forever.0jb.de.service"
   ];
   systemd.services.nginx.after = [ "acme-selfsigned-forever.0jb.de.service" ];
   systemd.services.nginx.before = [ "acme-forever.0jb.de.service" ];
-
 
   security.acme = {
     email = "mail+letsencrypt@0jb.de";
     acceptTerms = true;
     certs = {
       "forever.0jb.de" = {
+        extraDomains = {
+          "0jb.de" = null;
+        };
         webroot = "/var/lib/acme/acme-challenge";
+        user = "nginx";
         postRun = ''
           systemctl start --failed nginx.service
           systemctl reload nginx.service
