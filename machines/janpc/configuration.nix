@@ -24,6 +24,7 @@
 
   users.users.beinke.packages = [
     pkgs.patchelf
+    pkgs.multimc
   ];
 
 }
