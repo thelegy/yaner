@@ -8,9 +8,9 @@ with pkgs;
 # Of course, packages can depend on each other, as long as there is no cycle.
 let
 
-  unstable = import config.lib.channels."nixos-unstable" {};
+  unstable = import config._module.args.channels."nixos-unstable" {};
 
-  all-hies = import config.lib.channels."all-hies" {};
+  all-hies = import config._module.args.channels."all-hies" { inherit pkgs; };
 
   yanerpkgs = rec {
 

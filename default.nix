@@ -42,8 +42,8 @@ let
     {
       imports = machineConfigs ++ extraModules;
 
-      lib.helpers = helpers;
-      lib.channels = allChannels;
+      _module.args.helpers = helpers;
+      _module.args.channels = allChannels;
 
       nixpkgs.config = {
         packageOverrides = (import ./pkgs/all-packages.nix) { inherit lib config; };
