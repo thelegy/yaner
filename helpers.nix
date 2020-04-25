@@ -106,4 +106,7 @@ rec {
   toExistingPath = path: with builtins;
     if pathExists path then Just path else Nothing;
 
+  # tryImport :: Path -> Maybe a
+  tryImport = path: maybe Nothing (a: Just (import a)) (toExistingPath path);
+
 }

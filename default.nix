@@ -29,6 +29,13 @@ let
   # machineChannels :: { *: path }
   machineChannels = helpers.keysToAttrs mkMachineChannel machineNames;
 
+  # mkMachineArchitecture :: string -> string
+  mkMachineArchitecture = name: with helpers;
+    maybe "x86_64-linux" id (tryImport (machinesDir + "/${name}/system.nix"));
+
+  # machineArchitectures :: { *: string }
+  machineArchitectures = helpers.keysToAttrs mkMachineArchitecture machineNames;
+
   # mkMachineConfig :: string -> system_configuration
   mkMachineConfig = with helpers; name: { isIso ? false }:
     let
@@ -62,7 +69,7 @@ let
       channel = channels.${name};
       configuration = configurations.${name} {};
     in (import "${channel}/nixos" {
-      system = "x86_64-linux";
+      system = machineArchitectures.${name};
       configuration = configuration;
     }).system;
 
@@ -85,7 +92,7 @@ let
         boot.loader.grub.memtest86.enable = true;
       };
     in (import "${channel}/nixos" {
-      system = "x86_64-linux";
+      system = machineArchitectures.${name};
       configuration = configuration;
     }).config.system.build.isoImage;
 
