@@ -40,6 +40,13 @@ in {
       ];
       quota = "25G";
     };
+    itkeller-mc = {
+      path = "/mnt/backup-storage/itkeller-mc";
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+VRZSAJ+6Zv71G40gAiqbjl0qMBwAFBbuZePZIbbnP minecraft@minecraft"
+      ];
+      quota = "5G";
+    };
   };
 
 }
