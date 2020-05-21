@@ -40,9 +40,12 @@
     ];
   };
 
-  fonts.fonts = with pkgs; [
-    fira-code
-  ];
+  fonts = {
+    fonts = with pkgs; [
+      (nerdfonts.override {fonts = [ "FiraCode" ];})
+    ];
+    fontconfig.defaultFonts.monospace = [ "FiraCode Nerd Font" ];
+  };
 
   environment.systemPackages = with pkgs; [
     pinentry
