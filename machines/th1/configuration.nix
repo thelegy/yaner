@@ -1,4 +1,4 @@
-{ config, options, pkgs, ... }:
+{ config, options, pkgs, channels, ... }:
 
 {
 
@@ -17,6 +17,11 @@
     after = [ modemmanager ];
     requires = [ modemmanager ];
   };
+
+  environment.etc = with builtins; let
+    toPinnedChannel = name: repo : { name="nix-channels/${name}"; value={source=repo; }; };
+    pinnedChannels = listToAttrs (map (name: toPinnedChannel name channels."${name}") (attrNames channels));
+  in pinnedChannels;
 
   users.users.beinke.packages = with pkgs; [
   ];
