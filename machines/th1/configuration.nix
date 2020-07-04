@@ -42,7 +42,6 @@
       "/keybase"
       "/mnt"
       "/nix/store"
-      "/opt/altera"
       "/proc"
       "/run"
       "/sys"
