@@ -7,6 +7,6 @@ with lib;
   # Undervolting the cpu for less energy consumation and more power
   services.undervolt = {
     enable = true;
-    coreOffset = "-80";  # undervolt the CPU in mV
+    coreOffset = -80;  # undervolt the CPU in mV
   };
 }
