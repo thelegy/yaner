@@ -67,5 +67,6 @@
     magic-wormhole
     ripgrep
     neovim-customized
+    kitty.terminfo
   ];
 }
