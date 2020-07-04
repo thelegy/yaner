@@ -13,11 +13,17 @@
     packages = with pkgs; [
       all-hies-latest
       direnv
+      file
+      fzf
+      kicad
+      ldns
       signal-desktop
       stack
       tdesktop
       thunderbird
       vscode
+      ormolu
+      mumble
     ];
   };
 

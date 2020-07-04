@@ -27,14 +27,17 @@
   users.users.beinke = {
     extraGroups = [ "networkmanager" "video" "audio" ];
     packages = with pkgs; [
-      redshift-wlr
-      chromium
-      python3
-      kitty
       alacritty
+      chromium
+      grim
+      kitty
       mpv
+      python3
+      qbar
+      redshift-wlr
+      slurp
       youtube-dl
-      haskellPackages.qbar
+      wl-clipboard
     ];
   };
 
@@ -47,6 +50,7 @@
 
   environment.systemPackages = with pkgs; [
     pinentry
+    pinentry-gtk2
     glxinfo
   ];
 
