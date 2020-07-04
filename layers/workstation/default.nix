@@ -9,6 +9,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  boot.kernel.sysctl = options.boot.kernel.sysctl.default // {
+    "fs.inotify.max_user_watches" = 524288;
+  };
+
   users.users.beinke = {
     packages = with pkgs; [
       all-hies-latest
