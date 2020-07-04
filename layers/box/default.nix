@@ -23,8 +23,20 @@
     less.enable = true;
     mtr.enable = true;
     tmux.enable = true;
-    zsh.enable = true;
   };
+
+  programs.zsh = {
+    enable = true;
+    promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+    shellInit = ''
+      command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+    '';
+  };
+
+  environment.shellInit = ''
+    PATH=~/.local/bin:$PATH
+    export PATH
+  '';
 
   users.mutableUsers = false;
   users.users.beinke = {
