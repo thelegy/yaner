@@ -10,7 +10,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices.system = {
-    device = "/dev/disk/by-uuid/1026ba1d-40ca-4f4b-9cff-fcc897cd1b09";
+    device = "/dev/disk/by-uuid/924d6200-141f-4e95-9adc-fe410687be5b";
     allowDiscards = true;
   };
 
