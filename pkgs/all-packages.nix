@@ -22,7 +22,7 @@ let
 
     multimc = pkgs.runCommand "multimc" {} ''
       mkdir -p $out/bin
-      sed 's|${pkgs.jdk}/bin|${pkgs.openjdk13}/bin|' ${pkgs.multimc}/bin/multimc > $out/bin/multimc
+      sed 's|${pkgs.jdk}/bin|${pkgs.openjdk14}/bin|' ${pkgs.multimc}/bin/multimc > $out/bin/multimc
       chmod +x $out/bin/*
     '';
 
