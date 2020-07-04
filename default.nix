@@ -73,7 +73,7 @@ let
       configuration = configuration;
     }).system;
 
-  # mkMachineIsoDerivation :: string -> system_derivation
+  # mkMachineIsoDerivation :: string -> iso_derivation
   mkMachineIsoDerivation = name:
     let
       channel = channels.${name};
@@ -96,6 +96,33 @@ let
       configuration = configuration;
     }).config.system.build.isoImage;
 
+  # mkMachineSDCardDerivation :: string -> sdcard_derivation
+  mkMachineSDCardDerivation = name:
+    let
+      channel = channels.${name};
+      configuration = { config, ... }:
+      {
+        imports = [
+          (configurations.${name} { isIso = true; })
+          <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
+          <nixpkgs/nixos/modules/profiles/all-hardware.nix>
+          <nixpkgs/nixos/modules/profiles/base.nix>
+        ];
+        sdImage.populateRootCommands = "";
+        sdImage.populateFirmwareCommands = "";
+        boot.loader.grub.enable = false;
+        boot.loader.generic-extlinux-compatible.enable = true;
+        # isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-isohost-${name}.iso";
+        # isoImage.volumeID = substring 0 11 "NIXOS_ISO";
+        # isoImage.makeEfiBootable = true;
+        # isoImage.makeUsbBootable = true;
+        # boot.loader.grub.memtest86.enable = true;
+      };
+    in (import "${channel}/nixos" {
+      system = machineArchitectures.${name};
+      configuration = configuration;
+    }).config.system.build.sdImage;
+
   # configurations :: { *: ({ ... } -> system_configuration) }
   configurations = helpers.keysToAttrs mkMachineConfig machineNames;
 
@@ -105,10 +132,13 @@ let
   # isos :: { *: iso_derivation }
   isos = helpers.keysToAttrs mkMachineIsoDerivation machineNames;
 
+  # sdcards :: { *: sdcard_derivation}
+  sdcards = helpers.keysToAttrs mkMachineSDCardDerivation machineNames;
+
   # channels :: { *: path }
   channels = machineChannels;
 
 in
 {
-  inherit configurations systems isos channels;
+  inherit configurations systems isos sdcards channels;
 }

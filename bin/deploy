@@ -24,7 +24,7 @@ fi
 source bin/util.zsh
 
 usage() {
-  print "Usage: $cmdname <hostname> [switch|boot|reboot|test|dry-activate|build|iso]" >&2
+  print "Usage: $cmdname <hostname> [switch|boot|reboot|test|dry-activate|build|iso|sdcard]" >&2
 }
 
 positional=()
@@ -70,7 +70,7 @@ then
   operation="boot"
   set_profile=1
   reboot=1
-elif [[ "$operation" = "test" || "$operation" = "dry-activate" || "$operation" = "build" || "$operation" = "iso" ]]
+elif [[ "$operation" = "test" || "$operation" = "dry-activate" || "$operation" = "build" || "$operation" = "iso" || "$operation" = "sdcard" ]]
 then
   # pass
 else
@@ -96,6 +96,15 @@ then
   nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-iso-$hostname" iso
   readonly nixos_iso_path=$(realpath "$local_temp_dir/nixos-iso-$hostname")
   print $nixos_iso_path
+  exit 0
+fi
+
+if [[ "$operation" == "sdcard" ]]
+then
+  print_info "Building sdcard image"
+  nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-sdcard-$hostname" sdcard
+  readonly nixos_sdcard_path=$(realpath "$local_temp_dir/nixos-sdcard-$hostname")
+  print $nixos_sdcard_path
   exit 0
 fi
 
