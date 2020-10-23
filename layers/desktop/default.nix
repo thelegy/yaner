@@ -36,8 +36,9 @@
       qbar
       redshift-wlr
       slurp
-      youtube-dl
+      spotify
       wl-clipboard
+      youtube-dl
     ];
   };
 
