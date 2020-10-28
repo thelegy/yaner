@@ -2,7 +2,7 @@
 #! nix-shell -i sh -p nix-prefetch-git jq
 
 
-url="https://github.com/NixOS/nixpkgs-channels/"
+url="https://github.com/NixOS/nixpkgs/"
 ref="refs/heads/nixos-unstable"
 
 
