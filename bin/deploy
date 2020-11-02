@@ -93,7 +93,7 @@ trap "rm -rf $local_temp_dir" EXIT INT HUP TERM
 if [[ "$operation" == "iso" ]]
 then
   print_info "Building iso image"
-  nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-iso-$hostname" iso
+  nix-build nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-iso-$hostname" -A iso
   readonly nixos_iso_path=$(realpath "$local_temp_dir/nixos-iso-$hostname")
   print $nixos_iso_path
   exit 0
@@ -102,14 +102,14 @@ fi
 if [[ "$operation" == "sdcard" ]]
 then
   print_info "Building sdcard image"
-  nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-sdcard-$hostname" sdcard
+  nix-build nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-sdcard-$hostname" -A sdcard
   readonly nixos_sdcard_path=$(realpath "$local_temp_dir/nixos-sdcard-$hostname")
   print $nixos_sdcard_path
   exit 0
 fi
 
 print_info "Building target system configuration"
-nix build --file nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-config-$hostname" system
+nix-build nixos.nix --argstr hostname "$hostname" --out-link "$local_temp_dir/nixos-config-$hostname" -A system
 readonly nixos_config_path=$(realpath "$local_temp_dir/nixos-config-$hostname")
 
 if [[ "$operation" = "build" ]]
