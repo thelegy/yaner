@@ -55,6 +55,10 @@
   ];
 
   nix.autoOptimiseStore = true;
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+  nix.package = pkgs.nixUnstable;
 
   environment.systemPackages = with pkgs; [
     git

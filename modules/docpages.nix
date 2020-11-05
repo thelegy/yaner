@@ -1,4 +1,4 @@
-{ config, channels, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -37,7 +37,7 @@ let
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = with pkgs; [ git nix ];
-      environment."NIX_PATH" = "nixpkgs=${channels.nixos-unstable}";
+      environment."NIX_PATH" = "nixpkgs=${pkgs.src}";
       script = ''
         git clone --bare ${docpageCfg.repo} ${docpageCfg.repo_dir} || true
         readonly tempdir=$(mktemp -d)

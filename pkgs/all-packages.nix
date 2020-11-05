@@ -8,9 +8,7 @@ with pkgs;
 # Of course, packages can depend on each other, as long as there is no cycle.
 let
 
-  unstable = import config._module.args.channels."nixos-unstable" {};
 
-  all-hies = import config._module.args.channels."all-hies" { inherit pkgs; };
 
   yanerpkgs = rec {
 
@@ -32,7 +30,6 @@ let
 
     # redshift-wlr = unstable.redshift-wlr;
 
-    all-hies-latest = all-hies.latest;
 
   };
 

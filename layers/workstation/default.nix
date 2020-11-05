@@ -15,7 +15,6 @@
 
   users.users.beinke = {
     packages = with pkgs; [
-      all-hies-latest
       direnv
       file
       fzf

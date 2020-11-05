@@ -1,5 +1,4 @@
-# entry point for machine configurations:
-# (import <repo-path>).<netname>.configurations.<hostname>
+inputs@{ nixpkgs, ... }:
 
 with builtins;
 let
@@ -16,129 +15,106 @@ let
   # extraModules :: [ path ]
   extraModules = with helpers; map (module: ./modules + "/${module}") (readFilterDir (not filterDirHidden) ./modules);
 
-  # channelsDir :: path
-  channelsDir = ./channels;
-
-  # allChannels :: { *: path }
-  allChannels = with helpers; keysToAttrs (channelname: import (channelsDir + "/${channelname}") channelname) (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) channelsDir);
-
-  # mkMachineChannel :: string -> path
-  mkMachineChannel = name:
-    (import (machinesDir + "/${name}/channel.nix")) allChannels;
-
-  # machineChannels :: { *: path }
-  machineChannels = helpers.keysToAttrs mkMachineChannel machineNames;
-
   # mkMachineArchitecture :: string -> string
   mkMachineArchitecture = name: with helpers;
     maybe "x86_64-linux" id (tryImport (machinesDir + "/${name}/system.nix"));
 
+  mkMachinePkgs = name: with helpers;
+    maybe nixpkgs (pkgs: pkgs inputs) (tryImport (machinesDir + "/${name}/pkgs.nix"));
+
+  # evaluateConfig :: nixpkgs -> eval_config_args -> system_derivation
+  evaluateConfig = pkgs: args: (import "${pkgs}/nixos/lib/eval-config.nix" args).config;
+
   # machineArchitectures :: { *: string }
   machineArchitectures = helpers.keysToAttrs mkMachineArchitecture machineNames;
 
-  # mkMachineConfig :: string -> system_configuration
-  mkMachineConfig = with helpers; name: { isIso ? false }:
+  # mkMachineConfig :: nixpkgs -> string -> module
+  mkMachineConfig = with helpers; pkgs: name:
     let
       path = machinesDir + "/${name}";
       machineConfigs = foldl' (x: y: x ++ maybeToList (toExistingPath y)) [] [
         (path + "/configuration.nix")
         (path + "/hardware-configuration.nix")
       ];
-    in { pkgs, config, lib, ... }:
-
+    in { config, lib, ... }:
     {
       imports = machineConfigs ++ extraModules;
 
       _module.args.helpers = helpers;
-      _module.args.channels = allChannels;
-      _module.args.isIso = isIso;
+      _module.args.isIso = mkDefault false;
 
       nixpkgs.config = {
         packageOverrides = (import ./pkgs/all-packages.nix) { inherit lib config; };
       };
 
-      nix.nixPath = [ "nixpkgs=${machineChannels.${name}}" ];
+      nix.nixPath = [ "nixpkgs=${pkgs}" ];
+      nix.registry.nixpkgs.flake = pkgs;
 
       networking.hostName = lib.mkDefault name;
-
     };
+
+  # mkAdditionalIsoConfig :: string -> module
+  mkAdditionalIsoConfig = name: { config, modulesPath, ... }: {
+    imports = [
+      "${modulesPath}/installer/cd-dvd/iso-image.nix"
+      "${modulesPath}/profiles/all-hardware.nix"
+      "${modulesPath}/profiles/base.nix"
+    ];
+    isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-isohost-${name}.iso";
+    isoImage.volumeID = substring 0 11 "NIXOS_ISO";
+    isoImage.makeEfiBootable = true;
+    isoImage.makeUsbBootable = true;
+    boot.loader.grub.memtest86.enable = true;
+    _module.args.isIso = true;
+  };
+
+  # mkAdditionalSdCardConfig :: string -> module
+  mkAdditionalSdCardConfig = name: { config, modulesPath, ... }: {
+    imports = [
+      "${modulesPath}/installer/cd-dvd/sd-image.nix"
+      "${modulesPath}/profiles/all-hardware.nix"
+      "${modulesPath}/profiles/base.nix"
+    ];
+    sdImage.populateRootCommands = "";
+    sdImage.populateFirmwareCommands = "";
+    boot.loader.grub.enable = false;
+    boot.loader.generic-extlinux-compatible.enable = true;
+    _module.args.isIso = true;
+  };
 
   # mkMachineSystemDerivation :: string -> system_derivation
   mkMachineSystemDerivation = name:
     let
-      channel = channels.${name};
-      configuration = configurations.${name} {};
-    in (import "${channel}/nixos" {
-      system = machineArchitectures.${name};
-      configuration = configuration;
-    }).system;
-
-  # mkMachineIsoDerivation :: string -> iso_derivation
-  mkMachineIsoDerivation = name:
-    let
-      channel = channels.${name};
-      configuration = { config, ... }:
-      {
-        imports = [
-          (configurations.${name} { isIso = true; })
-          <nixpkgs/nixos/modules/installer/cd-dvd/iso-image.nix>
-          <nixpkgs/nixos/modules/profiles/all-hardware.nix>
-          <nixpkgs/nixos/modules/profiles/base.nix>
+      pkgs = mkMachinePkgs name;
+      configuration = mkMachineConfig pkgs name;
+      system = mkMachineArchitecture name;
+      iso = (evaluateConfig pkgs {
+        inherit system;
+        modules = [
+          configuration
+          (mkAdditionalIsoConfig name)
         ];
-        isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-isohost-${name}.iso";
-        isoImage.volumeID = substring 0 11 "NIXOS_ISO";
-        isoImage.makeEfiBootable = true;
-        isoImage.makeUsbBootable = true;
-        boot.loader.grub.memtest86.enable = true;
-      };
-    in (import "${channel}/nixos" {
-      system = machineArchitectures.${name};
-      configuration = configuration;
-    }).config.system.build.isoImage;
-
-  # mkMachineSDCardDerivation :: string -> sdcard_derivation
-  mkMachineSDCardDerivation = name:
-    let
-      channel = channels.${name};
-      configuration = { config, ... }:
-      {
-        imports = [
-          (configurations.${name} { isIso = true; })
-          <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
-          <nixpkgs/nixos/modules/profiles/all-hardware.nix>
-          <nixpkgs/nixos/modules/profiles/base.nix>
+      }).system.build.isoImage;
+      sdImage = (evaluateConfig pkgs {
+        inherit system;
+        modules = [
+          configuration
+          (mkAdditionalSdCardConfig name)
         ];
-        sdImage.populateRootCommands = "";
-        sdImage.populateFirmwareCommands = "";
-        boot.loader.grub.enable = false;
-        boot.loader.generic-extlinux-compatible.enable = true;
-        # isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-isohost-${name}.iso";
-        # isoImage.volumeID = substring 0 11 "NIXOS_ISO";
-        # isoImage.makeEfiBootable = true;
-        # isoImage.makeUsbBootable = true;
-        # boot.loader.grub.memtest86.enable = true;
-      };
-    in (import "${channel}/nixos" {
-      system = machineArchitectures.${name};
-      configuration = configuration;
-    }).config.system.build.sdImage;
-
-  # configurations :: { *: ({ ... } -> system_configuration) }
-  configurations = helpers.keysToAttrs mkMachineConfig machineNames;
+      }).system.build.sdImage;
+    in pkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        configuration
+        {
+          system.build = {
+            inherit iso sdImage;
+          };
+        }
+      ];
+    };
 
   # systems :: { *: system_derivation }
   systems = helpers.keysToAttrs mkMachineSystemDerivation machineNames;
 
-  # isos :: { *: iso_derivation }
-  isos = helpers.keysToAttrs mkMachineIsoDerivation machineNames;
-
-  # sdcards :: { *: sdcard_derivation}
-  sdcards = helpers.keysToAttrs mkMachineSDCardDerivation machineNames;
-
-  # channels :: { *: path }
-  channels = machineChannels;
-
-in
-{
-  inherit configurations systems isos sdcards channels;
-}
+in systems
