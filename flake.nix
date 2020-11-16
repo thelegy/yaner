@@ -1,14 +1,16 @@
 {
-  description = "A very basic flake";
+  description = "Yet Another Nix Expression Repository";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-20.09";
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
+    nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
   };
 
-  outputs = inputs@{ ... }: {
+  outputs = inputs@{ ... }: let
+    plumbing = import ./default.nix inputs;
+  in {
 
-    nixosConfigurations = import ./default.nix inputs;
+    inherit (plumbing) nixosConfigurations nixosModules overlay;
 
   };
 }

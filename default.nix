@@ -15,6 +15,18 @@ let
   # extraModules :: [ path ]
   extraModules = with helpers; map (module: ./modules + "/${module}") (readFilterDir (not filterDirHidden) ./modules);
 
+  # overlay :: nixpkgs_overlay
+  overlay = final: prev: {
+    imports = extraModules;
+  };
+
+  layerPaths = with helpers; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
+
+  nixosModules = listToAttrs (map (mpath: {
+    name = replaceStrings [".nix"] [""] (baseNameOf mpath);
+    value = import mpath;
+  }) layerPaths);
+
   # mkMachineArchitecture :: string -> string
   mkMachineArchitecture = name: with helpers;
     maybe "x86_64-linux" id (tryImport (machinesDir + "/${name}/system.nix"));
@@ -47,6 +59,7 @@ let
         packageOverrides = (import ./pkgs/all-packages.nix) { inherit lib config; };
       };
 
+      system.configurationRevision = nixpkgs.lib.mkIf (inputs.self ? rev) inputs.self.rev;
       nix.nixPath = [ "nixpkgs=${pkgs}" ];
       nix.registry.nixpkgs.flake = pkgs;
 
@@ -114,7 +127,9 @@ let
       ];
     };
 
-  # systems :: { *: system_derivation }
-  systems = helpers.keysToAttrs mkMachineSystemDerivation machineNames;
+  # nixosConfigurations :: { *: system_derivation }
+  nixosConfigurations = helpers.keysToAttrs mkMachineSystemDerivation machineNames;
 
-in systems
+in {
+  inherit nixosConfigurations nixosModules overlay;
+}
