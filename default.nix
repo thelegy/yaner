@@ -1,45 +1,31 @@
-inputs@{ nixpkgs, ... }:
+meta:
 
 with builtins;
 let
-
-  # helpers :: { *: ? }
-  helpers = import ./helpers.nix;
 
   # machinesDir :: path
   machinesDir = ./machines;
 
   # machineNames :: [ string ]
-  machineNames = with helpers; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
+  machineNames = with meta.lib; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
 
-  # modulePaths :: [ path ]
-  modulePaths = with helpers; map (module: ./modules + "/${module}") (readFilterDir (not filterDirHidden) ./modules);
-
-  # overlay :: nixpkgs_overlay
-  overlay = import ./pkgs;
-
-  layerPaths = with helpers; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
-
-  nixosModules = listToAttrs (map (mpath: {
-    name = replaceStrings [".nix"] [""] (baseNameOf mpath);
-    value = import mpath;
-  }) modulePaths);
+  layerPaths = with meta.lib; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
 
   # mkMachineArchitecture :: string -> string
-  mkMachineArchitecture = name: with helpers;
+  mkMachineArchitecture = name: with meta.lib;
     maybe "x86_64-linux" id (tryImport (machinesDir + "/${name}/system.nix"));
 
-  mkMachinePkgs = name: with helpers;
-    maybe nixpkgs (pkgs: pkgs inputs) (tryImport (machinesDir + "/${name}/pkgs.nix"));
+  mkMachinePkgs = name: with meta.lib;
+    maybe meta.nixpkgs (pkgs: pkgs meta) (tryImport (machinesDir + "/${name}/pkgs.nix"));
 
   # evaluateConfig :: nixpkgs -> eval_config_args -> system_derivation
   evaluateConfig = pkgs: args: (import "${pkgs}/nixos/lib/eval-config.nix" args).config;
 
   # machineArchitectures :: { *: string }
-  machineArchitectures = helpers.keysToAttrs mkMachineArchitecture machineNames;
+  machineArchitectures = meta.lib.keysToAttrs mkMachineArchitecture machineNames;
 
   # mkMachineConfig :: nixpkgs -> string -> module
-  mkMachineConfig = with helpers; pkgs: name:
+  mkMachineConfig = with meta.lib; pkgs: name:
     let
       path = machinesDir + "/${name}";
       machineConfigs = foldl' (x: y: x ++ maybeToList (toExistingPath y)) [] [
@@ -48,14 +34,15 @@ let
       ];
     in { config, lib, ... }:
     {
-      imports = machineConfigs ++ (attrValues nixosModules);
+      imports = machineConfigs ++ (attrValues meta.nixosModules);
 
-      nixpkgs.overlays = [ overlay ];
+      nixpkgs.overlays = [ meta.overlay ];
 
-      _module.args.helpers = helpers;
+      _module.args.helpers = meta.lib;
       _module.args.isIso = mkDefault false;
+      _module.args.meta = meta;
 
-      system.configurationRevision = nixpkgs.lib.mkIf (inputs.self ? rev) inputs.self.rev;
+      system.configurationRevision = lib.mkIf (meta.self ? rev) meta.self.rev;
       nix.nixPath = [ "nixpkgs=${pkgs}" ];
       nix.registry.nixpkgs.flake = pkgs;
 
@@ -124,8 +111,6 @@ let
     };
 
   # nixosConfigurations :: { *: system_derivation }
-  nixosConfigurations = helpers.keysToAttrs mkMachineSystemDerivation machineNames;
+  nixosConfigurations = meta.lib.keysToAttrs mkMachineSystemDerivation machineNames;
 
-in {
-  inherit nixosConfigurations nixosModules overlay;
-}
+in nixosConfigurations
