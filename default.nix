@@ -12,20 +12,18 @@ let
   # machineNames :: [ string ]
   machineNames = with helpers; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
 
-  # extraModules :: [ path ]
-  extraModules = with helpers; map (module: ./modules + "/${module}") (readFilterDir (not filterDirHidden) ./modules);
+  # modulePaths :: [ path ]
+  modulePaths = with helpers; map (module: ./modules + "/${module}") (readFilterDir (not filterDirHidden) ./modules);
 
   # overlay :: nixpkgs_overlay
-  overlay = final: prev: {
-    imports = extraModules;
-  };
+  overlay = import ./pkgs;
 
   layerPaths = with helpers; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
 
   nixosModules = listToAttrs (map (mpath: {
     name = replaceStrings [".nix"] [""] (baseNameOf mpath);
     value = import mpath;
-  }) layerPaths);
+  }) modulePaths);
 
   # mkMachineArchitecture :: string -> string
   mkMachineArchitecture = name: with helpers;
@@ -50,14 +48,12 @@ let
       ];
     in { config, lib, ... }:
     {
-      imports = machineConfigs ++ extraModules;
+      imports = machineConfigs ++ (attrValues nixosModules);
+
+      nixpkgs.overlays = [ overlay ];
 
       _module.args.helpers = helpers;
       _module.args.isIso = mkDefault false;
-
-      nixpkgs.config = {
-        packageOverrides = (import ./pkgs/all-packages.nix) { inherit lib config; };
-      };
 
       system.configurationRevision = nixpkgs.lib.mkIf (inputs.self ? rev) inputs.self.rev;
       nix.nixPath = [ "nixpkgs=${pkgs}" ];
