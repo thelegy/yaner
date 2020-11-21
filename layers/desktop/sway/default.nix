@@ -23,6 +23,7 @@
     position = "top";
     fonts = ["monospace 7"];
     statusCommand = statusCommand;
+    trayOutput = "*";
     extraConfig = ''
       status_padding 0
       colors {
