@@ -32,9 +32,7 @@
       passCommand = "cat /etc/secrets/borg_passphrase";
     };
     exclude = [
-      "/.snaps"
       "/dev"
-      "/keybase"
       "/mnt"
       "/nix/store"
       "/proc"
