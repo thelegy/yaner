@@ -34,7 +34,14 @@ let
       ];
     in { config, lib, ... }:
     {
-      imports = machineConfigs ++ (attrValues meta.nixosModules);
+      imports = machineConfigs ++ (attrValues meta.nixosModules) ++ [
+        meta.homemanager.nixosModules.home-manager
+      ];
+
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+      };
 
       nixpkgs.overlays = [ meta.overlay ];
 
