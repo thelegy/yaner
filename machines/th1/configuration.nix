@@ -1,4 +1,4 @@
-{ config, options, pkgs, channels, ... }:
+{ config, pkgs, ... }:
 
 {
 
