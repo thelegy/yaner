@@ -30,7 +30,6 @@
       alacritty
       chromium
       grim
-      kitty
       mpv
       python3
       qbar
@@ -39,6 +38,12 @@
       spotify
       wl-clipboard
       youtube-dl
+    ];
+  };
+
+  home-manager.users.beinke = { ... }: {
+    imports = [
+      ./kitty.nix
     ];
   };
 
