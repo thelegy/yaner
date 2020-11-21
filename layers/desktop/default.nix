@@ -5,7 +5,6 @@
   imports = [
     ../box
     ./pulseaudio.nix
-    ./sway
   ];
 
 
@@ -18,6 +17,9 @@
         "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
       ];
     };
+
+    # Enable sway to ensure pam is configured properly for swaylock
+    sway.enable = true;
   };
 
   networking.networkmanager = {
@@ -44,6 +46,7 @@
   home-manager.users.beinke = { ... }: {
     imports = [
       ./kitty.nix
+      ./sway
     ];
   };
 

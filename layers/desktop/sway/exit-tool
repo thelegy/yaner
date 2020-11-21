@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+lock() {
+  swaylock -c 202020F0
+  return
+}
+
+logout() {
+  swaymsg exit
+  return
+}
+
+reboot() {
+  systemctl reboot
+  return
+}
+
+shutdown() {
+  systemctl poweroff
+  return
+}
+
+suspend() {
+  lock&
+  systemctl suspend
+  return
+}
+
+hibernate() {
+  lock&
+  systemctl hibernate
+  return
+}
+usage() {
+  echo "$0 (lock|logout|reboot|shutdown|suspend|hibernate)"
+  return
+}
+
+case "$1" in
+  lock)
+    lock
+    ;;
+  logout)
+    logout
+    ;;
+  reboot)
+    reboot
+    ;;
+  shutdown)
+    shutdown
+    ;;
+  suspend)
+    suspend
+    ;;
+  hibernate)
+    hibernate
+    ;;
+  *)
+    usage
+    exit 2
+    ;;
+esac
+
+exit 0
