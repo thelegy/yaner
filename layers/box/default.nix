@@ -62,14 +62,14 @@
 
   environment.systemPackages = with pkgs; [
     git
-    htop
-    tig
     gnupg
+    htop
     inxi-full
+    kitty.terminfo
     lm_sensors
     magic-wormhole
-    ripgrep
     neovim-customized
-    kitty.terminfo
+    ripgrep
+    tig
   ];
 }
