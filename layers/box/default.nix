@@ -65,7 +65,7 @@
     htop
     tig
     gnupg
-    inxi
+    inxi-full
     lm_sensors
     dmidecode
     magic-wormhole

@@ -4,6 +4,8 @@ with self;
 
 {
 
+  inxi-full = inxi.override { withRecommends = true; };
+
   haskell = super.haskell // {
     packageOverrides = hself: hsuper:
       ( import ./qbar self hself hsuper {} ) // {
