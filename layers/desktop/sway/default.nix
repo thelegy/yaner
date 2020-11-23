@@ -83,6 +83,7 @@ in {
       };
       window = {
         border = 0;
+        titlebar = true;
         # the value is not implemented yet
         #hideEdgeBorders = "smart_no_gaps";
       };
