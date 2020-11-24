@@ -18,6 +18,7 @@
       direnv
       file
       fzf
+      git-revise
       kicad
       ldns
       signal-desktop
