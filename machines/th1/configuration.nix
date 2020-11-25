@@ -67,6 +67,7 @@
 
   users.users.beinke.extraGroups = [ "dialout" ];
 
+  nix.trustedUsers = [ "beinke" ];
 
   system.stateVersion = "19.03";
 
