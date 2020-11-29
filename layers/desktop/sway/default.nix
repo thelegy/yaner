@@ -55,6 +55,11 @@ in {
 
     extraConfig = ''
       titlebar_padding 3 1
+
+      bindsym --locked XF86AudioPlay exec --no-startup-id ${pkgs.playerctl}/bin/playerctl play-pause
+      bindsym --locked XF86AudioStop exec --no-startup-id ${pkgs.playerctl}/bin/playerctl stop
+      bindsym --locked XF86AudioPrev exec --no-startup-id ${pkgs.playerctl}/bin/playerctl previous
+      bindsym --locked XF86AudioNext exec --no-startup-id ${pkgs.playerctl}/bin/playerctl next
     '';
 
     config = {
@@ -114,9 +119,12 @@ in {
       keybindings = lib.mkOptionDefault {
         "${mod}+0" = "workspace number 10";
         "${mod}+Shift+0" = "move container to workspace number 10";
+
         "${mod}+Shift+Return" = "exec ${sensibleCommand} alacritty urxvt";
+
         "${mod}+Print" = "exec --no-startup-id ${exitTool} lock";
         "${mod}+Shift+Print" = "mode \"${modeSystem}\"";
+
         "${mod}+Shift+e" = "mode \"${modeExit}\"";
       };
     };
