@@ -8,12 +8,14 @@
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
   };
 
-  outputs = inputs@{self, ...}: let
+  outputs = inputs@{self, nixpkgs, ...}: let
     outputs = rec {
-      lib = import (self + "/lib"); 
+      utils = import (self + "/utils") nixpkgs.lib; 
 
       overlay = import ./pkgs;
-      nixosModules = lib.findNixosModules ./modules;
+      nixosModules = utils.findNixosModules {
+        path = ./modules;
+      };
 
       nixosConfigurations = import self meta;
     };

@@ -7,25 +7,25 @@ let
   machinesDir = ./machines;
 
   # machineNames :: [ string ]
-  machineNames = with meta.lib; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
+  machineNames = with meta.utils; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
 
-  layerPaths = with meta.lib; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
+  layerPaths = with meta.utils; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
 
   # mkMachineArchitecture :: string -> string
-  mkMachineArchitecture = name: with meta.lib;
+  mkMachineArchitecture = name: with meta.utils;
     maybe "x86_64-linux" id (tryImport (machinesDir + "/${name}/system.nix"));
 
-  mkMachinePkgs = name: with meta.lib;
+  mkMachinePkgs = name: with meta.utils;
     maybe meta.nixpkgs (pkgs: pkgs meta) (tryImport (machinesDir + "/${name}/pkgs.nix"));
 
   # evaluateConfig :: nixpkgs -> eval_config_args -> system_derivation
   evaluateConfig = pkgs: args: (import "${pkgs}/nixos/lib/eval-config.nix" args).config;
 
   # machineArchitectures :: { *: string }
-  machineArchitectures = meta.lib.keysToAttrs mkMachineArchitecture machineNames;
+  machineArchitectures = meta.utils.keysToAttrs mkMachineArchitecture machineNames;
 
   # mkMachineConfig :: nixpkgs -> string -> module
-  mkMachineConfig = with meta.lib; pkgs: name:
+  mkMachineConfig = with meta.utils; pkgs: name:
     let
       path = machinesDir + "/${name}";
       machineConfigs = foldl' (x: y: x ++ maybeToList (toExistingPath y)) [] [
@@ -45,7 +45,7 @@ let
 
       nixpkgs.overlays = [ meta.overlay ];
 
-      _module.args.helpers = meta.lib;
+      _module.args.helpers = meta.utils;
       _module.args.isIso = mkDefault false;
       _module.args.meta = meta;
 
@@ -118,6 +118,6 @@ let
     };
 
   # nixosConfigurations :: { *: system_derivation }
-  nixosConfigurations = meta.lib.keysToAttrs mkMachineSystemDerivation machineNames;
+  nixosConfigurations = meta.utils.keysToAttrs mkMachineSystemDerivation machineNames;
 
 in nixosConfigurations
