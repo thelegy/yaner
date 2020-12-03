@@ -19,14 +19,18 @@ let
 
     extractFromNamespace = o: lib.foldl (a: b: a."${b}") o moduleNamespace;
 
-    mkTrivialModule = module: let
-      mkTrivialModule_ = { config, lib, ... }: let
+    mkModule = { options?{}, config }: let
+      moduleConfig = config;
+      mkModule_ = { config, lib, ... }: let
         cfg = extractFromNamespace config;
+        baseOptions = liftToNamespace {enable = lib.mkEnableOption "Enable the ${moduleName} config layer";};
       in {
-        options = liftToNamespace {enable = lib.mkEnableOption "Enable the ${moduleName} config layer";};
-        config = lib.mkIf cfg.enable module;
+        options = baseOptions // options;
+        config = lib.mkIf cfg.enable (moduleConfig cfg);
       };
-    in { imports = [mkTrivialModule_]; };
+    in { imports = [ mkModule_ ]; };
+
+    mkTrivialModule = module: mkModule { config = _: module; };
 
   };
 
