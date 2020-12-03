@@ -19,22 +19,23 @@ let
 
     extractFromNamespace = o: lib.foldl (a: b: a."${b}") o moduleNamespace;
 
-    mkToggleableModule = module: let
-      mkToggleableModule_ = moduleArgs@{ config, lib, ... }: let
+    mkTrivialModule = module: let
+      mkTrivialModule_ = { config, lib, ... }: let
         cfg = extractFromNamespace config;
-        moduleEffect = if isFunction module then module moduleArgs else module;
       in {
         options = liftToNamespace {enable = lib.mkEnableOption "Enable the ${moduleName} config layer";};
-        config = lib.mkIf cfg.enable moduleEffect;
+        config = lib.mkIf cfg.enable module;
       };
-    in { imports = [mkToggleableModule_]; };
+    in { imports = [mkTrivialModule_]; };
 
   };
 
+  filterFunctionArgs = attrs: removeAttrs attrs (attrNames additionalModuleArgs);
+
   wrapModule = module:
-    if isFunction module then
-      moduleArgs@{pkgs, ...}:
-      module (additionalModuleArgs // moduleArgs)
+    if lib.isFunction module then
+    lib.setFunctionArgs (moduleArgs: (module (additionalModuleArgs // moduleArgs)))
+      (filterFunctionArgs (lib.functionArgs module))
     else module;
 
 in {
