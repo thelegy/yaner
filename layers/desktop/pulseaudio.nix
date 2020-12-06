@@ -1,4 +1,4 @@
-{ config, options, pkgs, ... }:
+{ pkgs, ... }:
 
 {
 
@@ -21,10 +21,22 @@
     '';
   in {
     enable = true;
-    handlers.volmute = { event = "button/mute";       action = pamixer "--toggle-mute"; };
-    handlers.voldown = { event = "button/volumedown"; action = pamixer "--gamma ${toString gammaCorrection} --decrease ${toString volumeStep} --unmute"; };
-    handlers.volup   = { event = "button/volumeup";   action = pamixer "--gamma ${toString gammaCorrection} --increase ${toString volumeStep} --unmute"; };
-    handlers.micmute = { event = "button/f20";        action = pamixer "--default-source --toggle-mute"; };
+    handlers.volmute = {
+      event = "button/mute";
+      action = pamixer "--toggle-mute";
+    };
+    handlers.voldown = {
+      event = "button/volumedown";
+      action = pamixer "--gamma ${toString gammaCorrection} --decrease ${toString volumeStep} --unmute";
+    };
+    handlers.volup = {
+      event = "button/volumeup";
+      action = pamixer "--gamma ${toString gammaCorrection} --increase ${toString volumeStep} --unmute";
+    };
+    handlers.micmute = {
+      event = "button/f20";
+      action = pamixer "--default-source --toggle-mute";
+    };
   };
 
 }
