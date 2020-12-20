@@ -28,6 +28,9 @@ mkTrivialModule {
   programs.zsh = {
     enable = true;
     promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+    interactiveShellInit = ''
+      source ${config.nix.package.src}/misc/zsh/completion.zsh
+    '';
     shellInit = ''
       command -v direnv >/dev/null && eval "$(direnv hook zsh)"
     '';
