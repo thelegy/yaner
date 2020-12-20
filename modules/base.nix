@@ -14,9 +14,9 @@ mkTrivialModule {
 
   services = {
     openssh.enable = true;
-    dbus.enable    = true;
-    acpid.enable   = true;
-    avahi.enable   = true;
+    dbus.enable = true;
+    acpid.enable = true;
+    avahi.enable = true;
   };
 
   programs = {
