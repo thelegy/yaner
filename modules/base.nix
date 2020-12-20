@@ -71,7 +71,7 @@ mkTrivialModule {
     kitty.terminfo
     lm_sensors
     magic-wormhole
-    neovim-customized
+    neovim-queezle
     ripgrep
     tig
   ];

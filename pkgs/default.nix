@@ -6,11 +6,6 @@ with self;
 
   inxi-full = inxi.override { withRecommends = true; };
 
-  haskell = super.haskell // {
-    packageOverrides = hself: hsuper:
-      ( import ./qbar self hself hsuper {} ) // {
-      };
-  };
 
   multimc = runCommand "multimc" {} ''
     mkdir -p $out/bin
@@ -18,8 +13,6 @@ with self;
     chmod +x $out/bin/*
   '';
 
-  qbar = haskellPackages.qbar;
 
-  neovim-customized = callPackage ./neovim {};
 
 }

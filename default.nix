@@ -32,6 +32,8 @@ let
         (path + "/configuration.nix")
         (path + "/hardware-configuration.nix")
       ];
+      # Fix broken overlay
+      queezle-dotfiles-overlay = _: meta.queezle-dotfiles.overlay;
     in { config, lib, ... }:
     {
       imports = machineConfigs ++ (attrValues meta.nixosModules) ++ [
@@ -43,7 +45,7 @@ let
         useUserPackages = true;
       };
 
-      nixpkgs.overlays = [ meta.overlay ];
+      nixpkgs.overlays = [ meta.overlay queezle-dotfiles-overlay ];
 
       _module.args.helpers = meta.utils;
       _module.args.isIso = mkDefault false;
