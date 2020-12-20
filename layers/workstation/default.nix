@@ -15,10 +15,13 @@
 
   users.users.beinke = {
     packages = with pkgs; [
+      cabal-install
       direnv
       file
       fzf
       git-revise
+      ghcid
+      haskell-language-server
       kicad
       ldns
       signal-desktop
@@ -26,7 +29,6 @@
       tdesktop
       thunderbird
       vscode
-      ormolu
       mumble
     ];
   };
