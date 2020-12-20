@@ -1,6 +1,6 @@
-{ lib, pkgs, ... }:
+{ lib, config, pkgs, mkTrivialModule, ... }:
 
-{
+mkTrivialModule {
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
   security.rngd.enable = lib.mkDefault false;
 

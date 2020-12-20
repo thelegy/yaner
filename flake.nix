@@ -18,6 +18,7 @@
       overlay = import ./pkgs;
       nixosModules = utils.findNixosModules {
         path = ./modules;
+        namespace = [ "userconfig" "thelegy" ];
       };
 
       nixosConfigurations = import self meta;

@@ -19,8 +19,8 @@ in {
 
   imports = [
     ./hardware-configuration.nix
-    ../../layers/box
   ];
+  userconfig.thelegy.base.enable = true;
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;

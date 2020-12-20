@@ -3,9 +3,9 @@
 {
 
   imports = [
-    ../box
     ./pulseaudio.nix
   ];
+  userconfig.thelegy.base.enable = true;
 
 
   hardware.opengl.enable = true;

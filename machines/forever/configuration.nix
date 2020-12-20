@@ -2,10 +2,10 @@
 {
 
   imports = [
-    ../../layers/box
     ./borg-server.nix
     ./docpages.nix
   ];
+  userconfig.thelegy.base.enable = true;
 
   boot.loader.grub.configurationLimit = 3;
   boot.loader.grub.device = "/dev/sda";
