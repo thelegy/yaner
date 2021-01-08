@@ -12,10 +12,7 @@ let
       tag = mkOption {
         type = types.str;
       };
-      repo = mkOption {
-        type = types.str;
-      };
-      repo_dir = mkOption {
+      flake = mkOption {
         type = types.str;
       };
       target_dir = mkOption {
@@ -25,7 +22,6 @@ let
     };
     config = {
       tag = mkDefault name;
-      repo_dir = mkDefault ("/tmp/docpagerepo-" + (builtins.hashString "sha1" cfg.pages."${name}".repo));
     };
   };
 
@@ -39,13 +35,11 @@ let
       path = with pkgs; [ git nix ];
       environment."NIX_PATH" = "nixpkgs=${pkgs.src}";
       script = ''
-        git clone --bare ${docpageCfg.repo} ${docpageCfg.repo_dir} || true
-        readonly tempdir=$(mktemp -d)
-        trap "rm -rf $tempdir" EXIT INT HUP TERM
-        GIT_DIR=${docpageCfg.repo_dir} git fetch --tags --force
-        GIT_DIR=${docpageCfg.repo_dir} GIT_WORK_TREE=$tempdir git checkout --force --ignore-other-worktrees --quiet ${docpageCfg.tag}
         mkdir -p ${docpageCfg.target_dir}
-        nix-build --out-link ${docpageCfg.target_dir}/${docpageCfg.tag} --attr ${docpageCfg.tag} $tempdir/docpages.nix
+        ${pkgs.nixUnstable}/bin/nix build \
+          --no-write-lock-file \
+          --out-link ${docpageCfg.target_dir}/${docpageCfg.tag} \
+          ${docpageCfg.flake}#docpages.${docpageCfg.tag}
       '';
     };
   };
