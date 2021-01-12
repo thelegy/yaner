@@ -60,11 +60,11 @@
       },
       "locked": {
         "host": "git.c3pb.de",
-        "lastModified": 1608432697,
-        "narHash": "sha256-odX2Qt/7yVJ749ImParEzI+z/fxVNwwh5yTL4DHzkUE=",
+        "lastModified": 1610409885,
+        "narHash": "sha256-ZN+EfwbsMnQhOBR6kMlntxHg3VjVV/FzyKX1oBly9P0=",
         "owner": "jens",
         "repo": "dotfiles",
-        "rev": "7f8df8ff2b3016c4b1bb7a081c0b49a596102f21",
+        "rev": "e7872bcc46780b32b51d824248aa73d0b881bfa2",
         "type": "gitlab"
       },
       "original": {
