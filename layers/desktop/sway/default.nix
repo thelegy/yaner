@@ -122,6 +122,11 @@ in {
 
         "${mod}+Shift+Return" = "exec ${sensibleCommand} alacritty urxvt";
 
+        "${mod}+Shift+Alt+h" = "move workspace to output left";
+        "${mod}+Shift+Alt+j" = "move workspace to output down";
+        "${mod}+Shift+Alt+k" = "move workspace to output up";
+        "${mod}+Shift+Alt+l" = "move workspace to output right";
+
         "${mod}+Print" = "exec ${exitTool} lock";
         "${mod}+Shift+Print" = "mode \"${modeSystem}\"";
 
