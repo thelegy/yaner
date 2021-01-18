@@ -25,7 +25,8 @@ let
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       preStart = ''
-        mkdir -m 700 -p /var/run/kea /var/kea
+        [[ -d /var/kea && ! -d /var/lib/kea ]] && mv /var/kea /var/lib/kea
+        mkdir -m 700 -p /var/run/kea /var/lib/kea
       '';
       serviceConfig =
       let
