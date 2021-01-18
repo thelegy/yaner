@@ -5,6 +5,7 @@
   hardware.pulseaudio = {
     enable = true;
     zeroconf.discovery.enable = true;
+    package = pkgs.pulseaudioFull;
   };
 
   environment.systemPackages = with pkgs; [
