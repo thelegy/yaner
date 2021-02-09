@@ -36,6 +36,14 @@ let
           If to update the AAAA record.
         '';
       };
+      takeIPv6FromInterface = mkOption {
+        type = types.str;
+        default = "";
+        example = "eth0";
+        description = ''
+          Get the ipv6 address from this interface. All interfaces are considered, when this is empty.
+        '';
+      };
       onCalendar = mkOption {
         type = with types; nullOr str;
         default = "*:00/10:00";
@@ -67,15 +75,29 @@ let
 
   flattenList = l: builtins.foldl' (x: y: x//y) {} l;
 
-  ddnsCurlLine = domainCfg: flags: ''
-    ${pkgs.curl}/bin/curl --silent ${flags} "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$password"
+  ddnsV4Script = domainCfg: flags: ''
+    ${pkgs.curl}/bin/curl --silent ${flags} "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})"
+    echo
+  '';
+  ddnsV6Script = domainCfg: flags: ''
+    # take the first global (should be routable) primary (to filter out privacy extension addresses) ipv6 address
+    myip="$(${pkgs.iproute2}/bin/ip -json -6 address show scope global primary ${domainCfg.takeIPv6FromInterface} | ${pkgs.jq}/bin/jq --raw-output '.[0].addr_info | map(.local | strings) | .[0]')"
+    # ensure we have a valid v6 address
+    if ${pkgs.iproute2}/bin/ip route get "$myip" >/dev/null &>/dev/null
+    then
+      echo "Using IPv6 address $myip"
+    else
+      echo "No global primary ipv6 address available"
+      exit 1
+    fi
+    ${pkgs.curl}/bin/curl --silent ${flags} "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})" -d "myip=$myip"
     echo
   '';
 
-  ddnsScript = domainCfg: ''
-    password="$(cat ${domainCfg.keyfile})"
-  '' + (optionalString domainCfg.updateAAAA (ddnsCurlLine domainCfg "-6"))
-     + (optionalString domainCfg.updateA (ddnsCurlLine domainCfg "-4"));
+  ddnsScript = domainCfg:
+    # ipv6 does ip detection which might fail, so run ipv4 first
+    (optionalString domainCfg.updateA (ddnsV4Script domainCfg "-4")) +
+    (optionalString domainCfg.updateAAAA (ddnsV6Script domainCfg "-6"));
 
   ddnsService = domainCfg: mkIf (domainCfg.updateAAAA || domainCfg.updateA) {
     "he-ddns-${domainCfg.domain}" = {
