@@ -38,6 +38,7 @@
       redshift-wlr
       slurp
       spotify
+      translate-shell
       wl-clipboard
       youtube-dl
     ];
