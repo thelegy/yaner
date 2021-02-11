@@ -81,6 +81,17 @@ with lib;
     };
   };
 
+  services.pdns-recursor = {
+    enable = true;
+    dns = {
+      # Allow connections from everywhere and let the firewall do its buisness
+      address = "0.0.0.0 ::";
+      allowFrom = [ "0.0.0.0/0" "::/0" ];
+    };
+  };
+  services.resolved.enable = false;
+  networking.resolvconf.useLocalResolver = true;
+
   services.kea = {
     enable = true;
     interfaces = [ "internal" ];
