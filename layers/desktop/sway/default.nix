@@ -60,6 +60,8 @@ in {
       bindsym --locked XF86AudioStop exec ${pkgs.playerctl}/bin/playerctl stop
       bindsym --locked XF86AudioPrev exec ${pkgs.playerctl}/bin/playerctl previous
       bindsym --locked XF86AudioNext exec ${pkgs.playerctl}/bin/playerctl next
+
+      exec ${pkgs.gammastep}/bin/gammastep -t 5700:3400 -g 1 -l 52:9
     '';
 
     config = {
