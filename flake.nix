@@ -30,10 +30,12 @@
         namespace = [ "userconfig" "thelegy" ];
       };
 
-      nixosConfigurations = import self meta;
+      nixosConfigurations = import self {
+        flakes=inputs;
+        flakeOutputs=outputs;
+      };
 
     };
-    meta = inputs // outputs;
   in outputs;
 
 }

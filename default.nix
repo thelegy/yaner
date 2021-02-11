@@ -1,4 +1,4 @@
-meta:
+{flakes, flakeOutputs}:
 
 with builtins;
 let
@@ -7,25 +7,25 @@ let
   machinesDir = ./machines;
 
   # machineNames :: [ string ]
-  machineNames = with meta.utils; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
+  machineNames = with flakeOutputs.utils; (readFilterDir (filterAnd [(not filterDirHidden) filterDirDirs]) machinesDir);
 
-  layerPaths = with meta.utils; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
+  layerPaths = with flakeOutputs.utils; map (layer: ./layers + "/${layer}") (readFilterDir (not filterDirHidden) ./layers);
 
   # mkMachineArchitecture :: string -> string
-  mkMachineArchitecture = name: with meta.utils;
+  mkMachineArchitecture = name: with flakeOutputs.utils;
     maybe "x86_64-linux" id (tryImport (machinesDir + "/${name}/system.nix"));
 
-  mkMachinePkgs = name: with meta.utils;
-    maybe meta.nixpkgs (pkgs: pkgs meta) (tryImport (machinesDir + "/${name}/pkgs.nix"));
+  mkMachinePkgs = name: with flakeOutputs.utils;
+    maybe flakes.nixpkgs (pkgs: pkgs flakes) (tryImport (machinesDir + "/${name}/pkgs.nix"));
 
   # evaluateConfig :: nixpkgs -> eval_config_args -> system_derivation
   evaluateConfig = pkgs: args: (import "${pkgs}/nixos/lib/eval-config.nix" args).config;
 
   # machineArchitectures :: { *: string }
-  machineArchitectures = meta.utils.keysToAttrs mkMachineArchitecture machineNames;
+  machineArchitectures = flakeOutputs.utils.keysToAttrs mkMachineArchitecture machineNames;
 
   # mkMachineConfig :: nixpkgs -> string -> module
-  mkMachineConfig = with meta.utils; pkgs: name:
+  mkMachineConfig = with flakeOutputs.utils; pkgs: name:
     let
       path = machinesDir + "/${name}";
       machineConfigs = foldl' (x: y: x ++ maybeToList (toExistingPath y)) [] [
@@ -34,8 +34,8 @@ let
       ];
     in { config, lib, ... }:
     {
-      imports = machineConfigs ++ (attrValues meta.nixosModules) ++ [
-        meta.homemanager.nixosModules.home-manager
+      imports = machineConfigs ++ (attrValues flakeOutputs.nixosModules) ++ [
+        flakes.homemanager.nixosModules.home-manager
       ];
 
       home-manager = {
@@ -43,13 +43,17 @@ let
         useUserPackages = true;
       };
 
-      nixpkgs.overlays = [ meta.overlay meta.queezle-dotfiles.overlay ];
+      nixpkgs.overlays = [
+        flakeOutputs.overlay
+        flakes.queezle-dotfiles.overlay
+      ];
 
-      _module.args.helpers = meta.utils;
+      _module.args.helpers = flakeOutputs.utils;
       _module.args.isIso = mkDefault false;
-      _module.args.meta = meta;
+      _module.args.flakes = flakes;
+      _module.args.flakeOutputs = flakeOutputs;
 
-      system.configurationRevision = lib.mkIf (meta.self ? rev) meta.self.rev;
+      system.configurationRevision = lib.mkIf (flakes.self ? rev) flakes.self.rev;
       nix.nixPath = [ "nixpkgs=${pkgs}" ];
       nix.registry.nixpkgs.flake = pkgs;
 
@@ -118,6 +122,6 @@ let
     };
 
   # nixosConfigurations :: { *: system_derivation }
-  nixosConfigurations = meta.utils.keysToAttrs mkMachineSystemDerivation machineNames;
+  nixosConfigurations = flakeOutputs.utils.keysToAttrs mkMachineSystemDerivation machineNames;
 
 in nixosConfigurations
