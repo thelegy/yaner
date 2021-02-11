@@ -65,6 +65,10 @@
     repo = "borg@backup.0jb.de:.";
   };
 
+  networking = {
+    networkmanager.wifi.backend = "iwd";
+  };
+
   users.users.beinke.extraGroups = [ "dialout" ];
 
   nix.trustedUsers = [ "beinke" ];
