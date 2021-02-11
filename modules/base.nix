@@ -72,6 +72,7 @@ mkTrivialModule {
     lm_sensors
     magic-wormhole
     neovim-queezle
+    reptyr
     ripgrep
     tig
   ];
