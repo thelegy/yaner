@@ -81,6 +81,25 @@ with lib;
     };
   };
 
+  services.kea = {
+    enable = true;
+    interfaces = [ "internal" ];
+    #interfaces = [ "*" ];
+    additionalConfig = {
+      Dhcp4 = {
+        interfaces-config.dhcp-socket-type = "raw";
+        subnet4 = [{
+          subnet = "10.0.16.0/22";
+          pools = [ { pool = "10.0.17.0-10.0.17.255"; } ];
+          option-data = [
+            { name = "routers"; data = "10.0.16.1"; }
+            { name = "domain-name-servers"; data = "10.0.16.1"; }
+          ];
+        }];
+      };
+    };
+  };
+
   users.users.nix = {
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
