@@ -108,6 +108,13 @@ with lib;
     ];
   };
 
+  services.he-dns = {
+    "roborock.beinqo.de" = {
+      keyfile = "/etc/secrets/he_passphrase";
+      takeIPv6FromInterface = "internal";
+    };
+  };
+
   nix.trustedUsers = [ "beinke" "nix" ];
 
   system.stateVersion = "19.03";
