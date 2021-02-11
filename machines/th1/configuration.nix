@@ -68,6 +68,7 @@
   networking = {
     networkmanager.wifi.backend = "iwd";
   };
+  services.resolved.enable = true;
 
   users.users.beinke.extraGroups = [ "dialout" ];
 
