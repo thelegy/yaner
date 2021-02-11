@@ -126,6 +126,12 @@ with lib;
     };
   };
 
+  environment.systemPackages = with pkgs; [
+    tcpdump
+    config.services.kea.package
+    pdns-recursor
+  ];
+
   nix.trustedUsers = [ "beinke" "nix" ];
 
   system.stateVersion = "19.03";
