@@ -36,7 +36,8 @@ let
     {
       imports = machineConfigs ++ (attrValues flakeOutputs.nixosModules) ++ [
         flakes.homemanager.nixosModules.home-manager
-      ];
+        flakes.qd.nixosModules.qd
+      ] ++ (attrValues flakes.queezle-dotfiles.nixosModules);
 
       home-manager = {
         useGlobalPkgs = true;
@@ -46,6 +47,7 @@ let
       nixpkgs.overlays = [
         flakeOutputs.overlay
         flakes.queezle-dotfiles.overlay
+        flakes.qd.overlay
       ];
 
       _module.args.helpers = flakeOutputs.utils;

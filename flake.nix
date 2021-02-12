@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    qd = {
+      url = gitlab:jens/qd?host=git.c3pb.de;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
 
   };

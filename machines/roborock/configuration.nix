@@ -126,6 +126,11 @@ with lib;
     };
   };
 
+  services.qd = {
+    enable = true;
+    mqttUri = "mqtt://localhost";
+  };
+
   environment.systemPackages = with pkgs; [
     tcpdump
     config.services.kea.package
