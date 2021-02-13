@@ -126,6 +126,29 @@ with lib;
     };
   };
 
+  sound.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    systemWide = true;
+    configFile = let
+      cfg = config.hardware.pulseaudio;
+      hasZeroconf = let z = cfg.zeroconf; in z.publish.enable || z.discovery.enable;
+      overriddenPackage = cfg.package.override
+      (optionalAttrs hasZeroconf { zeroconfSupport = true; });
+      originalConfigFile = "${getBin overriddenPackage}/etc/pulse/default.pa";
+    in pkgs.runCommand "default.pa" {} ''
+      sed -r 's|(load-module module-native-protocol-unix)|\1 auth-anonymous=1|' ${originalConfigFile} > $out
+    '';
+    extraConfig = ''
+      load-module module-pipe-sink file=/run/pulse/snapfifo sink_name=Snapcast sink_properties=device.description=Snapcast format=s16le rate=48000
+    '';
+  };
+  users.groups.pulse-access = {};
+  users.users.pulse.createHome = mkForce false;
+  systemd.tmpfiles.rules = [
+    "d /run/pulse 0755 pulse pulse -"
+  ];
+
   services.qd = {
     enable = true;
     mqttUri = "mqtt://localhost";
