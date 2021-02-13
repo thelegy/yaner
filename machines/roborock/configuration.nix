@@ -149,6 +149,22 @@ with lib;
     "d /run/pulse 0755 pulse pulse -"
   ];
 
+  services.snapserver = {
+    enable = true;
+    port = config.networking.services.snapcast-stream.port;
+    streams.pulse = {
+      type = "pipe";
+      location = "/run/pulse/snapfifo";
+      query = {
+        mode = "read";
+      };
+    };
+    tcp = {
+      enable = true;
+      port = config.networking.services.snapcast-control.port;
+    };
+  };
+
   services.qd = {
     enable = true;
     mqttUri = "mqtt://localhost";
