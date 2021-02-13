@@ -199,6 +199,18 @@ with lib;
     mqttUri = "mqtt://localhost";
   };
 
+  services.greetd = {
+    enable = true;
+    restart = false;
+    settings.default_session = {
+      command = pkgs.writeScript "tmux-session" ''
+        ${pkgs.tmux}/bin/tmux new -d -s greeter '${pkgs.htop}/bin/htop; zsh' 2>/dev/null
+        ${pkgs.tmux}/bin/tmux attach -r -t greeter
+      '';
+      user = "root";
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     tcpdump
     config.services.kea.package
