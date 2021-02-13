@@ -185,6 +185,15 @@ with lib;
     };
   };
 
+  systemd.services.wdr2 = {
+    serviceConfig = {
+      DynamicUser = true;
+      ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=pulse --no-terminal https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
+      SupplementaryGroups = [ "pulse-access" ];
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+
   services.qd = {
     enable = true;
     mqttUri = "mqtt://localhost";
