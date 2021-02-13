@@ -13,6 +13,6 @@ with self;
     chmod +x $out/bin/*
   '';
 
-
+  mpv_autospeed = ./mpv_autospeed.lua;
 
 }
