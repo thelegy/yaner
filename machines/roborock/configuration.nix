@@ -165,6 +165,26 @@ with lib;
     };
   };
 
+  services.spotifyd = {
+    enable = true;
+    config = ''
+      [global]
+      username_cmd = "head -n1 /etc/secrets/spotify"
+      password_cmd = "tail -n1 /etc/secrets/spotify"
+      backend = "pulseaudio"
+      device_name = "${config.networking.hostName}"
+      device_type = "speaker"
+    '';
+  };
+  users.groups.spotify = {};
+  systemd.services.spotifyd = {
+    serviceConfig.SupplementaryGroups = [ "spotify" "pulse-access" ];
+    environment = {
+      SHELL = "/bin/sh";
+      #PULSE_LOG = "4";
+    };
+  };
+
   services.qd = {
     enable = true;
     mqttUri = "mqtt://localhost";
