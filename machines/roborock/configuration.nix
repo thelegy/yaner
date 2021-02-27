@@ -195,6 +195,7 @@ with lib;
       DynamicUser = true;
       ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=pulse --no-terminal https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
       SupplementaryGroups = [ "pulse-access" ];
+      Restart = "always";
     };
     wantedBy = [ "multi-user.target" ];
   };
