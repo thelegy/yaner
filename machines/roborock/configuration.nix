@@ -169,16 +169,21 @@ with lib;
     enable = true;
     config = ''
       [global]
-      username_cmd = "head -n1 /etc/secrets/spotify"
-      password_cmd = "tail -n1 /etc/secrets/spotify"
+      username_cmd = "cat $CREDENTIALS_DIRECTORY/user"
+      password_cmd = "cat $CREDENTIALS_DIRECTORY/password"
       backend = "pulseaudio"
       device_name = "${config.networking.hostName}"
       device_type = "speaker"
     '';
   };
-  users.groups.spotify = {};
   systemd.services.spotifyd = {
-    serviceConfig.SupplementaryGroups = [ "spotify" "pulse-access" ];
+    serviceConfig = {
+      SupplementaryGroups = [ "pulse-access" ];
+      LoadCredential = [
+        "user:/etc/secrets/spotify_user"
+        "password:/etc/secrets/spotify_password"
+      ];
+    };
     environment = {
       SHELL = "/bin/sh";
       #PULSE_LOG = "4";
