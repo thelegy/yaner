@@ -2,7 +2,6 @@
 
 mkTrivialModule {
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-  security.rngd.enable = lib.mkDefault false;
 
   # Restore systemd default
   services.logind.killUserProcesses = lib.mkDefault true;
