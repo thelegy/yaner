@@ -18,10 +18,15 @@ mkTrivialModule {
   boot.tmpOnTmpfs = true;
 
   services = {
-    openssh.enable = true;
     dbus.enable = true;
     acpid.enable = true;
     avahi.enable = true;
+  };
+
+  services.openssh = {
+    enable = mkDefault true;
+    passwordAuthentication = mkDefault false;
+    challengeResponseAuthentication = mkDefault false;
   };
 
   programs = {
