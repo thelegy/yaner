@@ -1,10 +1,11 @@
 { lib, config, pkgs, mkTrivialModule, ... }:
+with lib;
 
 mkTrivialModule {
-  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
   # Restore systemd default
-  services.logind.killUserProcesses = lib.mkDefault true;
+  services.logind.killUserProcesses = mkDefault true;
 
   console.keyMap = "de-latin1-nodeadkeys";
   time.timeZone = "Europe/Berlin";
