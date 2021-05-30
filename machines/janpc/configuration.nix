@@ -6,6 +6,8 @@
     ../../layers/irb-kerberos
   ];
 
+  userconfig.thelegy.builder.enable = true;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 

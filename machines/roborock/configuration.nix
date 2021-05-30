@@ -9,6 +9,7 @@ with lib;
     ./usb.nix
   ];
   userconfig.thelegy.base.enable = true;
+  userconfig.thelegy.builder.enable = true;
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
