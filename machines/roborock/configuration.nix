@@ -6,6 +6,7 @@ with lib;
   imports = [
     ./hardware-configuration.nix
     ./fan.nix
+    ./usb.nix
   ];
   userconfig.thelegy.base.enable = true;
 
