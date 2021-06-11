@@ -13,6 +13,8 @@ with self;
     chmod +x $out/bin/*
   '';
 
+  media_volume = pkgs.callPackage ./media_volume.nix {};
+
   mpv_autospeed = ./mpv_autospeed.lua;
 
 }

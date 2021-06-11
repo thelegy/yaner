@@ -56,10 +56,16 @@ in {
     extraConfig = ''
       titlebar_padding 3 1
 
-      bindsym --locked XF86AudioPlay exec ${pkgs.playerctl}/bin/playerctl play-pause
-      bindsym --locked XF86AudioStop exec ${pkgs.playerctl}/bin/playerctl stop
-      bindsym --locked XF86AudioPrev exec ${pkgs.playerctl}/bin/playerctl previous
-      bindsym --locked XF86AudioNext exec ${pkgs.playerctl}/bin/playerctl next
+      bindsym --locked XF86AudioRaiseVolume exec ${pkgs.pamixer}/bin/pamixer --gamma 3 --increase 1 --unmute
+      bindsym --locked XF86AudioLowerVolume exec ${pkgs.pamixer}/bin/pamixer --gamma 3 --decrease 1 --unmute
+
+      bindsym --locked Shift+XF86AudioRaiseVolume exec ${pkgs.media_volume} 0.05
+      bindsym --locked Shift+XF86AudioLowerVolume exec ${pkgs.media_volume} -0.05
+
+      bindsym --locked XF86AudioPlay exec ${pkgs.playerctl}/bin/playerctl --ignore-player=chromium play-pause
+      bindsym --locked XF86AudioStop exec ${pkgs.playerctl}/bin/playerctl --ignore-player=chromium stop
+      bindsym --locked XF86AudioPrev exec ${pkgs.playerctl}/bin/playerctl --ignore-player=chromium previous
+      bindsym --locked XF86AudioNext exec ${pkgs.playerctl}/bin/playerctl --ignore-player=chromium next
 
       exec ${pkgs.gammastep}/bin/gammastep -t 5700:3400 -g 1 -l 52:9
     '';
