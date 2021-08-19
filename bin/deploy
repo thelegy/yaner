@@ -110,7 +110,7 @@ then
 fi
 
 print_info "Building target system configuration"
-nix $nix_options build .#nixosConfigurations.$hostname.config.system.build.toplevel --out-link "$local_temp_dir/nixos-config-$hostname"
+nix $nix_options build --keep-going .#nixosConfigurations.$hostname.config.system.build.toplevel --out-link "$local_temp_dir/nixos-config-$hostname"
 readonly nixos_config_path=$(realpath "$local_temp_dir/nixos-config-$hostname")
 
 if [[ "$operation" = "build" ]]

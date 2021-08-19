@@ -36,8 +36,7 @@ let
     {
       imports = machineConfigs ++ (attrValues flakeOutputs.nixosModules) ++ [
         flakes.homemanager.nixosModules.home-manager
-        flakes.qd.nixosModules.qd
-      ] ++ (attrValues flakes.queezle-dotfiles.nixosModules);
+      ];
 
       home-manager = {
         useGlobalPkgs = true;
@@ -47,7 +46,6 @@ let
       nixpkgs.overlays = [
         flakeOutputs.overlay
         flakes.queezle-dotfiles.overlay
-        flakes.qd.overlay
       ];
 
       _module.args.helpers = flakeOutputs.utils;
@@ -58,6 +56,7 @@ let
       system.configurationRevision = lib.mkIf (flakes.self ? rev) flakes.self.rev;
       nix.nixPath = [ "nixpkgs=${pkgs}" ];
       nix.registry.nixpkgs.flake = pkgs;
+      nix.registry.n.flake = pkgs;
 
       networking.hostName = lib.mkDefault name;
     };

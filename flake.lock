@@ -52,28 +52,6 @@
         "type": "github"
       }
     },
-    "qd": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "host": "git.c3pb.de",
-        "lastModified": 1613085782,
-        "narHash": "sha256-4xKP5svm858lime3jbR83a4tRjGPgmP5DVPnq2fzu9Q=",
-        "owner": "jens",
-        "repo": "qd",
-        "rev": "3666db6dbe6292b5c961aaeccc068719de2b33f7",
-        "type": "gitlab"
-      },
-      "original": {
-        "host": "git.c3pb.de",
-        "owner": "jens",
-        "repo": "qd",
-        "type": "gitlab"
-      }
-    },
     "queezle-dotfiles": {
       "inputs": {
         "nixpkgs": [
@@ -101,7 +79,6 @@
         "homemanager": "homemanager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
-        "qd": "qd",
         "queezle-dotfiles": "queezle-dotfiles"
       }
     }

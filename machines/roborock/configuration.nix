@@ -203,10 +203,6 @@ with lib;
     wantedBy = [ "multi-user.target" ];
   };
 
-  services.qd = {
-    enable = true;
-    mqttUri = "mqtt://localhost";
-  };
 
   services.greetd = {
     enable = true;
