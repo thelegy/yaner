@@ -5,6 +5,7 @@ let
   steam = pkgs.steam.override {
     extraPkgs = pkgs: with pkgs; [
       libbsd
+      glxinfo
     ];
     nativeOnly = true;
   };

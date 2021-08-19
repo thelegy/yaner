@@ -58,6 +58,9 @@ mkTrivialModule {
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMCC4cFL1xcZOsIzXg1b/M4b89ofMKErNhg9s+0NdBVC beinke@th1"
     ];
+    packages = with pkgs; [
+      xdg_utils
+    ];
   };
 
   users.users.root.openssh.authorizedKeys.keys = [

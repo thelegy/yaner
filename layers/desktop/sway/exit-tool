@@ -22,13 +22,13 @@ shutdown() {
 
 suspend() {
   lock&
-  systemctl suspend
+  systemctl suspend -i
   return
 }
 
 hibernate() {
   lock&
-  systemctl hibernate
+  systemctl hibernate -i
   return
 }
 usage() {

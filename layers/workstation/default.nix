@@ -24,6 +24,7 @@
       haskell-language-server
       kicad
       ldns
+      libfaketime
       signal-desktop
       stack
       tdesktop

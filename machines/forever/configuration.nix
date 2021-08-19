@@ -35,7 +35,7 @@
     virtualHosts.default = {
       default = true;
       useACMEHost = "forever.0jb.de";
-      addSSL = true;
+      forceSSL = true;
     };
   };
 
@@ -50,11 +50,11 @@
     acceptTerms = true;
     certs = {
       "forever.0jb.de" = {
-        extraDomains = {
-          "0jb.de" = null;
-        };
+        extraDomainNames = [
+          "0jb.de"
+        ];
+        group = "nginx";
         webroot = "/var/lib/acme/acme-challenge";
-        user = "nginx";
         postRun = ''
           systemctl start --failed nginx.service
           systemctl reload nginx.service
@@ -62,7 +62,6 @@
       };
     };
   };
-
 
   system.stateVersion = "19.09";
 

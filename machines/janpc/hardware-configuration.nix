@@ -10,13 +10,13 @@
 
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "nvme" "xhci_pci" "firewire_ohci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/system";
       fsType = "btrfs";
-      options = [ "subvol=janpc" "compress=zstd" ];
+      options = [ "subvol=janpc" "compress=zstd" "discard=async" ];
     };
 
   fileSystems."/boot" =
@@ -30,7 +30,7 @@
   #   };
 
 
-  nix.maxJobs = lib.mkDefault 8;
+  nix.maxJobs = lib.mkDefault 24;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # High-DPI console
   # i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
