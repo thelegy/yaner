@@ -11,6 +11,11 @@
 
   wallpaper = "${pkgs.sway-unwrapped.src}/assets/Sway_Wallpaper_Blue_2048x1536.png";
 
+  screenshotTool = pkgs.writeScript "screenshotTool" ''
+    #!${pkgs.zsh}/bin/zsh
+    PATH=${pkgs.grim}/bin:${pkgs.slurp}/bin:${pkgs.wl-clipboard}/bin:${pkgs.coreutils}/bin
+    slurp -do | grim -g - -t png - | tee "''${XDG_RUNTIME_DIR:-/tmp}/screenshot.png" | wl-copy --type image/png --foreground
+  '';
   sensibleCommand = ./sensible-command;
   exitTool = ./exit-tool;
 
@@ -137,6 +142,8 @@ in {
 
         "${mod}+Print" = "exec ${exitTool} lock";
         "${mod}+Shift+Print" = "mode \"${modeSystem}\"";
+
+        "${mod}+Insert" = "exec ${screenshotTool}";
 
         "${mod}+Shift+e" = "mode \"${modeExit}\"";
       };
