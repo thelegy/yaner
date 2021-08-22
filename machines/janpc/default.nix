@@ -1,13 +1,16 @@
-{ lib, pkgs, ... }:
+{ mkMachine, ... }:
+
+mkMachine {} ({ lib, pkgs, ... }:
 with lib;
 
 {
   imports = [
+    ./hardware-configuration.nix
     ../../layers/workstation
     ../../layers/irb-kerberos
   ];
 
-  userconfig.thelegy.builder.enable = true;
+  wat.thelegy.builder.enable = true;
 
   networking.useDHCP = false;
   networking.interfaces.enp7s0.useDHCP = true;
@@ -86,4 +89,4 @@ with lib;
     multimc
   ];
 
-}
+})

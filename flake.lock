@@ -79,7 +79,24 @@
         "homemanager": "homemanager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
-        "queezle-dotfiles": "queezle-dotfiles"
+        "queezle-dotfiles": "queezle-dotfiles",
+        "wat": "wat"
+      }
+    },
+    "wat": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "narHash": "sha256-ktnhZhaps9pZhtprYjleLowjkbpnstTmc2362odX9yw=",
+        "path": "/home/beinke/repos/wat",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/beinke/repos/wat",
+        "type": "path"
       }
     }
   },

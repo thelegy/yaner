@@ -1,9 +1,16 @@
 {
+
   description = "Yet Another Nix Expression Repository";
+
 
   inputs = {
 
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
+
+    wat = {
+      url = gitlab:beini/wat?host=git.c3pb.de;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     homemanager = {
       url = github:nix-community/home-manager;
@@ -19,23 +26,25 @@
 
   };
 
-  outputs = inputs@{self, nixpkgs, ...}: let
-    outputs = rec {
 
-      utils = import (self + "/utils") nixpkgs.lib;
+  outputs = flakes@{ wat, ... }: wat.lib.mkWatRepo flakes ({ findModules, findMachines, ... }: rec {
+    loadOverlays = [
+      outputs.overlay
+      flakes.queezle-dotfiles.overlay
+    ];
+    loadModules = (wat.lib.attrValues outputs.nixosModules) ++ [
+      flakes.homemanager.nixosModules.home-manager
+    ];
+    outputs = {
 
       overlay = import ./pkgs;
-      nixosModules = utils.findNixosModules {
-        path = ./modules;
-        namespace = [ "userconfig" "thelegy" ];
-      };
 
-      nixosConfigurations = import self {
-        flakes=inputs;
-        flakeOutputs=outputs;
-      };
+      nixosModules = findModules ["thelegy"] ./modules;
+
+      nixosConfigurations = findMachines ./machines;
 
     };
-  in outputs;
+  });
+
 
 }

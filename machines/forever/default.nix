@@ -1,11 +1,15 @@
-{ pkgs, ... }:
+{ mkMachine, ...}:
+
+mkMachine {} ({ pkgs, ... }:
 {
 
   imports = [
+    ./hardware-configuration.nix
     ./borg-server.nix
     ./docpages.nix
   ];
-  userconfig.thelegy.base.enable = true;
+
+  wat.thelegy.base.enable = true;
 
   boot.loader.grub.configurationLimit = 3;
   boot.loader.grub.device = "/dev/sda";
@@ -65,4 +69,4 @@
 
   system.stateVersion = "19.09";
 
-}
+})

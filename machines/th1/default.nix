@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ mkMachine, ... }:
 
-{
+mkMachine {} ( { pkgs, config, ... }: {
 
   imports = [
     ./hardware-configuration.nix
@@ -145,4 +145,4 @@
 
   system.stateVersion = "19.03";
 
-}
+})

@@ -2,6 +2,9 @@
 with lib;
 
 mkTrivialModule {
+
+  wat.thelegy.homeManager.enable = true;
+
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
   # Restore systemd default

@@ -5,7 +5,7 @@
   imports = [
     ./pulseaudio.nix
   ];
-  userconfig.thelegy.base.enable = true;
+  wat.thelegy.base.enable = true;
 
 
   hardware.opengl.enable = true;
