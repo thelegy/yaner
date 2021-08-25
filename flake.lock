@@ -90,13 +90,19 @@
         ]
       },
       "locked": {
-        "narHash": "sha256-ktnhZhaps9pZhtprYjleLowjkbpnstTmc2362odX9yw=",
-        "path": "/home/beinke/repos/wat",
-        "type": "path"
+        "host": "git.c3pb.de",
+        "lastModified": 1629658801,
+        "narHash": "sha256-I9C8WJRQWId7D6m6KJaj4/UUfk6NI4wZgjSk7WjzuYI=",
+        "owner": "beini",
+        "repo": "wat",
+        "rev": "11b9b716c927eb7459d31836c2d924a22cded453",
+        "type": "gitlab"
       },
       "original": {
-        "path": "/home/beinke/repos/wat",
-        "type": "path"
+        "host": "git.c3pb.de",
+        "owner": "beini",
+        "repo": "wat",
+        "type": "gitlab"
       }
     }
   },

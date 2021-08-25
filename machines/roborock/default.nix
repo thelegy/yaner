@@ -1,4 +1,6 @@
-{ lib, config, options, pkgs, flakes, ... }:
+{ mkMachine, ... }:
+
+mkMachine { system = "aarch64-linux"; } ({ lib, config, options, pkgs, flakes, ... }:
 with lib;
 
 {
@@ -8,8 +10,9 @@ with lib;
     ./fan.nix
     ./usb.nix
   ];
-  userconfig.thelegy.base.enable = true;
-  userconfig.thelegy.builder.enable = true;
+
+  wat.thelegy.base.enable = true;
+  wat.thelegy.builder.enable = true;
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
@@ -529,4 +532,4 @@ with lib;
 
   system.stateVersion = "19.03";
 
-}
+})

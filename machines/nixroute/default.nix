@@ -1,11 +1,13 @@
-{ config, pkgs, ... }:
+{ mkMachine, ...}:
+
+mkMachine {} ({ config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-  userconfig.thelegy.base.enable = true;
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
+  wat.thelegy.base.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -88,4 +90,4 @@
 
   system.stateVersion = "19.09"; # Did you read the comment?
 
-}
+})
