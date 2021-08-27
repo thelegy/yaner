@@ -25,6 +25,7 @@ mkMachine {} ({ pkgs, ... }:
     useDHCP = true;
     ipv6.addresses = [ { address = "2a01:4f8:c2c:e7b1::1"; prefixLength = 64; } ];
   };
+  networking.interfaces.ens10.useDHCP = true;
   networking.defaultGateway6 = { address = "fe80::1"; interface = "ens3"; };
 
 
