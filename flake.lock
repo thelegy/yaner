@@ -90,19 +90,17 @@
         ]
       },
       "locked": {
-        "host": "git.c3pb.de",
-        "lastModified": 1629658801,
-        "narHash": "sha256-I9C8WJRQWId7D6m6KJaj4/UUfk6NI4wZgjSk7WjzuYI=",
-        "owner": "beini",
+        "lastModified": 1631478181,
+        "narHash": "sha256-IB3uhDCInqB7UR93aJx8QdWAvXHwS5CFe1v87wLIB8Y=",
+        "owner": "thelegy",
         "repo": "wat",
-        "rev": "11b9b716c927eb7459d31836c2d924a22cded453",
-        "type": "gitlab"
+        "rev": "0c4722acce65bafdfab6f99bcef8f24b5f9b3255",
+        "type": "github"
       },
       "original": {
-        "host": "git.c3pb.de",
-        "owner": "beini",
+        "owner": "thelegy",
         "repo": "wat",
-        "type": "gitlab"
+        "type": "github"
       }
     }
   },

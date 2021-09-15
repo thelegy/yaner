@@ -8,7 +8,7 @@
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
 
     wat = {
-      url = gitlab:beini/wat?host=git.c3pb.de;
+      url = github:thelegy/wat;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -29,10 +29,9 @@
 
   outputs = flakes@{ wat, ... }: wat.lib.mkWatRepo flakes ({ findModules, findMachines, ... }: rec {
     loadOverlays = [
-      outputs.overlay
       flakes.queezle-dotfiles.overlay
     ];
-    loadModules = (wat.lib.attrValues outputs.nixosModules) ++ [
+    loadModules = [
       flakes.homemanager.nixosModules.home-manager
     ];
     outputs = {
