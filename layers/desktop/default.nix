@@ -47,6 +47,7 @@
   home-manager.users.beinke = { ... }: {
     imports = [
       ./kitty.nix
+      ./mako.nix
       ./sway
     ];
   };

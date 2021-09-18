@@ -59,6 +59,8 @@ in {
     enable = true;
 
     extraConfig = ''
+      include local
+
       titlebar_padding 3 1
 
       bindsym --locked XF86AudioRaiseVolume exec ${pkgs.pamixer}/bin/pamixer --gamma 3 --increase 1 --unmute
@@ -73,6 +75,7 @@ in {
       bindsym --locked XF86AudioNext exec ${pkgs.playerctl}/bin/playerctl --ignore-player=chromium next
 
       exec ${pkgs.gammastep}/bin/gammastep -t 5700:3400 -g 1 -l 52:9
+      exec ${pkgs.mako}/bin/mako
     '';
 
     config = {
