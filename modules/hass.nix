@@ -44,8 +44,8 @@ let
         </interface>
         <hostdev mode="subsystem" type="usb">
           <source startupPolicy="optional">
-            <vendor id="0x0451" />
-            <product id="0x16a8" />
+            <vendor id="0x1a86" />
+            <product id="0x7523" />
           </source>
         </hostdev>
       </devices>
