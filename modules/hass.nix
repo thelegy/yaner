@@ -39,7 +39,7 @@ let
         </disk>
         <interface type="bridge">
           <source bridge="br0" />
-          <target dev="hass" />
+          <mac address="52:54:00:8b:02:8b" />
           <model type="virtio" />
         </interface>
         <hostdev mode="subsystem" type="usb">
@@ -86,7 +86,6 @@ in mkTrivialModule {
       "libvirtd.service"
     ];
     script = ''
-      #${pkgs.libvirt}/bin/virsh 'start hass --autodestroy; event --domain hass --event lifecycle'
       ${pkgs.libvirt}/bin/virsh 'create ${domainDescription} --autodestroy; event --domain hass --event lifecycle'
     '';
     preStop = ''
