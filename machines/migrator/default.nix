@@ -19,11 +19,9 @@ in {
   boot.loader.efi.canTouchEfiVariables = false;
 
   boot.initrd.availableKernelModules = [ "r8169" ];
-  boot.initrd.preLVMCommands = mkOrder 300 "ip link set ${networkInterface} up; sleep 5";
-  boot.initrd.network.enable = true;
-  boot.initrd.network.ssh = {
+  wat.thelegy.ssh-unlock = {
     enable = true;
-    hostKeys = [ "/etc/secrets/initrd_ed25519_host_key" ];
+    interface = networkInterface;
   };
 
   wat.installer = {
