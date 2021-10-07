@@ -7,6 +7,8 @@
 
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
 
+    nixpkgs-roborock.url = github:NixOS/nixpkgs/dd14e5d78e90a2ccd6007e569820de9b4861a6c2;
+
     wat = {
       url = github:thelegy/wat;
       inputs.nixpkgs.follows = "nixpkgs";

@@ -36,6 +36,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-roborock": {
+      "locked": {
+        "lastModified": 1627128856,
+        "narHash": "sha256-yw3lA8zyNFhj309lmxvNByEEymRT1rRy5oE+jEPnsP4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "dd14e5d78e90a2ccd6007e569820de9b4861a6c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "dd14e5d78e90a2ccd6007e569820de9b4861a6c2",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1603918233,
@@ -78,6 +94,7 @@
       "inputs": {
         "homemanager": "homemanager",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-roborock": "nixpkgs-roborock",
         "nixpkgs-stable": "nixpkgs-stable",
         "queezle-dotfiles": "queezle-dotfiles",
         "wat": "wat"
