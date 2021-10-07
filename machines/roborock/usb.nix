@@ -3,22 +3,8 @@ with lib;
 
 {
 
-  boot.kernelPatches = [
-    {
-      # Got the idea from https://www.diyaudio.com/forums/pc-based/341590-using-raspberry-pi-4-usb-dsp-dac-5.html#post5893255
-      name = "fix-uac2-for-win10";
-      patch = ./linux-fix-uac2-for-windows.patch;
-    }
-  ];
 
-  boot.kernelPackages = let
-    crossPackages = import "${flakes.nixpkgs}/pkgs/top-level/default.nix" {
-      localSystem = "x86_64-linux";
-      crossSystem = config.nixpkgs.localSystem;
-    };
-    #crossPackages = pkgs.forceSystem "x86_64-linux" "";
-    #crossPackages = flakes.nixpkgs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform;
-  in crossPackages.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
 
   hardware.deviceTree.overlays = let
