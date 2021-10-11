@@ -33,6 +33,12 @@ in {
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICC+tSHBpxjuQWw4awATyFUAB8TTYHYi/54vh/ijXP+R root@mail"
       ];
     };
+    roborock = {
+      path = "/mnt/backup-storage/roborock";
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFFAkNZbkfRNHy8sbL44yCxqmVpe0NjH3P/dl+XH9icH root@roborock"
+      ];
+    };
     koma-valhalla = {
       path = "/mnt/backup-storage/koma-valhalla";
       authorizedKeys = [
