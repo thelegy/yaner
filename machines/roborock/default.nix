@@ -13,6 +13,7 @@ with lib;
 
   wat.thelegy.base.enable = true;
   wat.thelegy.builder.enable = true;
+  wat.thelegy.grocy.enable = true;
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
