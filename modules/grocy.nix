@@ -34,6 +34,9 @@ in mkTrivialModule {
         extraConfig = ''
           sub_filter "http://${hostName}/" "http://$host/grocy/";
           sub_filter "https://${hostName}/" "https://$host/grocy/";
+          sub_filter "http:\/\/${hostName}\/" "http:\/\/$host\/grocy\/";
+          sub_filter "https:\/\/${hostName}\/" "https:\/\/$host\/grocy\/";
+          sub_filter_types "*";
           sub_filter_once off;
         '';
       };
