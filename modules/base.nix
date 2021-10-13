@@ -4,6 +4,7 @@ with lib;
 mkTrivialModule {
 
   wat.thelegy.homeManager.enable = true;
+  wat.thelegy.emergencyStorage.enable = mkDefault true;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
