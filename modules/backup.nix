@@ -54,7 +54,7 @@ mkModule {
           "sh:/home/*/.stack"
           "sh:/home/*/.thunderbird"
         ] ++ cfg.extraExcludes;
-        extraCreateArgs = "--stats";
+        extraCreateArgs = "--stats --exclude-caches";
         paths = [ "/" ];
         prune = {
           keep = {
