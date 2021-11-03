@@ -99,7 +99,7 @@ let
     (optionalString domainCfg.updateA (ddnsV4Script domainCfg "-4")) +
     (optionalString domainCfg.updateAAAA (ddnsV6Script domainCfg "-6"));
 
-  ddnsService = domainCfg: mkIf (domainCfg.updateAAAA || domainCfg.updateA) {
+  ddnsService = domainCfg: optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
     "he-ddns-${domainCfg.domain}" = {
       description = "Hurricane Electric DDNS Update Service";
       requires = [ "network-online.target" ];
@@ -108,7 +108,7 @@ let
     };
   };
 
-  ddnsTimer = domainCfg: mkIf (domainCfg.updateAAAA || domainCfg.updateA) {
+  ddnsTimer = domainCfg: optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
     "he-ddns-${domainCfg.domain}" = {
       description = "Hurricane Electric DDNS Update Timer";
       wantedBy = [ "multi-user.target" ];
