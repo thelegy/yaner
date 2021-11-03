@@ -34,7 +34,6 @@ mkMachine {} ( { pkgs, config, ... }: {
       externalInterface = "wlp4s0";
     };
     networkmanager.unmanaged = [ "interface-name:ve-*" ];
-    networkmanager.wifi.backend = "iwd";
   };
   services.resolved.enable = true;
 
