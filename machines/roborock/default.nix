@@ -390,16 +390,6 @@ with lib;
     };
   };
 
-  services.zigbee2mqtt = {
-    enable = true;
-    settings = {
-      mqtt.server = "mqtt://localhost";
-      advanced.log_output = [ "console" ];
-      experimental.new_api = true;
-      frontend.port = config.networking.services.zigbee2mqtt-frontend;
-    };
-  };
-
   sound.enable = true;
   hardware.pulseaudio = {
     enable = true;
