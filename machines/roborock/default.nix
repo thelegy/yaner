@@ -274,6 +274,7 @@ with lib;
         to = [ "fw" ];
         allowedServices = [
           "http"
+          "https"
           "snapcast-http"
           "snapcast-stream"
           "snapcast-control"
@@ -289,6 +290,7 @@ with lib;
           "dhcp-server"
           "mqtt"
           "http"
+          "https"
           "pulseaudio-native"
           "zigbee2mqtt-frontend"
           "snapcast-stream"
@@ -389,6 +391,28 @@ with lib;
       takeIPv6FromInterface = "internal";
     };
   };
+
+  security.acme = {
+    acceptTerms = true;
+    #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    email = "mail+letsencrypt@0jb.de";
+    preliminarySelfsigned = false;
+    certs = {
+      "home.0jb.de" = {
+        extraDomainNames = [
+          "grocy.0jb.de"
+        ];
+        dnsProvider = "hurricane";
+        credentialsFile = "/etc/secrets/acme";
+        group = "nginx";
+        postRun = ''
+          systemctl start --failed nginx.service
+          systemctl reload nginx.service
+        '';
+      };
+    };
+  };
+
 
   sound.enable = true;
   hardware.pulseaudio = {

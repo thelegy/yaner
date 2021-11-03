@@ -5,8 +5,7 @@
 }: with lib;
 
 let
-  hostName = "grocy.localhost";
-  ip = "127.0.0.42";
+  hostName = "grocy.0jb.de";
 in mkTrivialModule {
 
   services.grocy = {
@@ -20,27 +19,10 @@ in mkTrivialModule {
     };
   };
 
-  networking.hosts."${ip}" = [ hostName ];
-
-  services.nginx.virtualHosts = {
-    "${hostName}" = {
-      listen = [{
-        addr = ip;
-      }];
-    };
-    default = {
-      locations."/grocy/" = {
-        proxyPass = "http://${hostName}/";
-        extraConfig = ''
-          sub_filter "http://${hostName}/" "http://$host/grocy/";
-          sub_filter "https://${hostName}/" "https://$host/grocy/";
-          sub_filter "http:\/\/${hostName}\/" "http:\/\/$host\/grocy\/";
-          sub_filter "https:\/\/${hostName}\/" "https:\/\/$host\/grocy\/";
-          sub_filter_types "*";
-          sub_filter_once off;
-        '';
-      };
-    };
+  services.nginx.virtualHosts.${hostName} = {
+    forceSSL = true;
+    sslCertificate = "/var/lib/acme/home.0jb.de/fullchain.pem";
+    sslCertificateKey = "/var/lib/acme/home.0jb.de/key.pem";
   };
 
 }
