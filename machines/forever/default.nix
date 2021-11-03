@@ -10,6 +10,7 @@ mkMachine {} ({ pkgs, ... }:
   ];
 
   wat.thelegy.base.enable = true;
+  wat.thelegy.backup.enable = true;
 
   boot.loader.grub.configurationLimit = 3;
   boot.loader.grub.device = "/dev/sda";
