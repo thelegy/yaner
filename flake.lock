@@ -22,33 +22,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1633528625,
-        "narHash": "sha256-AGj5q58eHACAe0RQGxObrGwMUsjMozTsiznhsLCYisQ=",
+        "lastModified": 1635844945,
+        "narHash": "sha256-tZcL307dj28jgEU1Wdn+zwG9neyW0H2+ZjdVhvJxh9g=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5e2018f7b383aeca6824a30c0cd1978c9532a46a",
+        "rev": "b67e752c29f18a0ca5534a07661366d6a2c2e649",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-roborock": {
-      "locked": {
-        "lastModified": 1627128856,
-        "narHash": "sha256-yw3lA8zyNFhj309lmxvNByEEymRT1rRy5oE+jEPnsP4=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "dd14e5d78e90a2ccd6007e569820de9b4861a6c2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "dd14e5d78e90a2ccd6007e569820de9b4861a6c2",
         "type": "github"
       }
     },
@@ -94,7 +78,6 @@
       "inputs": {
         "homemanager": "homemanager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-roborock": "nixpkgs-roborock",
         "nixpkgs-stable": "nixpkgs-stable",
         "queezle-dotfiles": "queezle-dotfiles",
         "wat": "wat"

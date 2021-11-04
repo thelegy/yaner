@@ -1,6 +1,6 @@
 { mkMachine, flakes, ... }:
 
-mkMachine { system = "aarch64-linux"; nixpkgs = flakes.nixpkgs-roborock; } ({ lib, config, pkgs, ... }:
+mkMachine { system = "aarch64-linux"; } ({ lib, config, pkgs, ... }:
 with lib;
 
 {
@@ -361,28 +361,24 @@ with lib;
 
   services.mosquitto = {
     enable = true;
-    port = 43354;  # Configure ipv4 only listener to irrelevant port
-    allowAnonymous = true;
-    extraConf = ''
-      persistence false
-
-      # Open a dualstack listener on default port
-      listener 1883
-    '';
-    aclExtraConf = ''
-      pattern readwrite #
-    '';
-    users = {
-      test = {
-        hashedPassword = "$6$01MyUz3GvSvGfb3U$IQTl7uF0HNTbLAuZU8v7h0gkMS7R5HyCSqNJx7MpUyDeohnJOsrlh1KOC0MfhWBz2UyVR8J7kSUmS3ve+GxEvQ==";
-        acl = [
-          "topic #"
-        ];
+    persistence = false;
+    listeners = [{
+      settings = {
+        allow_anonymous = true;
       };
-      nobody = {
-        acl = ["topic #"];
+      acl = [ "topic readwrite #" ];
+      users = {
+        test = {
+          hashedPassword = "$6$01MyUz3GvSvGfb3U$IQTl7uF0HNTbLAuZU8v7h0gkMS7R5HyCSqNJx7MpUyDeohnJOsrlh1KOC0MfhWBz2UyVR8J7kSUmS3ve+GxEvQ==";
+          acl = [ "readwrite #" ];
+        };
+        nobody.acl = [ "readwrite #" ];
+        tasmota = {
+          acl = [ "readwrite tasmota/#" ];
+          password = "tasmota";
+        };
       };
-    };
+    }];
   };
 
   services.he-dns = {
