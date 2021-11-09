@@ -5,6 +5,7 @@ mkTrivialModule {
 
   wat.thelegy.homeManager.enable = true;
   wat.thelegy.emergencyStorage.enable = mkDefault true;
+  wat.thelegy.zsh.enable = mkDefault true;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
@@ -37,14 +38,6 @@ mkTrivialModule {
     less.enable = true;
     mtr.enable = true;
     tmux.enable = true;
-  };
-
-  programs.zsh = {
-    enable = true;
-    promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-    shellInit = ''
-      command -v direnv >/dev/null && eval "$(direnv hook zsh)"
-    '';
   };
 
   environment.shellInit = ''
@@ -89,5 +82,6 @@ mkTrivialModule {
     reptyr
     ripgrep
     tig
+    w3m
   ];
 }
