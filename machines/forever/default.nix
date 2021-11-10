@@ -45,22 +45,19 @@ mkMachine {} ({ pkgs, ... }:
     };
   };
 
-  systemd.services.nginx.wants = [
-    "acme-selfsigned-forever.0jb.de.service"
-  ];
-  systemd.services.nginx.after = [ "acme-selfsigned-forever.0jb.de.service" ];
-  systemd.services.nginx.before = [ "acme-forever.0jb.de.service" ];
-
   security.acme = {
-    email = "mail+letsencrypt@0jb.de";
     acceptTerms = true;
+    #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    email = "mail+letsencrypt@0jb.de";
+    preliminarySelfsigned = false;
     certs = {
       "forever.0jb.de" = {
         extraDomainNames = [
           "0jb.de"
         ];
+        dnsProvider = "hurricane";
+        credentialsFile = "/etc/secrets/acme";
         group = "nginx";
-        webroot = "/var/lib/acme/acme-challenge";
         postRun = ''
           systemctl start --failed nginx.service
           systemctl reload nginx.service
