@@ -21,6 +21,14 @@ mkTrivialModule {
     };
 
     interactiveShellInit = ''
+
+      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+      # Initialization code that may require console input (password prompts, [y/n]
+      # confirmations, etc.) must go above this block; everything else may go below.
+      if [[ -r ''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh ]] {
+        source ''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh
+      }
+
       _exists direnv && eval "$(direnv hook zsh)"
       _exists w3mman && alias man=w3mman
 
@@ -42,15 +50,28 @@ mkTrivialModule {
       )
 
       cd () {
-        if [[ $# != 1 || -z $1 || -d $1 || $1 == "-" ]]; then
+        if [[ $# != 1 || -z $1 || -d $1 || $1 == "-" ]] {
           builtin cd $@
-        elif _exists $1; then
+        } elif { _exists $1 } {
           builtin cd ''${1:c:A:h}
-        elif [[ -e $1 ]]; then
+        } elif [[ -e $1 ]] {
           builtin cd ''${1:h}
-        else
+        } else {
           builtin cd $1
-        fi
+        }
+      }
+
+      pastebin () {
+        readonly pastebin='https://0x0.st'
+        readonly cmdName=$0
+        readonly usage="Usage: $cmdName [-s|--sign] [-h|--help] [FILENAME]"
+        if { [[ ''${1:-} == '-s' || ''${1:-} == '--sign' ]] && _exists gpg } {
+          shift
+          readonly filter='gpg --clearsign --output -'
+        }
+        [[ $# > 1 ]] && echo $usage && return 1
+        [[ ''${1:-} == '-h' || ''${1:-} == '--help' ]] && echo $usage && return 0
+        ''${=filer:-cat} ''${1:-} | curl -F'file=@-' $pastebin
       }
     '';
 
