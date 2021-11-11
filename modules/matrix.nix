@@ -87,7 +87,7 @@ mkModule {
     services.nginx.virtualHosts.${cfg.matrixDomain} = {
       forceSSL = true;
       useACMEHost = cfg.useACMEHost;
-      locations."/".extraConfig = "return 404;";  # ???
+      locations."/".extraConfig = "return 302 'https://${cfg.elementDomain}/';";
       locations."/_matrix".proxyPass = "http://[::1]:8008";
     };
 
