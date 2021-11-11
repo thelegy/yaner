@@ -9,9 +9,7 @@ with lib;
 
 mkModule {
 
-  options = let
-    cfg = extractFromNamespace config;
-  in liftToNamespace {
+  options = cfg: liftToNamespace {
 
     baseDomain = mkOption {
       type = types.str;
