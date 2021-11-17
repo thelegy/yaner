@@ -50,14 +50,12 @@ mkModule {
       enable = true;
       database_type = "sqlite3";
       server_name = cfg.baseDomain;
-      public_baseurl = "https://${cfg.matrixDomain}";
       no_tls = true;
       listeners = [{
         bind_address = "::1";
         port = 8008;
         resources = [
-          { compress = true; names = [ "client" ]; }
-          { compress = false; names = [ "federation" ]; }
+          { compress = false; names = [ "client" "federation" ]; }
         ];
         tls = false;
         type = "http";
@@ -68,13 +66,6 @@ mkModule {
       enable_registration = false;
       url_preview_enabled = true;
       expire_access_token = true;
-      extraConfig = ''
-        use_presence: true
-        enable_group_creation: true
-        group_creation_prefix: "unofficial/"
-        acme:
-          enabled: false
-      '';
 
       extraConfigFiles = [
         cfg.secretsFile
@@ -90,27 +81,34 @@ mkModule {
     };
 
     # Element Web
-    services.nginx.virtualHosts.${cfg.elementDomain} = {
-      forceSSL = true;
-      useACMEHost = cfg.useACMEHost;
-      root = pkgs.element-web.override {
-        conf = {
-          default_server_config."m.homeserver" = {
-            "base_url" = "https://${cfg.matrixDomain}";
-            "server_name" = "https://${cfg.baseDomain}";
-          };
-          disable_custom_urls = true;
-          disable_3pid_login = true;
-          showLabsSettings = true;
-          default_theme = "dark";
+    services.nginx.virtualHosts.${cfg.elementDomain} = let
+      config = {
+        default_server_name = cfg.baseDomain;
+        disable_login_language_selector = true;
+        disable_3pid_login = true;
+        disable_custom_urls = true;
+        disable_guests = true;
+        showLabsSettings = true;
+        enable_presence_by_hs_url = {
+          "https://matrix-client.matrix.org" = false;
+          "https://matrix.org" = false;
         };
       };
+    in {
+      forceSSL = true;
+      useACMEHost = cfg.useACMEHost;
+      root = pkgs.element-web;
+      locations."/config.json".extraConfig = ''
+        default_type application/json;
+        return 200 '${builtins.toJSON config}';
+      '';
     };
 
     # Well known connectivity
     services.nginx.virtualHosts.${cfg.nginxBaseVirtualhost}.locations = let
       wellKnownClient = {
         "m.homeserver".base_url = "https://${cfg.matrixDomain}";
+        "m.identity_server".base_url = "";
       };
       wellKnownServer = {
         "m.server" = "${cfg.matrixDomain}:443";
