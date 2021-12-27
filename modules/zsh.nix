@@ -7,6 +7,8 @@ mkTrivialModule {
 
     enable = true;
 
+    histSize = 1000000;
+
     shellInit = ''
       _exists () (( $+commands[$1] ))
     '';
@@ -19,6 +21,17 @@ mkTrivialModule {
       la = "ls -al";
       ll = "ls -l";
     };
+
+    setOptions = [
+      "GLOB_STAR_SHORT"
+      "HIST_FCNTL_LOCK"
+      "INC_APPEND_HISTORY"
+      "HIST_FIND_NO_DUPS"
+      "HIST_IGNORE_DUPS"
+      "HIST_IGNORE_SPACE"
+      "HIST_REDUCE_BLANKS"
+      "AUTO_CONTINUE"
+    ];
 
     interactiveShellInit = ''
 
@@ -36,6 +49,8 @@ mkTrivialModule {
       _exists vim && EDITOR=vim
       _exists nvim && EDITOR=nvim
       export VISUAL=$EDITOR
+
+      bindkey -e
 
       hash -d yaner=~/repos/yaner
 
@@ -72,6 +87,10 @@ mkTrivialModule {
         [[ $# > 1 ]] && echo $usage && return 1
         [[ ''${1:-} == '-h' || ''${1:-} == '--help' ]] && echo $usage && return 0
         ''${=filer:-cat} ''${1:-} | curl -F'file=@-' $pastebin
+      }
+
+      if [[ -f ~/.p10k.zsh ]] {
+        source ~/.p10k.zsh
       }
     '';
 
