@@ -22,6 +22,7 @@
       "kitty_mod+plus" = "change_font_size all +1.0";
       "kitty_mod+minus" = "change_font_size all -1.0";
       "kitty_mod+backspace" = "change_font_size all 0";
+      "kitty_mod+enter" = " new_os_window_with_cwd";
     };
   };
 
