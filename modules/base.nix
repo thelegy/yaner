@@ -68,7 +68,7 @@ mkTrivialModule {
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
-  nix.package = pkgs.nixUnstable;
+  nix.package = pkgs.nixFlakes;
 
   environment.systemPackages = with pkgs; [
     git
