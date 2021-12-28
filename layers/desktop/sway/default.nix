@@ -24,9 +24,12 @@
 
   mod = "Mod4";
 
+  menuCmd = "${pkgs.fuzzel}/bin/fuzzel --dpi-aware no --terminal kitty --border-radius 0 --background 111111e6 --text-color ccccccff --match-color dd5001ff --selection-color 000000e6 --vertical-pad 20 --font 'monospace:size=12' --width 100 --lines 25";
+
   bar = {
     position = "top";
-    fonts = ["monospace 7"];
+    fonts.names = [ "monospace" ];
+    fonts.size = 7.0;
     statusCommand = statusCommand;
     trayOutput = "*";
     extraConfig = ''
@@ -95,6 +98,7 @@ in {
         "*".bg = "${wallpaper} fill";
       };
       bars = [bar];
+      menu = menuCmd;
       colors.unfocused = {
         border = "#333333";
         background = "#202020dd";
