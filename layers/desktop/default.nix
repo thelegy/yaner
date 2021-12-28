@@ -7,7 +7,6 @@
   ];
   wat.thelegy.base.enable = true;
 
-
   hardware.opengl.enable = true;
 
   programs = {
@@ -31,6 +30,7 @@
     packages = with pkgs; [
       alacritty
       chromium
+      foot
       grim
       mpv
       python3
@@ -46,6 +46,7 @@
 
   home-manager.users.beinke = { ... }: {
     imports = [
+      ./foot.nix
       ./kitty.nix
       ./mako.nix
       ./sway
