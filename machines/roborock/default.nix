@@ -22,8 +22,24 @@ with lib;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
 
-  # Static kickstart ips (cloudflare anycast) to counteract missing rtc battery
-  services.timesyncd.extraConfig = "FallbackNTP=162.159.200.1,162.159.200.123";
+  services.chrony = {
+    enable = true;
+    servers = [];
+    extraConfig = ''
+      hwclockfile /etc/adjtime
+
+      pool pool.ntp.org iburst xleave presend 512
+      pool europe.pool.ntp.org iburst xleave presend 512
+
+      server ntp1.lwlcom.net iburst xleave presend 512
+      server ntp2.lwlcom.net iburst xleave presend 512
+      server ntp3.lwlcom.net iburst xleave presend 512
+
+      # Static kickstart ips (cloudflare anycast) to counteract missing rtc battery
+      server 162.159.200.1 iburst xleave presend 512
+      server 162.159.200.123 iburst xleave presend 512
+    '';
+  };
 
   networking.useDHCP = false;
 
