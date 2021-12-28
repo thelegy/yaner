@@ -19,6 +19,7 @@
       direnv
       file
       fzf
+      git-filter-repo
       git-revise
       ghcid
       haskell-language-server
