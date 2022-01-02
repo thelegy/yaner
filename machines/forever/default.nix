@@ -25,15 +25,29 @@ mkMachine {} ({ pkgs, ... }:
 
   boot.initrd.preDeviceCommands = "(while sleep 1; do echo DUMMY_PASSWORD | cryptsetup-askpass; done)&";
 
-
   networking.useDHCP = false;
-  networking.interfaces.ens3 = {
-    useDHCP = true;
-    ipv6.addresses = [ { address = "2a01:4f8:c2c:e7b1::1"; prefixLength = 64; } ];
+  systemd.network = {
+    enable = true;
+    networks.default = {
+      matchConfig.MACAddress = "96:00:00:33:c3:1e";
+      address = [ "2a01:4f8:c2c:e7b1::1/64" ];
+      dns = [
+        "213.133.98.98"
+        "213.133.99.99"
+        "213.133.100.100"
+      ];
+      gateway = [
+        "172.31.1.1"
+        "fe80::1"
+      ];
+      addresses = [{
+        addressConfig = {
+          Address = "78.47.82.136/32";
+          Peer = "172.31.1.1";
+        };
+      }];
+    };
   };
-  networking.interfaces.ens10.useDHCP = true;
-  networking.defaultGateway6 = { address = "fe80::1"; interface = "ens3"; };
-
 
   networking.firewall.allowedTCPPorts = [
     80
