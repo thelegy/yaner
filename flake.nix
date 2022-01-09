@@ -30,6 +30,7 @@
 
 
   outputs = flakes@{ wat, ... }: wat.lib.mkWatRepo flakes ({ findModules, findMachines, ... }: rec {
+    namespace = [ "thelegy" ];
     loadOverlays = [
       flakes.queezle-dotfiles.overlay
     ];
@@ -41,7 +42,7 @@
 
       overlay = import ./pkgs;
 
-      nixosModules = findModules ["thelegy"] ./modules;
+      nixosModules = findModules namespace ./modules;
 
       nixosConfigurations = findMachines ./machines;
 
