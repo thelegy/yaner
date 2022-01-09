@@ -20,6 +20,21 @@
         "type": "github"
       }
     },
+    "nixos-nftables-firewall": {
+      "locked": {
+        "lastModified": 1641757467,
+        "narHash": "sha256-ZA57xpD9Dz1isX7hi1zrv0BHJNG0wY1fAgo32MQZOlc=",
+        "owner": "thelegy",
+        "repo": "nixos-nftables-firewall",
+        "rev": "7078d4930347401fb995d15648f2a96b7464d8ee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "repo": "nixos-nftables-firewall",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1640408860,
@@ -77,6 +92,7 @@
     "root": {
       "inputs": {
         "homemanager": "homemanager",
+        "nixos-nftables-firewall": "nixos-nftables-firewall",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
         "queezle-dotfiles": "queezle-dotfiles",

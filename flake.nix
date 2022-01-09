@@ -17,6 +17,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-nftables-firewall.url = github:thelegy/nixos-nftables-firewall;
+
     queezle-dotfiles = {
       url = gitlab:jens/dotfiles?host=git.c3pb.de;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,6 +35,7 @@
     ];
     loadModules = [
       flakes.homemanager.nixosModules.home-manager
+      flakes.nixos-nftables-firewall.nixosModules.full
     ];
     outputs = {
 
