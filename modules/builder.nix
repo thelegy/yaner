@@ -11,6 +11,6 @@ mkTrivialModule {
     ];
   };
 
-  nix.trustedUsers = [ "nix" ];
+  nix.settings.trusted-users = [ "nix" ];
 
 }

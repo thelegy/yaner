@@ -67,7 +67,7 @@ mkMachine {} ({ pkgs, ... }:
   security.acme = {
     acceptTerms = true;
     #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-    email = "mail+letsencrypt@0jb.de";
+    defaults.email = "mail+letsencrypt@0jb.de";
     preliminarySelfsigned = false;
     certs = {
       "forever.0jb.de" = {

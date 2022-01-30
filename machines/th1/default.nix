@@ -35,7 +35,7 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   networking.firewall.allowedTCPPorts = [ 8000 ];
 
-  nix.trustedUsers = [ "beinke" ];
+  nix.settings.trusted-users = [ "beinke" ];
 
   nix.buildMachines = [
     {

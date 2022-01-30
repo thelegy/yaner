@@ -31,7 +31,7 @@ mkTrivialModule {
   services.openssh = {
     enable = mkDefault true;
     passwordAuthentication = mkDefault false;
-    challengeResponseAuthentication = mkDefault false;
+    kbdInteractiveAuthentication = mkDefault false;
   };
 
   programs = {
@@ -64,7 +64,7 @@ mkTrivialModule {
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMCC4cFL1xcZOsIzXg1b/M4b89ofMKErNhg9s+0NdBVC beinke@th1"
   ];
 
-  nix.autoOptimiseStore = true;
+  nix.settings.auto-optimise-store = true;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

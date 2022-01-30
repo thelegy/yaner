@@ -35,7 +35,6 @@
       mpv
       python3
       qbar
-      redshift-wlr
       slurp
       spotify
       translate-shell

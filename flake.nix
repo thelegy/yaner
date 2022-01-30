@@ -26,6 +26,8 @@
 
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
 
+    nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
+
   };
 
 
@@ -33,6 +35,7 @@
     namespace = [ "thelegy" ];
     loadOverlays = [
       flakes.queezle-dotfiles.overlay
+      (final: prev: {swaylock = flakes.nixpkgs-staging-next.legacyPackages.${final.system}.swaylock;})
     ];
     loadModules = [
       flakes.homemanager.nixosModules.home-manager

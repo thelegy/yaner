@@ -86,7 +86,7 @@ with lib;
   users.users.beinke.packages = with pkgs; [
     blender
     patchelf
-    multimc
+    polymc
   ];
 
 })

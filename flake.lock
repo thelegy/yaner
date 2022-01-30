@@ -22,11 +22,11 @@
     },
     "nixos-nftables-firewall": {
       "locked": {
-        "lastModified": 1641757467,
-        "narHash": "sha256-ZA57xpD9Dz1isX7hi1zrv0BHJNG0wY1fAgo32MQZOlc=",
+        "lastModified": 1643575417,
+        "narHash": "sha256-ODFs+OnDjYx8oder7LphbTsp6RdnGiAYLocAXXZAG7I=",
         "owner": "thelegy",
         "repo": "nixos-nftables-firewall",
-        "rev": "7078d4930347401fb995d15648f2a96b7464d8ee",
+        "rev": "8639bd275c99e0b6657b2a30ce0d8e94301aa5c7",
         "type": "github"
       },
       "original": {
@@ -37,11 +37,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1640408860,
-        "narHash": "sha256-h2uF3+a8bVfM8SjcS4hLbsOzOuG3qsxuImC0BucWs1Q=",
+        "lastModified": 1643347846,
+        "narHash": "sha256-O0tyXF//ppRpe9yT1Uu5n34yI2MWDyY6ZiJ4Qn5zIkE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "cb372c3b8880e504b06946e8fb2ca9777c685505",
+        "rev": "5bb20f9dc70e9ee16e21cc404b6508654931ce41",
         "type": "github"
       },
       "original": {
@@ -63,6 +63,22 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-20.09",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-staging-next": {
+      "locked": {
+        "lastModified": 1643565674,
+        "narHash": "sha256-VP+0nFRcmQY7DbZgbudgrCJfnbPxcnkI8QiDnMsWWpE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "24bc16243e07744359ccdde9e086fde0eb61db8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "staging-next",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -95,6 +111,7 @@
         "nixos-nftables-firewall": "nixos-nftables-firewall",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
+        "nixpkgs-staging-next": "nixpkgs-staging-next",
         "queezle-dotfiles": "queezle-dotfiles",
         "wat": "wat"
       }
