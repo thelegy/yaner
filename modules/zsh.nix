@@ -35,6 +35,12 @@ mkTrivialModule {
 
     interactiveShellInit = ''
 
+      if {_exists direnv} {
+        eval "$(direnv hook zsh)"
+        # Manually call the hook to ensure it is not run while the instant prompt is shown
+        _direnv_hook
+      }
+
       # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
       # Initialization code that may require console input (password prompts, [y/n]
       # confirmations, etc.) must go above this block; everything else may go below.
@@ -42,7 +48,6 @@ mkTrivialModule {
         source ''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh
       }
 
-      _exists direnv && eval "$(direnv hook zsh)"
       _exists w3mman && alias man=w3mman
 
       export EDITOR=vi
@@ -92,6 +97,7 @@ mkTrivialModule {
       if [[ -f ~/.p10k.zsh ]] {
         source ~/.p10k.zsh
       }
+
     '';
 
   };
