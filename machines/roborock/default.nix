@@ -7,7 +7,6 @@ with lib;
 
   imports = [
     ./hardware-configuration.nix
-    ./fan.nix
     ./usb.nix
   ];
 
