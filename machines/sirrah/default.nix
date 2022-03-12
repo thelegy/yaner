@@ -10,29 +10,36 @@ with lib;
     ../../layers/irb-kerberos
   ];
 
+  wat.installer.btrfs = {
+    enable = true;
+    installDisk = "/dev/disk/by-id/nvme-Samsung_SSD_980_PRO_2TB_S69ENF0R215215M";
+    swapSize = "8GiB";
+    luks.enable = true;
+  };
+
   wat.thelegy.builder.enable = true;
 
   networking.useDHCP = false;
   networking.interfaces.enp7s0.useDHCP = true;
 
-  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelParams = [ "acpi_enforce_resources=lax" ];
   boot.kernelModules = [ "nct6775" ];
 
-  boot.initrd.luks.devices.system = {
-    device = "/dev/disk/by-uuid/924d6200-141f-4e95-9adc-fe410687be5b";
-    allowDiscards = true;
+  boot.initrd.availableKernelModules = [ "igc" ];
+  wat.thelegy.ssh-unlock = {
+    enable = true;
+    interface = "enp7s0";
   };
 
-  boot.initrd.availableKernelModules = [ "igc" ];
-  boot.initrd.preLVMCommands = mkOrder 300 "ip link set enp7s0 up; sleep 5";
-  #boot.initrd.preLVMCommands = "/bin/ash";
-  boot.initrd.network.enable = true;
-  boot.initrd.network.ssh = {
+  virtualisation.libvirtd = {
     enable = true;
-    hostKeys = [ "/etc/secrets/initrd_ed25519_host_key" ];
+    qemu = {
+      package = mkDefault pkgs.qemu_kvm;
+      runAsRoot = false;
+    };
+    onShutdown = "shutdown";
   };
 
   hardware.cpu.amd.updateMicrocode = true;
@@ -44,7 +51,7 @@ with lib;
     amdvlk
   ];
 
-  fileSystems."/mnt/data" = {
+  fileSystems."/data" = {
     device = "/dev/disk/by-label/data";
     fsType = "btrfs";
     options = [
@@ -59,9 +66,10 @@ with lib;
     8080
   ];
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" ];
 
-  users.users.beinke.extraGroups = [ "vboxusers" "dialout" ];
+  users.groups.libvirt = {};
+  users.users.beinke.extraGroups = [ "vboxusers" "dialout" "libvirt" ];
 
   programs.sway.extraSessionCommands = ''
     export GTK_THEME=Blackbird
