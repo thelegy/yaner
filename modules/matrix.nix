@@ -48,24 +48,25 @@ mkModule {
     # Matrix Server
     services.matrix-synapse = {
       enable = true;
-      database_type = "sqlite3";
-      server_name = cfg.baseDomain;
-      no_tls = true;
-      listeners = [{
-        bind_address = "::1";
-        port = 8008;
-        resources = [
-          { compress = false; names = [ "client" "federation" ]; }
-        ];
-        tls = false;
-        type = "http";
-        x_forwarded = true;
-      }];
 
-      allow_guest_access = false;
-      enable_registration = false;
-      url_preview_enabled = true;
-      expire_access_token = true;
+      settings = {
+        server_name = cfg.baseDomain;
+        database.name = "sqlite3";
+        listeners = [{
+          port = 8008;
+          resources = [
+            { compress = false; names = [ "client" "federation" ]; }
+          ];
+          tls = false;
+          type = "http";
+          x_forwarded = true;
+        }];
+
+        allow_guest_access = false;
+        enable_registration = false;
+        url_preview_enabled = true;
+        expire_access_token = true;
+      };
 
       extraConfigFiles = [
         cfg.secretsFile

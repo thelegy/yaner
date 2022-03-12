@@ -7,7 +7,6 @@ let
       libbsd
       glxinfo
     ];
-    nativeOnly = true;
   };
 
 in {

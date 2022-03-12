@@ -1,6 +1,6 @@
-self: super:
+flakes: final: prev:
 
-with self;
+with final;
 
 {
 
@@ -9,5 +9,7 @@ with self;
   media_volume = callPackage ./media_volume.nix {};
 
   mpv_autospeed = ./mpv_autospeed.lua;
+
+  kicad = flakes.nixpkgs-staging-next.legacyPackages.${system}.kicad;
 
 }

@@ -26,6 +26,8 @@
 
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
 
+    nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
+
   };
 
 
@@ -40,7 +42,7 @@
     ];
     outputs = {
 
-      overlay = import ./pkgs;
+      overlay = import ./pkgs flakes;
 
       nixosModules = findModules namespace ./modules;
 
