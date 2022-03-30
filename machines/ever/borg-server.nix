@@ -21,10 +21,10 @@ in {
   };
 
   services.borgbackup.repos = {
-    forever = {
-      path = "/mnt/backup-storage/forever";
+    ever = {
+      path = "/mnt/backup-storage/ever";
       authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG3r0YJIUoGGIzmCrF/uiF5rEzD/B1nszoNhHehVLjXw root@forever"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG3r0YJIUoGGIzmCrF/uiF5rEzD/B1nszoNhHehVLjXw root@ever"
       ];
     };
     th1 = {

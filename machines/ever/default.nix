@@ -13,7 +13,7 @@ mkMachine {} ({ pkgs, ... }:
   wat.thelegy.backup.enable = true;
   wat.thelegy.matrix = {
     enable = true;
-    useACMEHost = "forever.0jb.de";
+    useACMEHost = "ever.0jb.de";
     secretsFile = "/etc/secrets/matrix-synapse.yml";
   };
 
@@ -59,7 +59,7 @@ mkMachine {} ({ pkgs, ... }:
     enable = true;
     virtualHosts.default = {
       default = true;
-      useACMEHost = "forever.0jb.de";
+      useACMEHost = "ever.0jb.de";
       forceSSL = true;
     };
   };
@@ -70,7 +70,7 @@ mkMachine {} ({ pkgs, ... }:
     defaults.email = "mail+letsencrypt@0jb.de";
     preliminarySelfsigned = false;
     certs = {
-      "forever.0jb.de" = {
+      "ever.0jb.de" = {
         extraDomainNames = [
           "0jb.de"
           "element.0jb.de"

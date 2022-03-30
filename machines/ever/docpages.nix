@@ -3,7 +3,7 @@
 {
 
   services.nginx.virtualHosts."0jb.de" = {
-    useACMEHost = "forever.0jb.de";
+    useACMEHost = "ever.0jb.de";
     forceSSL = true;
     root = "/srv/www/0jb.de";
   };
