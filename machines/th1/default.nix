@@ -9,6 +9,15 @@ mkMachine {} ( { pkgs, config, ... }: {
     ../../layers/irb-kerberos
   ];
 
+  # Fix the LTE modem not being detected
+  systemd.services.NetworkManager = let
+    modemmanager = "ModemManager.service";
+  in {
+    after = [ modemmanager ];
+    requires = [ modemmanager ];
+  };
+  systemd.services.ModemManager.path = [ pkgs.libqmi ];
+
   services.ratbagd.enable = true;
 
   wat.thelegy.backup = {
