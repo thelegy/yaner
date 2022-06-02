@@ -35,6 +35,7 @@ mkMachine {} ( { pkgs, config, ... }: {
       externalInterface = "wlp4s0";
     };
     networkmanager.unmanaged = [ "interface-name:ve-*" ];
+    networkmanager.enableFccUnlock = true;
   };
   services.resolved.enable = true;
 
