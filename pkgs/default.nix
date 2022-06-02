@@ -4,6 +4,8 @@ with final;
 
 {
 
+  qbar = flakes.qbar.packages.${system}.qbar;
+
   fuzzel = flakes.nixpkgs-staging-next.legacyPackages.${system}.fuzzel;
 
   inxi-full = inxi.override { withRecommends = true; };

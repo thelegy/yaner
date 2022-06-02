@@ -24,6 +24,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    qbar.url = gitlab:jens/qbar?host=git.c3pb.de;
+
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
 
     nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
