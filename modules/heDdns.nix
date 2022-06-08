@@ -75,11 +75,11 @@ let
 
   flattenList = l: builtins.foldl' (x: y: x//y) {} l;
 
-  ddnsV4Script = domainCfg: flags: ''
-    ${pkgs.curl}/bin/curl --silent ${flags} "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})"
+  ddnsV4Script = domainCfg: ''
+    ${pkgs.curl}/bin/curl --silent -4 "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})"
     echo
   '';
-  ddnsV6Script = domainCfg: flags: ''
+  ddnsV6Script = domainCfg: ''
     # take the first global (should be routable) primary (to filter out privacy extension addresses) ipv6 address
     myip="$(${pkgs.iproute2}/bin/ip -json -6 address show scope global primary ${domainCfg.takeIPv6FromInterface} | ${pkgs.jq}/bin/jq --raw-output '.[0].addr_info | map(.local | strings) | .[0]')"
     # ensure we have a valid v6 address
@@ -90,14 +90,14 @@ let
       echo "No global primary ipv6 address available"
       exit 1
     fi
-    ${pkgs.curl}/bin/curl --silent ${flags} "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})" -d "myip=$myip"
+    ${pkgs.curl}/bin/curl --silent "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})" -d "myip=$myip"
     echo
   '';
 
   ddnsScript = domainCfg:
     # ipv6 does ip detection which might fail, so run ipv4 first
-    (optionalString domainCfg.updateA (ddnsV4Script domainCfg "-4")) +
-    (optionalString domainCfg.updateAAAA (ddnsV6Script domainCfg "-6"));
+    (optionalString domainCfg.updateA (ddnsV4Script domainCfg)) +
+    (optionalString domainCfg.updateAAAA (ddnsV6Script domainCfg));
 
   ddnsService = domainCfg: optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
     "he-ddns-${domainCfg.domain}" = {
