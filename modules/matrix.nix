@@ -28,7 +28,7 @@ mkModule {
 
     nginxBaseVirtualhost = mkOption {
       type = types.str;
-      default = cfg.baseDomain;
+      default = "main";
     };
 
     useACMEHost = mkOption {

@@ -343,8 +343,10 @@ with lib;
     defaults.email = "mail+letsencrypt@0jb.de";
     preliminarySelfsigned = false;
     certs = {
-      "home.0jb.de" = {
+      "roborock.0jb.de" = {
         extraDomainNames = [
+          "home.0jb.de"
+          "grafana.0jb.de"
           "grocy.0jb.de"
         ];
         dnsProvider = "hurricane";
@@ -409,8 +411,15 @@ with lib;
 
   services.nginx = {
     enable = true;
-    virtualHosts.default = {
-      default = true;
+    recommendedProxySettings = true;
+    virtualHosts.main = {
+      serverName = "roborock.0jb.de";
+      forceSSL = true;
+      useACMEHost = "roborock.0jb.de";
+    };
+    virtualHosts."home.0jb.de" = {
+      forceSSL = true;
+      useACMEHost = "roborock.0jb.de";
       locations."/snapcast/" = {
         alias = "${pkgs.snapcast}/share/snapserver/snapweb/";
         extraConfig = ''

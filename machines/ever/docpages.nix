@@ -1,8 +1,12 @@
-{ ... }:
+{ config, ... }:
 
 {
 
-  services.nginx.virtualHosts."0jb.de" = {
+  services.nginx.virtualHosts.main = {
+    serverName = "${config.networking.hostName}.0jb.de";
+    serverAliases = [
+      "0jb.de"
+    ];
     useACMEHost = "ever.0jb.de";
     forceSSL = true;
     root = "/srv/www/0jb.de";
