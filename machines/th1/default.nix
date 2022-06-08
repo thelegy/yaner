@@ -25,6 +25,10 @@ mkMachine {} ( { pkgs, config, ... }: {
     extraExcludes = [
       "/home/.pre-repair-2020-11-19"
     ];
+    extraReadWritePaths = [
+      "/.backup-snapshots"
+      "/nix/.backup-snapshots"
+    ];
   };
 
   # Networking for containers

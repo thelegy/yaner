@@ -1,5 +1,6 @@
 { mkModule
 , lib
+, pkgs
 , liftToNamespace
 , config
 , ...
@@ -19,6 +20,11 @@ mkModule {
       default = "borg@backup.0jb.de:.";
     };
 
+    extraReadWritePaths = mkOption {
+      type = with types; listOf str;
+      default = [ "/.backup-snapshots" ];
+    };
+
   };
 
   config = cfg: {
@@ -32,6 +38,11 @@ mkModule {
         mode = "repokey-blake2";
         passCommand = "cat /etc/secrets/borg_passphrase";
       };
+      preHook = ''
+        ${pkgs.callPackage ./snapshot.nix {}}
+        cd /.backup
+      '';
+      readWritePaths = [ "/.backup" ] ++ cfg.extraReadWritePaths;
       exclude = [
         "/dev"
         "/mnt"
@@ -55,7 +66,7 @@ mkModule {
         "sh:/home/*/.thunderbird"
       ] ++ cfg.extraExcludes;
       extraCreateArgs = "--stats --exclude-caches";
-      paths = [ "/" ];
+      paths = [ "." ];
       prune = {
         keep = {
           hourly = 2;
@@ -67,6 +78,10 @@ mkModule {
       extraPruneArgs = "--list";
       repo = cfg.repo;
     };
+
+    systemd.tmpfiles.rules = [
+      "d /.backup 0700 root root - -"
+    ] ++ (map (x: "d ${x} 0700 root root - -") cfg.extraReadWritePaths);
 
   };
 

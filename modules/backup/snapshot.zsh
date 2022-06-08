@@ -26,7 +26,7 @@ btrfs_subvolumes() {
   }
 }
 
-btrfs_snapshot_name() echo ${src%/}/.backup-snapshot.${(j|.|)${(s|/|)1:-}}
+btrfs_snapshot_name() echo ${src%/}/.backup-snapshots/_.${(j|.|)${(s|/|)1:-}}
 
 btrfs_snapshot() {
   readonly snapshot=$(btrfs_snapshot_name ${1:-/})
@@ -41,6 +41,7 @@ bindmount() mount --bind --read-only $1 $2
 prepare_btrfs() {
   if { btrfs subvolume show $src >/dev/null 2>&1 } {
     subvolumes=( $(btrfs_subvolumes $src) )
+    mkdir -p ${src%/}/.backup-snapshots
     for subvol in '' $subvolumes; {
       btrfs_snapshot $subvol
     }

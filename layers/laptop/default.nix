@@ -4,7 +4,6 @@
 
   imports = [
     ../workstation
-    ../amnesia
   ];
 
   # Enable brightness switches
