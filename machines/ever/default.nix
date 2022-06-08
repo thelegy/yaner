@@ -5,7 +5,6 @@ mkMachine {} ({ pkgs, ... }:
 
   imports = [
     ./hardware-configuration.nix
-    ./borg-server.nix
     ./docpages.nix
   ];
 

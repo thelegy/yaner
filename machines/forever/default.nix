@@ -3,6 +3,7 @@
 mkMachine {} ({ lib, config, ... }: with lib; {
 
   imports = [
+    ./borg-server.nix
     ./docpages.nix
   ];
 
@@ -14,6 +15,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
   };
 
   wat.thelegy.base.enable = true;
+  wat.thelegy.backup.enable = true;
   wat.thelegy.firewall.enable = true;
 
 
