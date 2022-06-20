@@ -8,17 +8,29 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = [ "ahci" "usbhid" ];
+  boot.initrd.availableKernelModules = [
+    "ahci"
+    "nvme"
+    "pcie_rockchip_host"
+    "phy_rockchip_pcie"
+    "usbhid"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
-    fsType = "ext4";
+    device = "/dev/disk/by-uuid/38f880c7-ab8a-4f1b-be04-f87318bdf31a";
+    fsType = "btrfs";
+    options = [ "noatime" "discard=async" "subvol=roborock" ];
   };
 
-  swapDevices = [ { device = "/dev/disk/by-uuid/b25827b6-ba15-4f9d-a278-232729d38e64"; } ];
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/F099-4E41";
+    fsType = "vfat";
+  };
+
+  swapDevices = [ { device = "/dev/disk/by-uuid/aa8039bf-0145-40a4-bc65-3137f67d49da"; } ];
 
   nix.settings.max-jobs = lib.mkDefault 6;
   powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
