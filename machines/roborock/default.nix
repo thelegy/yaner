@@ -196,16 +196,16 @@ with lib;
         egressExpression = "ip daddr {192.168.1.0/24}";
       };
     };
-    from.internal = {
-      to.external = {
-        #policy = "counter accept";
-        masquerade = true;
-      };
-    };
     rules = {
 
+      masquerade = {
+        from = [ "internal" ];
+        to = [ "external" ];
+        masquerade = true;
+      };
+
       outbound = {
-        insertionPoint = "late";
+        late = true;
         from = [ "internal" ];
         to = [ "external" "internal" ];
         verdict = "accept";

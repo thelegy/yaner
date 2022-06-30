@@ -3,6 +3,27 @@
     "dependencyDagOfSubmodule": {
       "inputs": {
         "nixpkgs": [
+          "nixos-nftables-firewall",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1656615370,
+        "narHash": "sha256-IZDqz1aSySoqf1qtVQg+oJMHfC4IlT55Zoa7EkjvPug=",
+        "owner": "thelegy",
+        "repo": "nix-dependencyDagOfSubmodule",
+        "rev": "98eb563d80b35acafbfc1abb9ccee569c1efb19c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "repo": "nix-dependencyDagOfSubmodule",
+        "type": "github"
+      }
+    },
+    "dependencyDagOfSubmodule_2": {
+      "inputs": {
+        "nixpkgs": [
           "wat",
           "nixpkgs"
         ]
@@ -42,12 +63,18 @@
       }
     },
     "nixos-nftables-firewall": {
+      "inputs": {
+        "dependencyDagOfSubmodule": "dependencyDagOfSubmodule",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1643575417,
-        "narHash": "sha256-ODFs+OnDjYx8oder7LphbTsp6RdnGiAYLocAXXZAG7I=",
+        "lastModified": 1656622549,
+        "narHash": "sha256-3PGF7RpCMST+EKMJDNfvCVFXtqTkg79fX7sjQMchto4=",
         "owner": "thelegy",
         "repo": "nixos-nftables-firewall",
-        "rev": "8639bd275c99e0b6657b2a30ce0d8e94301aa5c7",
+        "rev": "7d81b6ed1f92f9523d1140819aaad56168bbb944",
         "type": "github"
       },
       "original": {
@@ -173,7 +200,7 @@
     },
     "wat": {
       "inputs": {
-        "dependencyDagOfSubmodule": "dependencyDagOfSubmodule",
+        "dependencyDagOfSubmodule": "dependencyDagOfSubmodule_2",
         "nixpkgs": [
           "nixpkgs"
         ]

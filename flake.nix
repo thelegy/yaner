@@ -17,7 +17,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-nftables-firewall.url = github:thelegy/nixos-nftables-firewall;
+    nixos-nftables-firewall = {
+      url = github:thelegy/nixos-nftables-firewall;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     queezle-dotfiles = {
       url = gitlab:jens/dotfiles?host=git.c3pb.de;

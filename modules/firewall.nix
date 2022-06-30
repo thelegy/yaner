@@ -2,7 +2,6 @@
 , ... }: mkTrivialModule {
 
   networking.services = {
-    ssh = 22;
     dns-udp = { port = 53; type = "udp"; };
     dns-tcp = 53;
     dhcp-server = { port = 67; type = "udp"; };
@@ -38,31 +37,6 @@
 
   networking.nftables.firewall = {
     enable = true;
-    zones = {
-
-      fw = {
-        localZone = true;
-        interfaces = [ "lo" ];
-      };
-
-    };
-    rules = {
-
-      loopback = {
-        insertionPoint = "early";
-        from = [ "fw" ];
-        to = [ "fw" ];
-        verdict = "accept";
-      };
-
-      ssh = {
-        insertionPoint = "early";
-        from = "all";
-        to = [ "fw" ];
-        allowedServices = [ "ssh" ];
-      };
-
-    };
   };
 
 }
