@@ -66,6 +66,8 @@ in {
 
       titlebar_padding 3 1
 
+      for_window [app_id="^chrome-.*"] shortcuts_inhibitor disable
+
       bindsym --locked XF86AudioRaiseVolume exec ${pkgs.pamixer}/bin/pamixer --gamma 3 --increase 1 --unmute
       bindsym --locked XF86AudioLowerVolume exec ${pkgs.pamixer}/bin/pamixer --gamma 3 --decrease 1 --unmute
 

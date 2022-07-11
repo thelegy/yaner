@@ -17,6 +17,8 @@ in {
     options = [
       automountOptions
       "credentials=/etc/secrets/backup-cifs-credentials"
+      "seal"
+      "vers=3.0.2"
       "uid=${backupUser}"
     ];
   };

@@ -84,8 +84,8 @@ mkMachine {} ( { pkgs, config, ... }: {
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
-    gtkUsePortal = true;
   };
+  environment.sessionVariables.GTK_USE_PORTAL = "1";
 
   services.pipewire = {
     enable = true;
