@@ -35,6 +35,8 @@
 
     nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
 
+    nixpkgs-roborock.url = github:NixOS/nixpkgs/5f43d8b088d3771274bcfb69d3c7435b1121ac88;
+
   };
 
 
