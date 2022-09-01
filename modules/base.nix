@@ -45,6 +45,8 @@ mkTrivialModule {
     export PATH
   '';
 
+  documentation.man.generateCaches = mkDefault true;
+
   users.mutableUsers = false;
   users.users.beinke = {
     uid = 1000;

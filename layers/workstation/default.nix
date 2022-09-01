@@ -13,6 +13,9 @@
     "fs.inotify.max_user_watches" = 524288;
   };
 
+  environment.systemPackages = [ pkgs.man-pages pkgs.man-pages-posix ];
+  documentation.dev.enable = true;
+
   users.users.beinke = {
     packages = with pkgs; [
       cabal-install
