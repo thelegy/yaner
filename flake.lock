@@ -144,6 +144,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1661361016,
+        "narHash": "sha256-Bjf6ZDnDc6glTwIIItvwfcaeJ5zWFM6GYfPajSArdUY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b784c5ae63dd288375af1b4d37b8a27dd8061887",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "qbar": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -162,6 +178,25 @@
         "owner": "jens",
         "repo": "qbar",
         "type": "gitlab"
+      }
+    },
+    "qed": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1661647246,
+        "narHash": "sha256-ewdZgByMHW5Wwt600899cF//D0nXkswn/wgAGC2RRmY=",
+        "owner": "thelegy",
+        "repo": "qed",
+        "rev": "77b01b28a00c14768ef8eaca4f7071e5a1b88441",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "ref": "dev",
+        "repo": "qed",
+        "type": "github"
       }
     },
     "queezle-dotfiles": {
@@ -194,6 +229,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-staging-next": "nixpkgs-staging-next",
         "qbar": "qbar",
+        "qed": "qed",
         "queezle-dotfiles": "queezle-dotfiles",
         "wat": "wat"
       }

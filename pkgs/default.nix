@@ -14,4 +14,6 @@ with final;
 
   mpv_autospeed = ./mpv_autospeed.lua;
 
+  neovim-thelegy = flakes.qed.packages.${final.system}.qed;
+
 }

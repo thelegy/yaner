@@ -80,7 +80,7 @@ mkTrivialModule {
     kitty.terminfo
     lm_sensors
     magic-wormhole
-    neovim-queezle
+    neovim-thelegy
     reptyr
     ripgrep
     tig
