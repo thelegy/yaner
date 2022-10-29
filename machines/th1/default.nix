@@ -107,7 +107,10 @@ mkMachine {} ( { pkgs, config, ... }: {
     deviceUri = "socket://192.168.1.29:9100";
   }];
 
-  environment.systemPackages = with pkgs; [ tcpdump ];
+  environment.systemPackages = with pkgs; [
+    tcpdump
+    itd
+  ];
 
   system.stateVersion = "19.03";
 

@@ -16,4 +16,6 @@ with final;
 
   neovim-thelegy = flakes.qed.packages.${final.system}.qed;
 
+  itd = callPackage ./itd.nix {};
+
 }
