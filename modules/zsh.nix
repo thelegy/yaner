@@ -49,7 +49,8 @@ mkTrivialModule {
         source ''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh
       }
 
-      _exists w3mman && alias man=w3mman
+      export MANPAGER='nvim +Man!'
+      export MANWIDTH=999
 
       export EDITOR=vi
       _exists vim && EDITOR=vim
