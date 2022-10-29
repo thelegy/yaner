@@ -217,11 +217,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1661647246,
-        "narHash": "sha256-ewdZgByMHW5Wwt600899cF//D0nXkswn/wgAGC2RRmY=",
+        "lastModified": 1664096326,
+        "narHash": "sha256-/yZqI1B9962g5w88NsLBnMCsQSFAaQJ/dQFoICn2u8Q=",
         "owner": "thelegy",
         "repo": "qed",
-        "rev": "77b01b28a00c14768ef8eaca4f7071e5a1b88441",
+        "rev": "c573514af26cde3b3516bbf94699f17fbe03cf0c",
         "type": "github"
       },
       "original": {
