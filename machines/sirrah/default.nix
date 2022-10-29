@@ -3,6 +3,9 @@
 mkMachine {} ({ lib, pkgs, ... }:
 with lib;
 
+let
+  interface = "enp6s0";
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -20,7 +23,7 @@ with lib;
   wat.thelegy.builder.enable = true;
 
   networking.useDHCP = false;
-  networking.interfaces.enp7s0.useDHCP = true;
+  networking.interfaces.${interface}.useDHCP = true;
 
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -30,7 +33,7 @@ with lib;
   boot.initrd.availableKernelModules = [ "igc" ];
   wat.thelegy.ssh-unlock = {
     enable = true;
-    interface = "enp7s0";
+    inherit interface;
   };
 
   wat.thelegy.bs-oneclick.enable = true;
