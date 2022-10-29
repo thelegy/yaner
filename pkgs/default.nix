@@ -16,6 +16,8 @@ with final;
 
   neovim-thelegy = flakes.qed.packages.${final.system}.qed;
 
+  bs-oneclick = callPackage ./bs-oneclick.nix {};
+
   itd = callPackage ./itd.nix {};
 
 }

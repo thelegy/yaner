@@ -33,6 +33,8 @@ with lib;
     interface = "enp7s0";
   };
 
+  wat.thelegy.bs-oneclick.enable = true;
+
   virtualisation.libvirtd = {
     enable = true;
     qemu = {
