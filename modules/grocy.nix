@@ -21,8 +21,8 @@ in mkTrivialModule {
 
   services.nginx.virtualHosts.${hostName} = {
     forceSSL = true;
-    sslCertificate = "/var/lib/acme/home.0jb.de/fullchain.pem";
-    sslCertificateKey = "/var/lib/acme/home.0jb.de/key.pem";
+    sslCertificate = "/var/lib/acme/roborock.0jb.de/fullchain.pem";
+    sslCertificateKey = "/var/lib/acme/roborock.0jb.de/key.pem";
   };
 
 }
