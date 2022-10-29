@@ -38,12 +38,46 @@ mkModule {
 
     secretsFile = mkOption {
       type = types.str;
-      default = "${config.services.matrix-synapse.dataDir}/secrets.yml";
+      default =
+        if isNull cfg.sopsSecretsFile
+        then "${config.services.matrix-synapse.dataDir}/secrets.yml"
+        else config.sops.secrets.${cfg.sopsSecretsFile}.path;
+    };
+
+    sopsSecretsFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
     };
 
   };
 
-  config = cfg: {
+  config = cfg: let
+    sopsIsUsed = ! isNull cfg.sopsSecretsFile;
+  in {
+
+    systemd.services.matrix-synapse.serviceConfig.SupplementaryGroups = mkIf sopsIsUsed [ "keys" ];
+
+    sops.secrets.${cfg.sopsSecretsFile} = mkIf sopsIsUsed {
+      format = "yaml";
+      group = "matrix-synapse";
+      mode = "0640";
+    };
+
+    environment.systemPackages = [
+      config.services.postgresql.package
+      config.services.matrix-synapse.package
+    ];
+
+    services.postgresql = {
+      enable = true;
+      package = pkgs.postgresql_14;
+      settings.listen_addresses = mkForce "";
+      ensureUsers = [
+        {
+          name = "matrix-synapse";
+        }
+      ];
+    };
 
     # Matrix Server
     services.matrix-synapse = {
@@ -51,16 +85,26 @@ mkModule {
 
       settings = {
         server_name = cfg.baseDomain;
-        database.name = "sqlite3";
-        listeners = [{
-          port = 8008;
-          resources = [
-            { compress = false; names = [ "client" "federation" ]; }
-          ];
-          tls = false;
-          type = "http";
-          x_forwarded = true;
-        }];
+        database.name = "psycopg2";
+        enable_metrics = true;
+        listeners = [
+          {
+            port = 8008;
+            resources = [
+              { compress = false; names = [ "client" "federation" ]; }
+            ];
+            tls = false;
+            type = "http";
+            x_forwarded = true;
+          }
+          {
+            port = 9008;
+            resources = [];
+            tls = false;
+            bind_addresses = [ "127.0.0.1" ];
+            type = "metrics";
+          }
+        ];
 
         allow_guest_access = false;
         enable_registration = false;

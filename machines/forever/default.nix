@@ -17,6 +17,11 @@ mkMachine {} ({ lib, config, ... }: with lib; {
   wat.thelegy.base.enable = true;
   wat.thelegy.backup.enable = true;
   wat.thelegy.firewall.enable = true;
+  wat.thelegy.matrix = {
+    enable = true;
+    useACMEHost = "forever.0jb.de";
+    sopsSecretsFile = "matrix-synapse-keys";
+  };
 
 
   networking.nftables.firewall = {
