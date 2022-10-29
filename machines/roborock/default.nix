@@ -233,6 +233,13 @@ with lib;
         ];
       };
 
+      nixos-firewall = {
+        from = [ "insecure" ];
+        to = [ "fw" ];
+        allowedTCPPorts = config.networking.firewall.allowedTCPPorts;
+        allowedUDPPorts = config.networking.firewall.allowedUDPPorts;
+      };
+
       int-to-fw = {
         from = [ "internal" ];
         to = [ "fw" ];
@@ -302,8 +309,6 @@ with lib;
 
   #systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
 
-  users.users.beinke.extraGroups = [ "pulse-access" ];
-
   users.users.jens-nix = {
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
@@ -363,55 +368,6 @@ with lib;
     };
   };
 
-  sound.enable = true;
-  hardware.pulseaudio = {
-    enable = true;
-    systemWide = true;
-    configFile = let
-      cfg = config.hardware.pulseaudio;
-      hasZeroconf = let z = cfg.zeroconf; in z.publish.enable || z.discovery.enable;
-      overriddenPackage = cfg.package.override
-      (optionalAttrs hasZeroconf { zeroconfSupport = true; });
-      originalConfigFile = "${getBin overriddenPackage}/etc/pulse/default.pa";
-    in pkgs.runCommand "default.pa" {} ''
-      sed -r 's|(load-module module-native-protocol-unix)|\1 auth-anonymous=1|' ${originalConfigFile} > $out
-    '';
-    daemon.config.default-sample-rate = 48000;
-    tcp = {
-      enable = true;
-      anonymousClients.allowAll = true;
-      #anonymousClients.allowedIpRanges = [ "127.0.0.1" "192.168.1.1/24" "10.0.16.1/20" ];
-    };
-    extraConfig = ''
-      load-module module-pipe-sink file=/run/pulse/snapfifo sink_name=snapcast sink_properties=device.description=Snapcast format=s16le rate=48000
-      load-module module-null-sink sink_name=main channels=2 sink_properties=device.description=Main
-      load-module module-loopback source=main.monitor sink=alsa_output.usb-Focusrite_Saffire_6USB2.0-00.analog-surround-40
-
-      #load-module module-combine-sink sink_name=main channels=2 slaves=alsa_output.usb-Focusrite_Saffire_6USB2.0-00.analog-surround-40,alsa_output.usb-JABRA_GN_2000_MS_USB-00.analog-stereo sink_properties=device.description=Main
-    '';
-  };
-  users.groups.pulse-access = {};
-  users.users.pulse.createHome = mkForce false;
-  systemd.tmpfiles.rules = [
-    "d /run/pulse 0755 pulse pulse -"
-  ];
-
-  services.snapserver = {
-    enable = true;
-    port = config.networking.services.snapcast-stream.port;
-    streams.pulse = {
-      type = "pipe";
-      location = "/run/pulse/snapfifo";
-      query = {
-        mode = "read";
-      };
-    };
-    tcp = {
-      enable = true;
-      port = config.networking.services.snapcast-control.port;
-    };
-  };
-
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -440,41 +396,7 @@ with lib;
         proxyWebsockets = true;
       };
     };
-  };
-
-  services.spotifyd = {
-    enable = true;
-    config = ''
-      [global]
-      username_cmd = "cat $CREDENTIALS_DIRECTORY/user"
-      password_cmd = "cat $CREDENTIALS_DIRECTORY/password"
-      backend = "pulseaudio"
-      device_name = "${config.networking.hostName}"
-      device_type = "speaker"
-    '';
-  };
-  systemd.services.spotifyd = {
-    serviceConfig = {
-      SupplementaryGroups = [ "pulse-access" ];
-      LoadCredential = [
-        "user:/etc/secrets/spotify_user"
-        "password:/etc/secrets/spotify_password"
-      ];
     };
-    environment = {
-      SHELL = "/bin/sh";
-      #PULSE_LOG = "4";
-    };
-  };
-
-  systemd.services.wdr2 = {
-    serviceConfig = {
-      DynamicUser = true;
-      ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=pulse --no-terminal https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
-      SupplementaryGroups = [ "pulse-access" ];
-      Restart = "always";
-    };
-    wantedBy = [ "multi-user.target" ];
   };
 
   programs.sway.enable = true;
