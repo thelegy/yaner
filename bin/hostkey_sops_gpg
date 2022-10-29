@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+ssh root@$1 "cat /etc/ssh/ssh_host_rsa_key" | nix-shell -p ssh-to-pgp --run "ssh-to-pgp -o secrets/keys/hosts/$1.asc"

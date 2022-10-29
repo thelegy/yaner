@@ -12,6 +12,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = github:Mic92/sops-nix;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     homemanager = {
       url = github:nix-community/home-manager;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -48,6 +53,7 @@
     loadModules = [
       flakes.homemanager.nixosModules.home-manager
       flakes.nixos-nftables-firewall.nixosModules.full
+      flakes.sops-nix.nixosModules.sops
     ];
     outputs = {
 

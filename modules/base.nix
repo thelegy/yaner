@@ -12,6 +12,8 @@ mkTrivialModule {
   # Restore systemd default
   services.logind.killUserProcesses = mkDefault true;
 
+  sops.defaultSopsFile = config.wat.machines.${config.networking.hostName}."secrets.yaml".file;
+
   console = {
     font = "Lat2-Terminus16";
     keyMap = "de-latin1-nodeadkeys";

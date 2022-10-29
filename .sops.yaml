@@ -1,0 +1,39 @@
+keys:
+- &thelegy CC340A1392661DD38B0DE83DABB80FCB4FFE0BC5
+
+- &forever 739759680da462402111a08f4081a822387c18d0
+- &ever 4e4d337fc2844527dba181817b6c85e9c7ed4d12
+- &roborock 2d59898b69126a28647dda7de82e1978fd768662
+- &sirrah ab9a4004133c9e02091db7e53b6203a9abeb522d
+- &th1 efb1200339303eab0ac3ce783c966b47b84d969e
+
+creation_rules:
+- path_regex: machines/ever/.*
+  key_groups:
+  - pgp:
+    - *thelegy
+    - *ever
+- path_regex: machines/forever/.*
+  key_groups:
+  - pgp:
+    - *thelegy
+    - *forever
+- path_regex: machines/roborock/.*
+  key_groups:
+  - pgp:
+    - *thelegy
+    - *roborock
+- path_regex: machines/sirrah/.*
+  key_groups:
+  - pgp:
+    - *sirrah
+    - *th1
+- path_regex: machines/th1/.*
+  key_groups:
+  - pgp:
+    - *thelegy
+    - *th1
+- pgp:
+  key_groups:
+  - pgp:
+    - *thelegy
