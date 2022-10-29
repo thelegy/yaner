@@ -56,6 +56,12 @@ in
     amdvlk
   ];
 
+  # To enable Vulkan support for 32-bit applications, also add:
+  hardware.opengl.extraPackages32 = with pkgs.driversi686Linux; [
+    amdvlk
+  ];
+  environment.variables.AMD_VULKAN_ICD = "RADV";  # as opposed to AMDVLK
+
   fileSystems."/data" = {
     device = "/dev/disk/by-label/data";
     fsType = "btrfs";
