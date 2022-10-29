@@ -86,6 +86,7 @@ mkTrivialModule {
     reptyr
     ripgrep
     tig
+    lazygit
     w3m
   ];
 }

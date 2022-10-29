@@ -20,6 +20,7 @@ mkTrivialModule {
       l = "ls -Alh";
       la = "ls -al";
       ll = "ls -l";
+      lg = "lazygit";
     };
 
     setOptions = [
