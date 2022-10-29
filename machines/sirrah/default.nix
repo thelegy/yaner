@@ -97,9 +97,14 @@ in
   };
   environment.sessionVariables.GTK_USE_PORTAL = "1";
 
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    pulse.enable = false;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
   };
 
   users.users.beinke.packages = with pkgs; [
@@ -109,4 +114,5 @@ in
   ];
 
   system.stateVersion = "22.05";
+
 })
