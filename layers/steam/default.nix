@@ -1,30 +1,34 @@
-{ config, options, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
-let
+{
 
-  steam = pkgs.steam.override {
-    extraPkgs = pkgs: with pkgs; [
-      libbsd
-      glxinfo
-    ];
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "steam"
+    "steam-original"
+    "steam-runtime"
+  ];
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs: with pkgs; [
+        cabextract
+        glxinfo
+        libbsd
+      ];
+    };
   };
-
-in {
-
-  nixpkgs.config.allowUnfree = true;
-
-  hardware.steam-hardware.enable = true;
-  hardware.opengl = {
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-  hardware.pulseaudio.support32Bit = true;
 
   users.users.beinke = {
-    packages = [
-      pkgs.steam
+    packages = with pkgs; [
+      steam
       steam.run
+      protonup
     ];
+  };
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
   };
 
 }
