@@ -396,7 +396,6 @@ with lib;
         proxyWebsockets = true;
       };
     };
-    };
   };
 
   programs.sway.enable = true;
