@@ -3,7 +3,7 @@
 {
 
   hardware.pulseaudio = {
-    enable = true;
+    enable = pkgs.lib.mkDefault true;
     zeroconf.discovery.enable = true;
     package = pkgs.pulseaudioFull;
   };
