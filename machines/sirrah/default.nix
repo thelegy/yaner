@@ -21,6 +21,7 @@ in
   };
 
   wat.thelegy.builder.enable = true;
+  wat.thelegy.prebuild.enable = true;
 
   networking.useDHCP = false;
   networking.interfaces.${interface}.useDHCP = true;
