@@ -111,7 +111,7 @@ in
   users.users.beinke.packages = with pkgs; [
     blender
     patchelf
-    polymc
+    prismlauncher
   ];
 
   system.stateVersion = "22.05";
