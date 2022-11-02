@@ -297,11 +297,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1667309200,
-        "narHash": "sha256-Xc85oquKRJBVODHoAjnmw6Igkak+kkwQjDHLheAbohE=",
+        "lastModified": 1667324856,
+        "narHash": "sha256-e8NdILvuuChgDnvJPpeDYgkayYfh3kWl1fjSgB++ydA=",
         "owner": "thelegy",
         "repo": "wat",
-        "rev": "f2719ed054fe4bb06da43853ce04c34a679107be",
+        "rev": "53f93a5dff130ad5e33784473b3a144db9ef254b",
         "type": "github"
       },
       "original": {
