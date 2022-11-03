@@ -1,4 +1,4 @@
-{ lib, mkTrivialModule, ... }:
+{ lib, mkTrivialModule, config, ... }:
 with lib;
 
 mkTrivialModule {
@@ -6,6 +6,7 @@ mkTrivialModule {
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    sharedModules = [ { home.stateVersion = config.system.stateVersion; } ];
   };
 
 }
