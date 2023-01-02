@@ -1,0 +1,16 @@
+diff --git a/bs-oneclick.py b/bs-oneclick.py
+index 1ae6493..a8cfd05 100755
+--- a/bs-oneclick.py
++++ b/bs-oneclick.py
+@@ -141,9 +141,10 @@ def playlist_install():
+     """Installs a playlist (bsplaylist:// URI)"""
+ 
+     url = sys.argv[1].replace('bsplaylist://playlist/', '') # url for downloading
+-    filename = url.replace('https://bsaber.com/PlaylistAPI/','') # blah blah .bplist
++    filename = unquote(re.search('/([^/]+)$', url)[1])
+     os.chdir('Playlists')
+     # download .bplist file
++    print(url, filename)
+     with urllib.request.urlopen(url) as resp, open(filename, 'wb') as f:
+         shutil.copyfileobj(resp, f)
+ 

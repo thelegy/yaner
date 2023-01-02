@@ -30,5 +30,6 @@ runCommandLocal "bs-oneclick" {
   . ${makeWrapper}/nix-support/setup-hook
   mkdir -p $out/bin $out $out/lib/bs-oneclick
   cp --reflink=auto $src/bs-oneclick.py $src/song_install.ui $bsPath/bs-path.txt $out/lib/bs-oneclick/
+  patch $out/lib/bs-oneclick/bs-oneclick.py ${./bs-oneclick.patch}
   makeWrapper $out/lib/bs-oneclick/bs-oneclick.py $out/bin/bs-oneclick --prefix PATH : $python/bin --prefix GI_TYPELIB_PATH : "${lib.makeSearchPathOutput "lib" "lib/girepository-1.0" [ atk gdk-pixbuf gtk3 harfbuzz pango libnotify ]}"
 ''
