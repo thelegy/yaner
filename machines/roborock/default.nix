@@ -262,6 +262,8 @@ with lib;
     };
   };
 
+  wat.thelegy.leg-net.enable = true;
+
   services.pdns-recursor = {
     enable = true;
     dns = {

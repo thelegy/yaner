@@ -31,6 +31,12 @@ mkMachine {} ( { pkgs, config, ... }: {
     ];
   };
 
+  wat.thelegy.leg-net.enable = true;
+
+  # Enable systemd-networkd in addition to NetworkManager
+  systemd.network.enable = true;
+  systemd.network.wait-online.enable = false;
+
   # Networking for containers
   networking = {
     nat = {

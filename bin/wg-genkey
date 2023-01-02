@@ -1,0 +1,17 @@
+#!/usr/bin/env -S nix shell nixpkgs#wireguard-tools nixpkgs#sops nixpkgs#yq-go nixpkgs#zsh -c zsh
+
+set -euo pipefail
+
+if [[ ! -d machines/$1 ]] {
+  echo "Machine \"$1\" could not be found" >&2
+  exit 1
+}
+
+privKey=$(wg genkey)
+pubKey=$(wg pubkey <<< $privKey)
+echo $pubKey
+
+sopsFile=machines/$1/secrets.yaml
+
+rule=".wgPrivateKey = \"$privKey\", .wgPublicKey_unencrypted = \"$pubKey\""
+EDITOR="yq eval -i 'del (.hello, .example_array, .example_key, .example_number, .example_booleans) | '${(q)rule}" sops $sopsFile
