@@ -2,6 +2,8 @@
 
 let
   json = pkgs.formats.json {};
+  snapcast-stream-port = 1704;
+  snapcast-control-port = 1705;
 in
 {
 
@@ -93,7 +95,7 @@ in
 
   services.snapserver = {
     enable = true;
-    port = config.networking.services.snapcast-stream.port;
+    port = snapcast-stream-port;
     streams.default = {
       type = "pipe";
       location = "/run/pipewire/snapfifo";
@@ -103,7 +105,7 @@ in
     };
     tcp = {
       enable = true;
-      port = config.networking.services.snapcast-control.port;
+      port = snapcast-control-port;
     };
   };
   systemd.services.snapserver.serviceConfig.SupplementaryGroups = [ "pipewire" ];

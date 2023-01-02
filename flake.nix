@@ -52,7 +52,7 @@
     ];
     loadModules = [
       flakes.homemanager.nixosModules.home-manager
-      flakes.nixos-nftables-firewall.nixosModules.full
+      flakes.nixos-nftables-firewall.nixosModules.default
       flakes.sops-nix.nixosModules.sops
     ];
     outputs = {

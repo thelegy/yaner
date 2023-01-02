@@ -29,9 +29,9 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     rules.public-services = {
       from = "all";
       to = [ "fw" ];
-      allowedServices = [
-        "http"
-        "https"
+      allowedTCPPorts = [
+        80
+        443
       ];
     };
   };

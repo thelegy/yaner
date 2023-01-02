@@ -71,11 +71,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1656622549,
-        "narHash": "sha256-3PGF7RpCMST+EKMJDNfvCVFXtqTkg79fX7sjQMchto4=",
+        "lastModified": 1672620670,
+        "narHash": "sha256-ved/Ldz9SLqPt71olyZw07O+AhSDYAMZhN8hTKg9UGw=",
         "owner": "thelegy",
         "repo": "nixos-nftables-firewall",
-        "rev": "7d81b6ed1f92f9523d1140819aaad56168bbb944",
+        "rev": "bbf7215478af15313b061b79572f3af7afd3ac52",
         "type": "github"
       },
       "original": {

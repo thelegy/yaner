@@ -1,15 +1,6 @@
 { mkTrivialModule
 , ... }: mkTrivialModule {
 
-  networking.services = {
-    dns-udp = { port = 53; type = "udp"; };
-    dns-tcp = 53;
-    dhcp-server = { port = 67; type = "udp"; };
-    dhcpv6-client = { port = 546; type = "udp"; };
-    http = 80;
-    https = 443;
-  };
-
   networking.firewall.enable = false;
   networking.nftables.stopRuleset = ''
     table inet filter {

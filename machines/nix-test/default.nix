@@ -1,6 +1,8 @@
 { mkMachine, ... }:
 
-mkMachine {} ({ lib, config, ... }: with lib; {
+mkMachine {} ({ lib, config, ... }: with lib; let
+  yggdrasil-port = 42042;
+in {
 
   wat.installer.hcloud = {
     enable = true;
@@ -12,12 +14,11 @@ mkMachine {} ({ lib, config, ... }: with lib; {
   wat.thelegy.base.enable = true;
   wat.thelegy.firewall.enable = true;
 
-  networking.services.yggdrasil-tcp = 42042;
   services.yggdrasil = {
     enable = true;
     config = {
       Listen = [
-        "tcp://0.0.0.0:${toString config.networking.services.yggdrasil-tcp.port}"
+        "tcp://0.0.0.0:${toString yggdrasil-port}"
       ];
       IfName = "ygg";
     };
@@ -34,16 +35,13 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     rules.yggdrasil = {
       from = "all";
       to = [ "fw" ];
-      allowedServices = [
-        "yggdrasil-tcp"
+      allowedTCPPorts = [
+        yggdrasil-port
       ];
     };
     rules.home-services = {
       from = [ "ygg-home" ];
       to = [ "fw" ];
-      allowedServices = [
-        #"http"
-      ];
     };
   };
 

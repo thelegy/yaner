@@ -10,6 +10,7 @@ with lib;
 
   imports = [
     ./hardware-configuration.nix
+    ./audio.nix
     ./monitoring
     ./usb.nix
   ];
@@ -177,16 +178,6 @@ with lib;
     };
   };
 
-  networking.services = {
-    mqtt = 1883;
-    mqqts = 8883;
-    pulseaudio-native = 4713;
-    zigbee2mqtt-frontend = 8083;
-    snapcast-stream = 1704;
-    snapcast-control = 1705;
-    snapcast-http = 1780;
-  };
-
   networking.nftables.firewall = {
     zones = {
       internal = {
@@ -219,19 +210,18 @@ with lib;
       ext-to-fw = {
         from = [ "external" ];
         to = [ "fw" ];
-        allowedServices = [
-        ];
       };
 
       insecure-to-fw = {
         from = [ "insecure" ];
         to = [ "fw" ];
-        allowedServices = [
-          "http"
-          "https"
-          "snapcast-http"
-          "snapcast-stream"
-          "snapcast-control"
+        allowedTCPPorts = [
+          80  # http
+          443  # https
+          1780  # snapcast-http
+          1704  # snapcast-stream
+          1705  # snapcast-control
+          1883  # mqtt
         ];
       };
 
@@ -245,17 +235,19 @@ with lib;
       int-to-fw = {
         from = [ "internal" ];
         to = [ "fw" ];
-        allowedServices = [
-          "dns-udp"
-          "dns-tcp"
-          "dhcp-server"
-          "mqtt"
-          "http"
-          "https"
-          "pulseaudio-native"
-          "zigbee2mqtt-frontend"
-          "snapcast-stream"
-          "snapcast-control"
+        allowedUDPPorts = [
+          53  # dns
+          67  # dhcp-server
+        ];
+        allowedTCPPorts = [
+          53  # dns
+          1883  # mqtt
+          80  # http
+          443  # https
+          4713  # pulseaudio-native
+          8083  # zigbee2mqtt-frontend
+          1704  # snapcast-stream
+          1705  # snapcast-control
         ];
       };
 
