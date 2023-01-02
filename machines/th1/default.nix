@@ -100,7 +100,6 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   hardware.bluetooth = {
     enable = true;
-    hsphfpd.enable = true;
   };
 
   services.printing = {
