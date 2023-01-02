@@ -10,6 +10,7 @@ with lib;
 
   imports = [
     ./hardware-configuration.nix
+    ./monitoring
     ./usb.nix
   ];
 
@@ -18,6 +19,7 @@ with lib;
   wat.thelegy.builder.enable = true;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.grocy.enable = true;
+  wat.thelegy.monitoring.enable = true;
 
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
@@ -395,6 +397,10 @@ with lib;
         proxyPass = "http://localhost:1780/stream";
         proxyWebsockets = true;
       };
+    };
+    virtualHosts."grafana.0jb.de" = {
+      forceSSL = true;
+      useACMEHost = "roborock.0jb.de";
     };
   };
 

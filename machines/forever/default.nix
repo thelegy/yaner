@@ -22,6 +22,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     useACMEHost = "forever.0jb.de";
     sopsSecretsFile = "matrix-synapse-keys";
   };
+  wat.thelegy.monitoring.enable = true;
 
 
   networking.nftables.firewall = {
@@ -46,6 +47,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
           "0jb.de"
           "element.0jb.de"
           "matrix.0jb.de"
+          "mailmetrics.0jb.de"
         ];
         dnsProvider = "hurricane";
         credentialsFile = "/etc/secrets/acme";
@@ -64,6 +66,13 @@ mkMachine {} ({ lib, config, ... }: with lib; {
       default = true;
       useACMEHost = "forever.0jb.de";
       forceSSL = true;
+    };
+    virtualHosts."mailmetrics.0jb.de" = {
+      useACMEHost = "forever.0jb.de";
+      forceSSL = true;
+      locations."/<redacted>" = {
+        proxyPass = "<redacted>";
+      };
     };
   };
 

@@ -173,6 +173,9 @@ mkModule {
         ${headers}
         return 200 '${builtins.toJSON wellKnownServer}';
       '';
+      "/<redacted>" = {
+        proxyPass = "<redacted>";
+      };
     };
 
   };
