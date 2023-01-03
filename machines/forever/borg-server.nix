@@ -1,4 +1,5 @@
-{ pkgs, ... }:
+{ lib, config, pkgs, ... }:
+with lib;
 
 let
 
@@ -70,5 +71,22 @@ in {
       ];
     };
   };
+
+  systemd.services = mapAttrs' (repo: repoCfg: {
+    name = "borgbackup-compact-${repo}";
+    value = {
+      path = with pkgs; [ borgbackup ];
+      script = "borg compact --verbose ${repoCfg.path}";
+      serviceConfig = {
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        PrivateTmp = true;
+        ProtectSystem = "strict";
+        ReadWritePaths = repoCfg.path;
+        User = backupUser;
+      };
+      startAt = "Mon 4:55";
+    };
+  }) config.services.borgbackup.repos;
 
 }
