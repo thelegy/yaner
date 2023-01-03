@@ -24,7 +24,7 @@
       fzf
       git-filter-repo
       git-revise
-      kicad
+      kicad-small
       ldns
       libfaketime
       signal-desktop
