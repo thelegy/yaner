@@ -25,6 +25,13 @@ in {
   };
 
   services.borgbackup.repos = {
+    ender = {
+      path = "/mnt/backup-storage/ender";
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZbGCnfx1ndfDHZ7w2QutSTgSbgSltqlDQGnQArYjwX root@ender"
+      ];
+      quota = "25G";
+    };
     ever = {
       path = "/mnt/backup-storage/ever";
       authorizedKeys = [
