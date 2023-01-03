@@ -26,7 +26,7 @@ in
           args = {
             "tunnel.mode" = "sink";
             "pipe.filename" = "/run/pipewire/snapfifo";
-            "audio.format" = "s16le";
+            "audio.format" = "S16LE";
             "audio.rate" = 48000;
             "audio.channels" = 2;
             "stream.props" = {
@@ -39,51 +39,49 @@ in
     };
   };
 
-  environment.etc."pipewire/pipewire.conf.d/70-loopback.conf" = {
-    source = json.generate "pipewire-loopback.conf" {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-loopback";
-          args = {
-            "node.description" = "Output proxy (stereo)";
-            "audio.rate" = 44100;
-            "capture.props" = {
-              "node.name" = "output-proxy-stereo";
-              "media.class" = "Audio/Sink";
-              "audio.position" = "FL,FR";
-            };
-            "playback.props" = {
-              "node.name" = "output-proxy-stereo-playback";
-              "node.description" = "Output proxy (stereo) playback";
-              "audio.position" = "FL,FR";
-            };
-          };
-        }
-      ];
-    };
-  };
+  #environment.etc."pipewire/pipewire.conf.d/70-loopback.conf" = {
+  #  source = json.generate "pipewire-loopback.conf" {
+  #    "context.modules" = [
+  #      {
+  #        name = "libpipewire-module-loopback";
+  #        args = {
+  #          "node.description" = "Output proxy (stereo)";
+  #          "audio.rate" = 44100;
+  #          "capture.props" = {
+  #            "node.name" = "output-proxy-stereo";
+  #            "media.class" = "Audio/Sink";
+  #            "audio.position" = "FL,FR";
+  #          };
+  #          "playback.props" = {
+  #            "node.name" = "output-proxy-stereo-playback";
+  #            "node.description" = "Output proxy (stereo) playback";
+  #            "audio.position" = "FL,FR";
+  #          };
+  #        };
+  #      }
+  #};
 
-  environment.etc."pipewire/pipewire.conf.d/80-network.conf" = {
-    source = json.generate "pipewire-network.conf" {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-roc-source";
-          args = {
-            "source.name" = "input-network-stereo";
-            "source.props" = {
-              "node.name" = "Network input (stereo)";
-            };
-            "local.ip" = "0.0.0.0";
-            "resampler.profile" = "none";
-            "fec.code" = "rs8m";
-            "sess.latency.msec" = 25;
-            "local.source.port" = 10001;
-            "local.repair.port" = 10002;
-          };
-        }
-      ];
-    };
-  };
+  #environment.etc."pipewire/pipewire.conf.d/80-network.conf" = {
+  #  source = json.generate "pipewire-network.conf" {
+  #    "context.modules" = [
+  #      {
+  #        name = "libpipewire-module-roc-source";
+  #        args = {
+  #          "source.name" = "input-network-stereo";
+  #          "source.props" = {
+  #            "node.name" = "Network input (stereo)";
+  #          };
+  #          "local.ip" = "0.0.0.0";
+  #          "resampler.profile" = "none";
+  #          "fec.code" = "rs8m";
+  #          "sess.latency.msec" = 25;
+  #          "local.source.port" = 10001;
+  #          "local.repair.port" = 10002;
+  #        };
+  #      }
+  #    ];
+  #  };
+  #};
 
   networking.nftables.firewall.rules.pipewire = {
     from = [ "insecure" "internal" ];

@@ -2,7 +2,6 @@
 
 mkMachine {
   system = "aarch64-linux";
-  nixpkgs = flakes.nixpkgs-roborock;
 } ({ lib, config, pkgs, ... }:
 with lib;
 
@@ -122,7 +121,7 @@ with lib;
         Bandwidth = 35M
 
         [DHCPv6]
-        ForceDHCPv6PDOtherInformation = yes
+        #ForceDHCPv6PDOtherInformation = yes
         WithoutRA = solicit
       '';
     };
@@ -163,8 +162,8 @@ with lib;
       };
       vlanConfig.Id = 7;
     };
-    networks.eth0 = {
-      name = "eth0";
+    networks.end0 = {
+      name = "end0";
       vlan = [
         "internal"
         "uplink"
@@ -184,7 +183,7 @@ with lib;
         interfaces = [ "internal" ];
       };
       external = {
-        interfaces = [ "eth0" "ppp0" "uplink" "uplink2" ];
+        interfaces = [ "end0" "ppp0" "uplink" "uplink2" ];
       };
       insecure = {
         parent = "external";

@@ -37,17 +37,21 @@ in {
 
   services.grafana = {
     enable = true;
-    domain = domain;
-    addr = local_ip;
-    rootUrl = "https://${domain}/";
-    port = local_port;
-    database = {
-      type = "postgres";
-      user = "grafana";
-      host = "/var/run/postgresql/";
+    settings = {
+      server = {
+        domain = domain;
+        root_url = "https://${domain}/";
+        http_addr = local_ip;
+        http_port = local_port;
+      };
+      database = {
+        type = "postgres";
+        user = "grafana";
+        host = "/var/run/postgresql/";
+      };
     };
     provision.enable = true;
-    provision.datasources = [
+    provision.datasources.settings.datasources = [
       {
         name = "timescaledb";
         isDefault = true;
@@ -64,7 +68,7 @@ in {
         url = "http://localhost:9090";
       }
     ];
-    provision.dashboards = [
+    provision.dashboards.settings.providers = [
       {
         name = "yaner dashboards";
         options.path = ./dashboards;
