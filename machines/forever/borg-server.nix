@@ -25,6 +25,12 @@ in {
   };
 
   services.borgbackup.repos = {
+    agony = {
+      path = "/mnt/backup-storage/agony";
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHPhOxyZXi5Y44EJh3yHgQB5ZevQBA+YU1aaAM9at89d root@agony"
+      ];
+    };
     ender = {
       path = "/mnt/backup-storage/ender";
       authorizedKeys = [
