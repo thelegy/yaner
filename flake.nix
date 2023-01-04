@@ -40,6 +40,15 @@
 
     nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
 
+    nixpkgs-snm = {
+      url = github:NixOS/nixpkgs/nixos-21.11;
+      follows = "snm/nixpkgs-22_11";
+    };
+    snm = {
+      url = gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-22.11;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
 
