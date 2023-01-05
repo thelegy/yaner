@@ -17,9 +17,24 @@ mkMachine {
     ipv6Address = "2a01:4f8:c2c:e7b1::/64";
   };
 
-  wat.thelegy.backup.enable = true;
+  wat.thelegy.backup = {
+    enable = true;
+    extraReadWritePaths = [
+      "/.backup-snapshots"
+      "/var/vmail/.backup-snapshots"
+    ];
+  };
   wat.thelegy.base.enable = true;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.monitoring.enable = true;
+
+  fileSystems."/var/vmail" = {
+    device = "/dev/disk/by-label/vmail";
+    fsType = "btrfs";
+    options = [
+      "noatime"
+      "discard=async"
+    ];
+  };
 
 })
