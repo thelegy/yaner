@@ -1,18 +1,18 @@
 keys:
 - &thelegy CC340A1392661DD38B0DE83DABB80FCB4FFE0BC5
 
+- &agony 954ab1770044b7bc35bfa2b004bb211e9f8ae7c3
 - &forever 739759680da462402111a08f4081a822387c18d0
-- &ever 4e4d337fc2844527dba181817b6c85e9c7ed4d12
 - &roborock 2d59898b69126a28647dda7de82e1978fd768662
 - &sirrah ab9a4004133c9e02091db7e53b6203a9abeb522d
 - &th1 efb1200339303eab0ac3ce783c966b47b84d969e
 
 creation_rules:
-- path_regex: machines/ever/.*
+- path_regex: machines/agony/.*
   key_groups:
   - pgp:
     - *thelegy
-    - *ever
+    - *agony
 - path_regex: machines/forever/.*
   key_groups:
   - pgp:
