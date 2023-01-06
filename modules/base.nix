@@ -14,6 +14,8 @@ mkTrivialModule {
 
   sops.defaultSopsFile = config.wat.machines.${config.networking.hostName}."secrets.yaml".file;
 
+  networking.domain = mkDefault "0jb.de";
+
   console = {
     font = "Lat2-Terminus16";
     keyMap = "de-latin1-nodeadkeys";
