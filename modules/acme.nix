@@ -23,14 +23,14 @@ mkModule {
       default = [];
     };
 
-    postRun = mkOption {
-      type = types.lines;
-      default = "";
-    };
-
     sopsCredentialsFile = mkOption {
       type = types.str;
       default = "acme-credentials-file";
+    };
+
+    reloadUnits = mkOption {
+      type = types.listOf types.str;
+      default = [];
     };
 
   };
@@ -44,13 +44,16 @@ mkModule {
 
     security.acme = {
       acceptTerms = true;
-      server = mkIf (!cfg.staging) "https://acme-staging-v02.api.letsencrypt.org/directory";
+      defaults.server = mkIf (cfg.staging) "https://acme-staging-v02.api.letsencrypt.org/directory";
       defaults.email = "mail+letsencrypt@0jb.de";
       preliminarySelfsigned = false;
       certs.${cfg.defaultCertName} = {
+        inherit (cfg) extraDomainNames;
         dnsProvider = "hurricane";
         credentialsFile = config.sops.secrets.${cfg.sopsCredentialsFile}.path;
-        inherit (cfg) extraDomainNames postRun;
+        postRun = ''
+          systemctl reload-or-restart ${concatStringsSep " " cfg.reloadUnits}
+        '';
       };
     };
 
