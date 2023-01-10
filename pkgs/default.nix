@@ -18,4 +18,9 @@ with final;
 
   itd = callPackage ./itd.nix {};
 
+  lego =
+    if lib.versionOlder prev.lego.version "4.9.1"
+    then flakes.nixpkgs.legacyPackages.${system}.lego
+    else prev.lego;
+
 }
