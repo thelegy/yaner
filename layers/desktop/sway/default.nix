@@ -90,6 +90,8 @@ in {
         "type:keyboard" = {
           xkb_layout = "de";
           xkb_variant = "nodeadkeys";
+          xkb_numlock = "enable";
+          xkb_options = "caps:escape";
         };
         "type:touchpad" = {
           tap = "enabled";
