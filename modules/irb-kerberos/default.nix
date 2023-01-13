@@ -1,5 +1,8 @@
-{ pkgs, ... }:
-{
+{ mkTrivialModule
+, pkgs
+, ... }:
+
+mkTrivialModule {
 
   environment.systemPackages = [ pkgs.krb5 ];
 

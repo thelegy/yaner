@@ -9,7 +9,6 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../layers/irb-kerberos
   ];
 
   wat.installer.btrfs = {

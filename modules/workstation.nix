@@ -8,6 +8,7 @@ mkTrivialModule {
 
   wat.thelegy.desktop.enable = true;
   wat.thelegy.steam.enable = true;
+  wat.thelegy.irb-kerberos.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 

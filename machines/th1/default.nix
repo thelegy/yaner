@@ -4,7 +4,6 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   imports = [
     ./hardware-configuration.nix
-    ../../layers/irb-kerberos
   ];
 
   # Fix the LTE modem not being detected
