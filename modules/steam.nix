@@ -1,6 +1,11 @@
-{ config, lib, options, pkgs, ... }:
+{ mkTrivialModule
+, config
+, lib
+, options
+, pkgs
+, ... }:
 
-{
+mkTrivialModule {
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "steam"

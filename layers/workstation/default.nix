@@ -4,8 +4,9 @@
 
   imports = [
     ../desktop
-    ../steam
   ];
+
+  wat.thelegy.steam.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
