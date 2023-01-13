@@ -7,6 +7,8 @@
 
 mkTrivialModule {
 
+  wat.thelegy.desktop.enable = true;
+
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "steam"
     "steam-original"

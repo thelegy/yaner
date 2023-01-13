@@ -1,6 +1,10 @@
-{ config, options, pkgs, ... }:
+{ mkTrivialModule
+, config
+, options
+, pkgs
+, ... }:
 
-{
+mkTrivialModule {
 
   wat.thelegy.base.enable = true;
   wat.thelegy.pulseaudio.enable = true;

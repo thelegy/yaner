@@ -2,10 +2,7 @@
 
 {
 
-  imports = [
-    ../desktop
-  ];
-
+  wat.thelegy.desktop.enable = true;
   wat.thelegy.steam.enable = true;
 
   nixpkgs.config.allowUnfree = true;
