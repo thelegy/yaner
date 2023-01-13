@@ -30,6 +30,7 @@
     packages = with pkgs; [
       alacritty
       chromium
+      firefox
       foot
       grim
       mpv
