@@ -28,6 +28,7 @@
       ldns
       libfaketime
       signal-desktop
+      sops
       stack
       tdesktop
       thunderbird
