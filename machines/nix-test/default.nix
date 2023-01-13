@@ -29,8 +29,7 @@ in {
     };
     zones.ygg-home = {
       parent = "ygg";
-      ingressExpression = "ip6 saddr {203:4a69:1559:3f0:3933:4f27:d573:9ef8}";
-      egressExpression = "ip6 daddr {203:4a69:1559:3f0:3933:4f27:d573:9ef8}";
+      ipv6Addresses = [ "203:4a69:1559:3f0:3933:4f27:d573:9ef8" ];
     };
     rules.yggdrasil = {
       from = "all";
