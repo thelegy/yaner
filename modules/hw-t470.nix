@@ -1,6 +1,10 @@
-{ lib, pkgs, ... }:
+{ mkTrivialModule
+, lib
+, pkgs
+, ... }:
 with lib;
-{
+
+mkTrivialModule {
   # Enable Microcode updates
   hardware.cpu.intel.updateMicrocode = mkDefault true;
 

@@ -4,7 +4,6 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   imports = [
     ./hardware-configuration.nix
-    ../../layers/t470
     ../../layers/irb-kerberos
   ];
 
@@ -20,6 +19,7 @@ mkMachine {} ( { pkgs, config, ... }: {
   services.ratbagd.enable = true;
 
   wat.thelegy.workstation.enable = true;
+  wat.thelegy.hw-t470.enable = true;
 
   wat.thelegy.backup = {
     enable = true;
