@@ -2,10 +2,8 @@
 
 {
 
-  imports = [
-    ./pulseaudio.nix
-  ];
   wat.thelegy.base.enable = true;
+  wat.thelegy.pulseaudio.enable = true;
 
   hardware.opengl.enable = true;
 

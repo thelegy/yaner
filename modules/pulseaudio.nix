@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ mkTrivialModule
+, pkgs
+, ... }:
 
-{
+mkTrivialModule {
 
   hardware.pulseaudio = {
     enable = pkgs.lib.mkDefault true;
