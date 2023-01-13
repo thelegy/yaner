@@ -27,9 +27,8 @@ mkTrivialModule {
   boot.tmpOnTmpfs = true;
 
   services = {
-    dbus.enable = true;
-    acpid.enable = true;
-    avahi.enable = true;
+    acpid.enable = mkDefault true;
+    avahi.enable = mkDefault true;
   };
 
   services.openssh = {
