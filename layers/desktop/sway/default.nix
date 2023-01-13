@@ -91,6 +91,10 @@ in {
           xkb_layout = "de";
           xkb_variant = "nodeadkeys";
         };
+        "type:touchpad" = {
+          tap = "enabled";
+          natural_scroll = "enabled";
+        };
       };
       output = {
         "eDP-1" = {
