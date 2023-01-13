@@ -20,6 +20,8 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   services.ratbagd.enable = true;
 
+  wat.thelegy.workstation.enable = true;
+
   wat.thelegy.backup = {
     enable = true;
     extraExcludes = [

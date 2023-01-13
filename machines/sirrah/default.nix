@@ -9,7 +9,6 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../layers/workstation
     ../../layers/irb-kerberos
   ];
 
@@ -20,6 +19,7 @@ in
     luks.enable = true;
   };
 
+  wat.thelegy.workstation.enable = true;
   wat.thelegy.builder.enable = true;
   wat.thelegy.prebuild.enable = true;
 

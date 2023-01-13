@@ -1,6 +1,10 @@
-{ config, options, pkgs, ... }:
+{ mkTrivialModule
+, config
+, options
+, pkgs
+, ... }:
 
-{
+mkTrivialModule {
 
   wat.thelegy.desktop.enable = true;
   wat.thelegy.steam.enable = true;
