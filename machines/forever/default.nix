@@ -76,4 +76,6 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     };
   };
 
+  system.stateVersion = "22.05";
+
 })
