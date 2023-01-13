@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
 
-  environment.systemPackages = [ pkgs.kerberos ];
+  environment.systemPackages = [ pkgs.krb5 ];
 
   environment.etc."krb5.conf".source = ./krb5.conf;
 
