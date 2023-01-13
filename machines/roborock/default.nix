@@ -187,8 +187,7 @@ with lib;
       };
       insecure = {
         parent = "external";
-        ingressExpression = "ip saddr {192.168.1.0/24}";
-        egressExpression = "ip daddr {192.168.1.0/24}";
+        ipv4Addresses = [ "192.168.1.0/24" ];
       };
     };
     rules = {
@@ -224,12 +223,7 @@ with lib;
         ];
       };
 
-      nixos-firewall = {
-        from = [ "insecure" ];
-        to = [ "fw" ];
-        allowedTCPPorts = config.networking.firewall.allowedTCPPorts;
-        allowedUDPPorts = config.networking.firewall.allowedUDPPorts;
-      };
+      nixos-firewall.from = [ "insecure" ];
 
       int-to-fw = {
         from = [ "internal" ];

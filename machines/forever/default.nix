@@ -26,6 +26,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
 
 
   networking.nftables.firewall = {
+    rules.nixos-firewall.enable = false;
     rules.public-services = {
       from = "all";
       to = [ "fw" ];

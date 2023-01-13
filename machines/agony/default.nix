@@ -63,11 +63,4 @@ mkMachine {
     };
   };
 
-  networking.nftables.firewall.rules.nixos-firewall = {
-    from = "all";
-    to = [ "fw" ];
-    allowedTCPPorts = config.networking.firewall.allowedTCPPorts;
-    allowedUDPPorts = config.networking.firewall.allowedUDPPorts;
-  };
-
 })
