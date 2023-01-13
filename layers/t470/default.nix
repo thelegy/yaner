@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 with lib;
 {
   # Enable Microcode updates
@@ -8,5 +8,10 @@ with lib;
   services.undervolt = {
     enable = true;
     coreOffset = -80;  # undervolt the CPU in mV
+  };
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = [ pkgs.intel-media-driver ];
   };
 }
