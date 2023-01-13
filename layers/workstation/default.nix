@@ -27,6 +27,8 @@
       kicad-small
       ldns
       libfaketime
+      nixpkgs-fmt
+      rnix-lsp
       signal-desktop
       sops
       stack
