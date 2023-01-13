@@ -1,6 +1,7 @@
 { mkMachine, ...}:
 
-mkMachine {} ({ config, pkgs, ... }:
+mkMachine {} ({ lib, config, pkgs, ... }:
+with lib;
 
 {
   imports = [
@@ -70,6 +71,44 @@ mkMachine {} ({ config, pkgs, ... }:
         };
       };
     '';
+  };
+
+  services.printing = {
+    enable = true;
+    browsing = true;
+    defaultShared = true;
+    extraConf = ''
+      DefaultLanguage de_DE
+      DefaultPaperSize A4
+    '';
+    listenAddresses = [ "*:631" ];
+    allowFrom = [ "all" ];
+  };
+  hardware.printers.ensureDefaultPrinter = "olhado";
+  hardware.printers.ensurePrinters = [{
+    name = "olhado";
+    model = "drv:///sample.drv/generic.ppd";
+    deviceUri = "socket://10.0.0.111:9100";
+    ppdOptions = {
+      PageSize = "A4";
+      Option1 = "True";  # Enable the Duplexer
+    };
+  }];
+
+
+  services.avahi = {
+    enable = true;
+    publish.enable = true;
+    publish.userServices = true;
+    nssmdns = true;
+  };
+
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 631 ];
+      allowedUDPPorts = [ 631 ];
+    };
   };
 
   # services.dhcpd4 = {
