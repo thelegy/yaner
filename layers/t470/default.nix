@@ -14,4 +14,7 @@ with lib;
     enable = true;
     extraPackages = [ pkgs.intel-media-driver ];
   };
+
+  # Enable brightness switches
+  services.illum.enable = true;
 }

@@ -5,7 +5,6 @@ mkMachine {} ( { pkgs, config, ... }: {
   imports = [
     ./hardware-configuration.nix
     ../../layers/t470
-    ../../layers/laptop
     ../../layers/irb-kerberos
   ];
 
