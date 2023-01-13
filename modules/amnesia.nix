@@ -1,6 +1,7 @@
-{ ... }:
+{ mkTrivialModule
+, ... }:
 
-{
+mkTrivialModule {
 
   fileSystems.amnesia = {
     mountPoint = "/mnt/amnesia";
