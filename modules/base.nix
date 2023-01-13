@@ -38,6 +38,8 @@ mkTrivialModule {
     kbdInteractiveAuthentication = mkDefault false;
   };
 
+  hardware.rasdaemon.enable = mkDefault true;
+
   programs = {
     less.enable = true;
     mtr.enable = true;
