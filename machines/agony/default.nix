@@ -21,6 +21,7 @@ mkMachine {
     enable = true;
     staging = false;
     extraDomainNames = [
+      "autoconfig.0jb.de"
       "autoconfig.beinke.cloud"
       "imap.beinke.cloud"
       "smtp.beinke.cloud"
@@ -36,8 +37,15 @@ mkMachine {
   wat.thelegy.base.enable = true;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.nginx.enable = true;
-  wat.thelegy.mailserver.enable = true;
   wat.thelegy.monitoring.enable = true;
+
+  wat.thelegy.mailserver = {
+    enable = true;
+    autoconfigDomains = [
+      "0jb.de"
+      "beinke.cloud"
+    ];
+  };
 
   fileSystems."/var/vmail" = {
     device = "/dev/disk/by-label/vmail";
@@ -50,16 +58,26 @@ mkMachine {
 
   mailserver = {
     domains = [
+      "0jb.de"
       "beinke.cloud"
       "die-cloud.org"
+      "janbeinke.com"
     ];
     extraVirtualAliases = {};
     forwards = {};
     loginAccounts = {
       "jan@beinke.cloud" = {
         aliases = [
+          "mail@0jb.de"
+          "@janbeinke.com"
         ];
       };
+      "uni@0jb.de" = {
+        aliases = [
+          "uni@janbeinke.com"
+        ];
+      };
+      "admin@0jb.de" = {};
     };
   };
 
