@@ -14,9 +14,20 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     ipv6Address = "2a01:4f8:1c1e:8ee7::1/64";
   };
 
+  wat.thelegy.acme = {
+    enable = true;
+    staging = false;
+    extraDomainNames = [
+      "0jb.de"
+      "element.0jb.de"
+      "matrix.0jb.de"
+      "mailmetrics.0jb.de"
+    ];
+  };
   wat.thelegy.base.enable = true;
   wat.thelegy.backup.enable = true;
   wat.thelegy.firewall.enable = true;
+  wat.thelegy.nginx.enable = true;
   wat.thelegy.matrix = {
     enable = true;
     useACMEHost = "forever.0jb.de";
@@ -37,37 +48,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     };
   };
 
-  security.acme = {
-    acceptTerms = true;
-    #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-    defaults.email = "mail+letsencrypt@0jb.de";
-    preliminarySelfsigned = false;
-    certs = {
-      "forever.0jb.de" = {
-        extraDomainNames = [
-          "0jb.de"
-          "element.0jb.de"
-          "matrix.0jb.de"
-          "mailmetrics.0jb.de"
-        ];
-        dnsProvider = "hurricane";
-        credentialsFile = "/etc/secrets/acme";
-        group = "nginx";
-        postRun = ''
-          systemctl start --failed nginx.service
-          systemctl reload nginx.service
-        '';
-      };
-    };
-  };
-
   services.nginx = {
-    enable = true;
-    virtualHosts.default = {
-      default = true;
-      useACMEHost = "forever.0jb.de";
-      forceSSL = true;
-    };
     virtualHosts."mailmetrics.0jb.de" = {
       useACMEHost = "forever.0jb.de";
       forceSSL = true;
