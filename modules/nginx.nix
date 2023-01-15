@@ -24,6 +24,12 @@ mkModule {
       enable = true;
       virtualHosts.default = {
         default = true;
+        addSSL = true;
+        useACMEHost = cfg.useACMEHost;
+        locations."/".return = "404";
+      };
+      virtualHosts.main = {
+        serverName = config.networking.fqdn;
         forceSSL = true;
         useACMEHost = cfg.useACMEHost;
       };
