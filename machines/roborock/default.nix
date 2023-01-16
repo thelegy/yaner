@@ -211,7 +211,7 @@ with lib;
       };
 
       insecure-to-fw = {
-        from = [ "insecure" ];
+        from = [ "insecure" "internal" ];
         to = [ "fw" ];
         allowedTCPPorts = [
           80  # http
@@ -223,7 +223,7 @@ with lib;
         ];
       };
 
-      nixos-firewall.from = [ "insecure" ];
+      nixos-firewall.from = [ "insecure" "internal" ];
 
       int-to-fw = {
         from = [ "internal" ];
@@ -235,12 +235,8 @@ with lib;
         allowedTCPPorts = [
           53  # dns
           1883  # mqtt
-          80  # http
-          443  # https
           4713  # pulseaudio-native
           8083  # zigbee2mqtt-frontend
-          1704  # snapcast-stream
-          1705  # snapcast-control
         ];
       };
 
