@@ -38,6 +38,11 @@ in mkModule {
       ];
     };
 
+    defaultQuota = mkOption {
+      type = types.str;
+      default = "5G";
+    };
+
   } // {
 
     mailserver.loginAccounts = mkOption {
@@ -56,6 +61,8 @@ in mkModule {
             mkIf
               (!isNull config.useSopsHashedPassword)
               toplevel_cfg.sops.secrets.${config.useSopsHashedPassword}.path;
+
+          quota = mkDefault cfg.defaultQuota;
 
         };
       }));
