@@ -34,12 +34,16 @@ let
       after = [ "network-online.target" ];
       path = with pkgs; [ git nix ];
       environment."NIX_PATH" = "nixpkgs=${pkgs.src}";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
       script = ''
-        mkdir -p ${docpageCfg.target_dir}
+        mkdir -p ${escapeShellArg docpageCfg.target_dir}
         ${pkgs.nixUnstable}/bin/nix build \
           --no-write-lock-file \
-          --out-link ${docpageCfg.target_dir}/${docpageCfg.tag} \
-          ${docpageCfg.flake}#docpages.${docpageCfg.tag}
+          --out-link ${escapeShellArg "${docpageCfg.target_dir}/${docpageCfg.tag}"} \
+          ${escapeShellArg docpageCfg.flake}
       '';
     };
   };

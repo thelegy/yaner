@@ -13,7 +13,7 @@
     target_dir = "/srv/www/0jb.de";
     pages = {
       "Qfrl".flake = "gitlab:beini/things?host=git.c3pb.de#docpages.Qfrl";
-      "BuzzLight".flake = "gitlab:beini/things?dir=BuzzLight/BuzzLight&host=git.c3pb.de";
+      #"BuzzLight".flake = "gitlab:beini/things?dir=BuzzLight/BuzzLight&host=git.c3pb.de";
     };
   };
 
