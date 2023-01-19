@@ -1,4 +1,3 @@
-
 { mkModule
 , config
 , lib
@@ -33,9 +32,8 @@ in mkModule {
 
     autoconfigDomains = mkOption {
       type = types.listOf types.str;
-      default = [
-        cfg.mailDomain
-      ];
+      default = [ cfg.mailDomain ];
+      # See https://wiki.mozilla.org/Thunderbird:Autoconfiguration
     };
 
     defaultQuota = mkOption {
