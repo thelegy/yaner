@@ -31,6 +31,7 @@ mkTrivialModule {
       ldns
       libfaketime
       nixpkgs-fmt
+      pass
       rnix-lsp
       signal-desktop
       sops
