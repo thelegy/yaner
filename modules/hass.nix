@@ -54,10 +54,12 @@ let
 
 in mkTrivialModule {
 
+  security.polkit.enable = true;
+
   virtualisation.libvirtd = {
     enable = true;
-    qemuPackage = mkDefault pkgs.qemu_kvm;
-    qemuRunAsRoot = false;
+    qemu.package = mkDefault pkgs.qemu_kvm;
+    qemu.runAsRoot = false;
     onShutdown = "shutdown";
   };
 
