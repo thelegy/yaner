@@ -32,6 +32,7 @@ mkTrivialModule {
       libfaketime
       nixpkgs-fmt
       pass
+      prusa-slicer
       rnix-lsp
       signal-desktop
       sops
