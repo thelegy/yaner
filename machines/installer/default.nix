@@ -1,16 +1,14 @@
 { mkMachine, ... }:
 
-mkMachine {} ({ pkgs, modulesPath, ... }: {
+mkMachine {} ({ lib, pkgs, modulesPath, config, ... }: with lib; {
 
   imports = [
-    (modulesPath + "/installer/cd-dvd/iso-image.nix")
-    (modulesPath + "/profiles/all-hardware.nix")
+    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
   ];
 
-  isoImage.makeEfiBootable = true;
-  isoImage.makeUsbBootable = true;
+  isoImage.isoBaseName = "nixos-thelegy";
 
-  boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
+  boot.kernelPackages = pkgs.linuxPackages;
 
   wat.thelegy.base.enable = true;
 
