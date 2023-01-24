@@ -27,7 +27,7 @@ let
       </features>
       <vcpu>2</vcpu>
       <cpu mode="host-model" />
-      <memory unit="G">4</memory>
+      <memory unit="G">3</memory>
       <currentMemory unit="G">1</currentMemory>
       <devices>
         <emulator>/run/libvirt/nix-emulators/qemu-kvm</emulator>
