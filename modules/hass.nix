@@ -10,7 +10,7 @@ let
 
   targetDir = "/var/lib/libvirt/hass";
   fileName = "hass.qcow2";
-  imageUrl = "https://github.com/home-assistant/operating-system/releases/download/6.3/haos_ova-6.3.qcow2.xz";
+  imageUrl = "https://github.com/home-assistant/operating-system/releases/download/9.4/haos_ova-9.4.qcow2.xz";
 
   machineUuid = "352e0f3b-494d-446c-98bf-8b3ee0728356";
 
