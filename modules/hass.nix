@@ -54,14 +54,7 @@ let
 
 in mkTrivialModule {
 
-  security.polkit.enable = true;
-
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu.package = mkDefault pkgs.qemu_kvm;
-    qemu.runAsRoot = false;
-    onShutdown = "shutdown";
-  };
+  wat.thelegy.libvirtd.enable = true;
 
   systemd.services.hass-image = {
     serviceConfig.Type = "oneshot";
