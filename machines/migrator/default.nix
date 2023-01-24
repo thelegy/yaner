@@ -17,6 +17,7 @@ in {
   };
 
   wat.thelegy.base.enable = true;
+  wat.thelegy.hw-t410.enable = true;
   #wat.thelegy.hass.enable = true;
 
   services.openssh.forwardX11 = true;
