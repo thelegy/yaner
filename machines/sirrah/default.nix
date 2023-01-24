@@ -38,14 +38,7 @@ in
 
   wat.thelegy.bs-oneclick.enable = true;
 
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = mkDefault pkgs.qemu_kvm;
-      runAsRoot = false;
-    };
-    onShutdown = "shutdown";
-  };
+  wat.thelegy.libvirtd.enable = true;
 
   hardware.cpu.amd.updateMicrocode = true;
   powerManagement.cpuFreqGovernor = "schedutil";
