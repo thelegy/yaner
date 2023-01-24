@@ -33,6 +33,7 @@ mkTrivialModule {
       nixpkgs-fmt
       pass
       prusa-slicer
+      pyright
       rnix-lsp
       signal-desktop
       sops
