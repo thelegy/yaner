@@ -49,4 +49,8 @@ in {
     };
   };
 
+  wat.thelegy.ender3s1 = {
+    enable = true;
+  };
+
 })
