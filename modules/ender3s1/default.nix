@@ -21,16 +21,6 @@ mkModule {
       default = "ender3s1";
     };
 
-    usbIdVendor = mkOption {
-      type = types.str;
-      default = "1a86";
-    };
-
-    usbIdProduct = mkOption {
-      type = types.str;
-      default = "7523";
-    };
-
     virtualSdcardPath = mkOption {
       type = types.str;
       default = "/srv/klipper";
@@ -49,14 +39,6 @@ mkModule {
       mkKeyValue = generators.mkKeyValueDefault {} ":";
     };
   in {
-
-    services.udev.packages = singleton (pkgs.writeTextFile {
-      name = "${cfg.serialName}-udev-rules";
-      destination = "/etc/udev/rules.d/90-${cfg.serialName}-serial.rules";
-      text = ''
-        SUBSYSTEM=="tty", ATTRS{idVendor}=="${cfg.usbIdVendor}", ATTRS{idProduct}=="${cfg.usbIdProduct}", SYMLINK+="${cfg.serialName}"
-      '';
-    });
 
     systemd.tmpfiles.rules = [
       "d ${cfg.virtualSdcardPath} 0770 root klipper - -"

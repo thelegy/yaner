@@ -49,6 +49,10 @@ in {
     };
   };
 
+  services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{physical_location/horizontal_position}=="right", ATTRS{physical_location/vertical_position}=="lower", SYMLINK+="ender3s1"
+  '';
+
   wat.thelegy.ender3s1 = {
     enable = true;
   };
