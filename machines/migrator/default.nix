@@ -67,8 +67,29 @@ in {
   };
 
   services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{physical_location/horizontal_position}=="center", ATTRS{physical_location/vertical_position}=="lower", SYMLINK+="zigstar", GROUP="zigbee", ENV{SYSTEMD_WANTS}="ser2net-zigstar.service"
     SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{physical_location/horizontal_position}=="right", ATTRS{physical_location/vertical_position}=="lower", SYMLINK+="ender3s1"
   '';
+
+  users.groups.zigbee = {};
+
+  systemd.services.ser2net-zigstar = let
+    conf = pkgs.writeText "ser2net.yaml" ''
+      connection: &con01
+        accepter: tcp,20108
+        connector: serialdev,/dev/zigstar,115200n81,local,dtr=off,rts=off
+        options:
+          kickolduser: true
+    '';
+  in {
+    serviceConfig = {
+      DynamicUser = true;
+      Type = "simple";
+      ExecStart = "${pkgs.ser2net}/bin/ser2net -d -u -c ${conf}";
+      SupplementaryGroups = [ "zigbee" ];
+      #TemporaryFileSystem = [ "/var" ];
+    };
+  };
 
   wat.thelegy.ender3s1 = {
     enable = true;
