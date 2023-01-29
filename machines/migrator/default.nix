@@ -17,8 +17,25 @@ in {
   };
 
   wat.thelegy.base.enable = true;
-  wat.thelegy.hw-t410.enable = true;
+  wat.thelegy.firewall.enable = true;
   wat.thelegy.hass.enable = true;
+  wat.thelegy.hw-t410.enable = true;
+
+  networking.nftables.firewall = {
+    zones.hass = {
+      ipv4Addresses = [ "192.168.1.30" ];
+    };
+    rules.hass-inbound = {
+      from = "all";
+      to = [ "hass" ];
+      verdict = "accept";
+    };
+    rules.hass-outbound = {
+      from = [ "hass" ];
+      to = "all";
+      verdict = "accept";
+    };
+  };
 
   services.openssh.forwardX11 = true;
 
