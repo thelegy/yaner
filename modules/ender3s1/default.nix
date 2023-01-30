@@ -208,6 +208,44 @@ mkModule {
             '';
           };
 
+          "gcode_macro START_PRINT" = {
+            gcode = mkGcode ''
+              {% set BED_TEMP = params.BED_TEMP|default(60)|float %}
+              {% set EXTRUDER_TEMP = params.EXTRUDER_TEMP|default(190)|float %}
+              # Start bed heating
+              M140 S{BED_TEMP}
+              # Set indermediate nozzle temperature
+              M104 S150
+              # Use absolute coordinates
+              G90
+              # Reset the G-Code Z offset (adjust Z offset if needed)
+              SET_GCODE_OFFSET Z=0.0
+              # Home the printer X and Y
+              G28 X Y
+              # Wait for bed to reach temperature
+              M190 S{BED_TEMP}
+              # Home the printer
+              G28 Z
+              # Set nozzle temperature
+              M104 S{EXTRUDER_TEMP}
+              # Move to idle position for pre-ooze
+              G1 X235 Y0 Z30 F3000
+              # Wait for the nozzle to heat up
+              M109 S{EXTRUDER_TEMP}
+              # Ooze some material
+              G1 E40 F200
+              # Move to prime position
+              G1 X2.0 Y10 Z0.28 F3000
+              # Prime the nozzle with a double line
+              G92 E0
+              G1 X2.0 Y140 E10 F1500
+              G1 X2.3 Y140 F5000
+              G92 E0
+              G1 X2.3 Y10 E10 F1200
+              G92 E0
+            '';
+          };
+
           "gcode_macro CANCEL_PRINT" = {
             description = "Cancel the actual running print";
             rename_existing = "CANCEL_PRINT_BASE";
