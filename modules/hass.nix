@@ -42,12 +42,6 @@ let
           <mac address="52:54:00:8b:02:8b" />
           <model type="virtio" />
         </interface>
-        <hostdev mode="subsystem" type="usb">
-          <source startupPolicy="optional">
-            <vendor id="0x1a86" />
-            <product id="0x7523" />
-          </source>
-        </hostdev>
       </devices>
     </domain>
   '';
