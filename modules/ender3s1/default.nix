@@ -16,9 +16,19 @@ mkModule {
       default = "stm32f401";
     };
 
-    serialName = mkOption {
+    serial = mkOption {
       type = types.str;
-      default = "ender3s1";
+      default = "/dev/ender3s1";
+    };
+
+    companionMcu = mkOption {
+      type = types.str;
+      default = "rp2040";
+    };
+
+    companionSerial = mkOption {
+      type = types.nullOr types.str;
+      default = null;
     };
 
     virtualSdcardPath = mkOption {
@@ -29,7 +39,6 @@ mkModule {
   };
 
   config = cfg: let
-    serial = "/dev/${cfg.serialName}";
     mkGcode = splitString "\n";
     iniFormat = pkgs.formats.ini {
       # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
@@ -38,6 +47,7 @@ mkModule {
         else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
       mkKeyValue = generators.mkKeyValueDefault {} ":";
     };
+    hasCompanion = !isNull cfg.companionSerial;
   in {
 
     systemd.tmpfiles.rules = [
@@ -46,174 +56,188 @@ mkModule {
 
     services.klipper = {
       enable = true;
-      settings = {
+      settings = mkMerge [
+        {
 
-        stepper_x = {
-          step_pin = "PC2";
-          dir_pin = "PB9";
-          enable_pin = "!PC3";
-          microsteps = "16";
-          rotation_distance = "40";
-          endstop_pin = "!PA5";
-          position_endstop = "-10";
-          position_max = "235";
-          position_min = "-10";
-          homing_speed = "50";
-        };
-        stepper_y = {
-          step_pin = "PB8";
-          dir_pin = "PB7";
-          enable_pin = "!PC3";
-          microsteps = "16";
-          rotation_distance = "40";
-          endstop_pin = "!PA6";
-          position_endstop = "-8";
-          position_max = "235";
-          position_min = "-13";
-          homing_speed = "50";
-        };
+          stepper_x = {
+            step_pin = "PC2";
+            dir_pin = "PB9";
+            enable_pin = "!PC3";
+            microsteps = "16";
+            rotation_distance = "40";
+            endstop_pin = "!PA5";
+            position_endstop = "-10";
+            position_max = "235";
+            position_min = "-10";
+            homing_speed = "50";
+          };
+          stepper_y = {
+            step_pin = "PB8";
+            dir_pin = "PB7";
+            enable_pin = "!PC3";
+            microsteps = "16";
+            rotation_distance = "40";
+            endstop_pin = "!PA6";
+            position_endstop = "-8";
+            position_max = "235";
+            position_min = "-13";
+            homing_speed = "50";
+          };
 
-        stepper_z = {
-          step_pin = "PB6";
-          dir_pin = "!PB5";
-          enable_pin = "!PC3";
-          microsteps = "16";
-          rotation_distance = "8";
-          endstop_pin = "probe:z_virtual_endstop";
-          position_max = "270";
-          position_min = "-4";
-        };
+          stepper_z = {
+            step_pin = "PB6";
+            dir_pin = "!PB5";
+            enable_pin = "!PC3";
+            microsteps = "16";
+            rotation_distance = "8";
+            endstop_pin = "probe:z_virtual_endstop";
+            position_max = "270";
+            position_min = "-4";
+          };
 
-        extruder = {
-          step_pin = "PB4";
-          dir_pin = "PB3";
-          enable_pin = "!PC3";
-          microsteps = "16";
-          gear_ratio = "42:12";
-          rotation_distance = "26.359";
-          nozzle_diameter = "0.400";
-          filament_diameter = "1.750";
-          heater_pin = "PA1";
-          sensor_type = "EPCOS 100K B57560G104F";
-          sensor_pin = "PC5";
-          control = "pid";
-          pid_Kp = "23.561";
-          pid_Ki = "1.208";
-          pid_Kd = "114.859";
-          min_temp = "0";
-          max_temp = "260 # Set to 300 for S1 Pro";
-          pressure_advance = "0.016";
-        };
+          extruder = {
+            step_pin = "PB4";
+            dir_pin = "PB3";
+            enable_pin = "!PC3";
+            microsteps = "16";
+            gear_ratio = "42:12";
+            rotation_distance = "26.359";
+            nozzle_diameter = "0.400";
+            filament_diameter = "1.750";
+            heater_pin = "PA1";
+            sensor_type = "EPCOS 100K B57560G104F";
+            sensor_pin = "PC5";
+            control = "pid";
+            pid_Kp = "23.561";
+            pid_Ki = "1.208";
+            pid_Kd = "114.859";
+            min_temp = "0";
+            max_temp = "260 # Set to 300 for S1 Pro";
+            pressure_advance = "0.016";
+          };
 
-        heater_bed = {
-          heater_pin = "PA7";
-          sensor_type = "EPCOS 100K B57560G104F";
-          sensor_pin = "PC4";
-          control = "pid";
-          pid_Kp = "71.867";
-          pid_Ki = "1.536";
-          pid_Kd = "840.843";
-          min_temp = "0";
-          max_temp = "100 # Set to 110 for S1 Pro";
-        };
+          heater_bed = {
+            heater_pin = "PA7";
+            sensor_type = "EPCOS 100K B57560G104F";
+            sensor_pin = "PC4";
+            control = "pid";
+            pid_Kp = "71.867";
+            pid_Ki = "1.536";
+            pid_Kd = "840.843";
+            min_temp = "0";
+            max_temp = "100 # Set to 110 for S1 Pro";
+          };
 
-        "heater_fan hotend_fan" = {
-          pin = "PC0";
-        };
+          "heater_fan hotend_fan" = {
+            pin = "PC0";
+          };
 
-        fan = {
-          pin = "PA0";
-        };
+          fan = {
+            pin = "PA0";
+          };
 
-        mcu = {
-          serial = serial;
-          restart_method = "command";
-        };
+          mcu = {
+            serial = cfg.serial;
+            restart_method = "command";
+          };
 
-        printer = {
-          kinematics = "cartesian";
-          max_velocity = "300";
-          max_accel = "2000";
-          max_z_velocity = "5";
-          max_z_accel = "100";
-        };
+          printer = {
+            kinematics = "cartesian";
+            max_velocity = "300";
+            max_accel = "2000";
+            max_z_velocity = "5";
+            max_z_accel = "100";
+          };
 
-        bltouch = {
-          sensor_pin = "^PC14";
-          control_pin = "PC13";
-          x_offset = "-31.8";
-          y_offset = "-40.5";
-          z_offset = "1.605";
-          probe_with_touch_mode = "true";
-          stow_on_each_sample = "false";
-        };
+          bltouch = {
+            sensor_pin = "^PC14";
+            control_pin = "PC13";
+            x_offset = "-31.8";
+            y_offset = "-40.5";
+            z_offset = "1.605";
+            probe_with_touch_mode = "true";
+            stow_on_each_sample = "false";
+          };
 
-        bed_mesh = {
-          speed = "120";
-          mesh_min = "20, 20";
-          mesh_max = "200, 194";
-          probe_count = "4,4";
-          algorithm = "bicubic";
-        };
+          bed_mesh = {
+            speed = "120";
+            mesh_min = "20, 20";
+            mesh_max = "200, 194";
+            probe_count = "4,4";
+            algorithm = "bicubic";
+          };
 
-        safe_z_home = {
-          home_xy_position = "147, 154";
-          speed = "75";
-          z_hop = "10";
-          z_hop_speed = "5";
-          move_to_previous = "true";
-        };
+          safe_z_home = {
+            home_xy_position = "147, 154";
+            speed = "75";
+            z_hop = "10";
+            z_hop_speed = "5";
+            move_to_previous = "true";
+          };
 
-        "filament_switch_sensor e0_sensor" = {
-          switch_pin = "!PC15";
-          pause_on_runout = "true";
-          runout_gcode = "PAUSE";
-        };
+          "filament_switch_sensor e0_sensor" = {
+            switch_pin = "!PC15";
+            pause_on_runout = "true";
+            runout_gcode = "PAUSE";
+          };
 
-        pause_resume = {
-          recover_velocity = "25";
-        };
+          pause_resume = {
+            recover_velocity = "25";
+          };
 
-        bed_screws = {
-          screw1 = "20, 29";
-          screw2 = "195, 29";
-          screw3 = "195, 198";
-          screw4 = "20, 198";
-        };
+          bed_screws = {
+            screw1 = "20, 29";
+            screw2 = "195, 29";
+            screw3 = "195, 198";
+            screw4 = "20, 198";
+          };
 
-        virtual_sdcard = {
-          path = cfg.virtualSdcardPath;
-        };
+          virtual_sdcard = {
+            path = cfg.virtualSdcardPath;
+          };
 
-        display_status = {};
+          display_status = {};
 
-        "gcode_macro CANCEL_PRINT" = {
-          description = "Cancel the actual running print";
-          rename_existing = "CANCEL_PRINT_BASE";
-          gcode = mkGcode ''
-            TURN_OFF_HEATERS
-            G91
-            G1 Z3
-            CANCEL_PRINT_BASE
-          '';
-        };
+          exclude_object = {};
 
-        "gcode_macro CENTER" = {
-          description = "Center the nozzle";
-          gcode = mkGcode ''
-            G91
-            G1 Z3
-            G90
-            G1 X110 Y110 F7800
-            G1 Z50
-          '';
-        };
+          "gcode_macro CANCEL_PRINT" = {
+            description = "Cancel the actual running print";
+            rename_existing = "CANCEL_PRINT_BASE";
+            gcode = mkGcode ''
+              TURN_OFF_HEATERS
+              G91
+              G1 Z3
+              CANCEL_PRINT_BASE
+            '';
+          };
 
-      };
+          "gcode_macro CENTER" = {
+            description = "Center the nozzle";
+            gcode = mkGcode ''
+              G91
+              G1 Z3
+              G90
+              G1 X110 Y110 F7800
+              G1 Z50
+            '';
+          };
+
+        }
+        (optionalAttrs hasCompanion {
+          "mcu companion" = {
+            serial = cfg.companionSerial;
+          };
+        })
+      ];
       firmwares.mcu = {
         enable = true;
         serial = null;
         configFile = ./fw/${cfg.mcu};
+      };
+      firmwares."mcu companion" = mkIf hasCompanion {
+        enable = true;
+        serial = null;
+        configFile = ./fw/${cfg.companionMcu};
       };
     };
 

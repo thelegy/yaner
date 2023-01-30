@@ -69,6 +69,7 @@ in {
   services.udev.extraRules = ''
     SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{physical_location/horizontal_position}=="center", ATTRS{physical_location/vertical_position}=="lower", SYMLINK+="zigstar", GROUP="zigbee", ENV{SYSTEMD_WANTS}="ser2net-zigstar.service"
     SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{physical_location/horizontal_position}=="right", ATTRS{physical_location/vertical_position}=="lower", SYMLINK+="ender3s1"
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="614e", SYMLINK+="klipper_companion"
   '';
 
   users.groups.zigbee = {};
@@ -87,12 +88,12 @@ in {
       Type = "simple";
       ExecStart = "${pkgs.ser2net}/bin/ser2net -d -u -c ${conf}";
       SupplementaryGroups = [ "zigbee" ];
-      #TemporaryFileSystem = [ "/var" ];
     };
   };
 
   wat.thelegy.ender3s1 = {
     enable = true;
+    companionSerial = "/dev/klipper_companion";
   };
 
 })
