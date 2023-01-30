@@ -246,6 +246,25 @@ mkModule {
             '';
           };
 
+          "gcode_macro END_PRINT" = {
+            gcode = mkGcode ''
+              {% set max_z = printer.toolhead.axis_maximum.z %}
+              # Turn off bed, extruder, and fan
+              M140 S0
+              M104 S0
+              M106 S0
+              # Set to absolute
+              G90
+              # Move nozzle away from print a bit
+              G1 Z{[max_z, 3+printer.toolhead.position.z] | min} E-3 F300
+              # Present the finished print
+              G1 X235 Y235 F1800
+              G1 Z{[max_z, 100+printer.toolhead.position.z] | min} F300
+              # Disable steppers
+              M84 X Y E
+            '';
+          };
+
           "gcode_macro CANCEL_PRINT" = {
             description = "Cancel the actual running print";
             rename_existing = "CANCEL_PRINT_BASE";
