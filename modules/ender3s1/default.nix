@@ -200,6 +200,14 @@ mkModule {
 
           exclude_object = {};
 
+          "gcode_macro INIT" = {
+            gcode = mkGcode ''
+              G28
+              BED_MESH_CALIBRATE
+              CENTER
+            '';
+          };
+
           "gcode_macro CANCEL_PRINT" = {
             description = "Cancel the actual running print";
             rename_existing = "CANCEL_PRINT_BASE";
