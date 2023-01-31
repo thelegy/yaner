@@ -32,6 +32,7 @@ mkTrivialModule {
       libfaketime
       nixpkgs-fmt
       pass
+      preprocess-cancellation
       prusa-slicer
       pyright
       rnix-lsp
