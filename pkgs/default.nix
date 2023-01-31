@@ -23,4 +23,12 @@ with final;
     then flakes.nixpkgs.legacyPackages.${system}.lego
     else prev.lego;
 
+  preprocess-cancellation =
+    final.python3Packages.preprocess-cancellation.overrideAttrs (orig:{
+      postPatch = ''
+      ${orig.postPatch}
+      sed -i 's/\[tool.poetry.scripts\]/[project.scripts]/' -i pyproject.toml
+      '';
+    });
+
 }
