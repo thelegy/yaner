@@ -54,26 +54,35 @@
   };
 
 
-  outputs = flakes@{ wat, ... }: wat.lib.mkWatRepo flakes ({ findModules, findMachines, ... }: rec {
-    namespace = [ "thelegy" ];
-    loadOverlays = [
-      flakes.queezle-dotfiles.overlay
-    ];
-    loadModules = [
-      flakes.homemanager.nixosModules.home-manager
-      flakes.nixos-nftables-firewall.nixosModules.default
-      flakes.sops-nix.nixosModules.sops
-    ];
-    outputs = {
+  outputs = flakes@{ wat, ... }: wat.lib.mkWatRepo flakes (
+    { findModules
+    , findMachines
+    , ...
+    }: rec {
+      namespace = [ "thelegy" ];
+      loadOverlays = [
+        flakes.queezle-dotfiles.overlay
+      ];
+      loadModules = [
+        flakes.homemanager.nixosModules.home-manager
+        flakes.nixos-nftables-firewall.nixosModules.default
+        flakes.sops-nix.nixosModules.sops
+      ];
+      outputs = {
 
-      overlay = import ./pkgs flakes;
+        overlay = import ./pkgs flakes;
 
-      nixosModules = findModules namespace ./modules;
+        nixosModules = findModules namespace ./modules;
 
-      nixosConfigurations = findMachines ./machines;
+        nixosConfigurations = findMachines ./machines;
 
-    };
-  });
+        packages = wat.lib.withPkgsForLinux flakes.nixpkgs [ flakes.self.overlay ] (pkgs: {
+
+        });
+
+      };
+    }
+  );
 
 
 }
