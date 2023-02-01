@@ -22,6 +22,7 @@ mkTrivialModule {
   users.users.beinke = {
     packages = with pkgs; [
       cabal-install
+      launch-cadquery
       direnv
       file
       fzf
