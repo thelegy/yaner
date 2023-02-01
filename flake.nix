@@ -32,6 +32,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    cadquery.url = github:bobtwinkles/cq-flake;
+
     qed.url = github:thelegy/qed/dev;
 
     qbar.url = gitlab:jens/qbar?host=git.c3pb.de;

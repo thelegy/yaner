@@ -6,6 +6,22 @@ with final;
 
   bs-oneclick = callPackage ./bs-oneclick.nix {};
 
+  cadquery-env = let
+    cadquery-python = flakes.cadquery.packages.${system}.python;
+    cq-kit = lib.head (lib.filter (p: p.pname == "cq-kit") cq-editor.propagatedBuildInputs);
+    pythonBundle = cadquery-python.withPackages (p: with p; [
+      cadquery
+      cq-kit
+      #ocp-stubs
+      #pybind11-stubgen
+    ]);
+  in buildEnv {
+    name = "cadquery-env";
+    paths = [ cq-editor pythonBundle ];
+  };
+
+  cq-editor = flakes.cadquery.packages.${system}.cq-editor;
+
   inxi-full = inxi.override { withRecommends = true; };
 
   itd = callPackage ./itd.nix {};
