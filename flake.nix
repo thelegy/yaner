@@ -78,6 +78,8 @@
 
         packages = wat.lib.withPkgsForLinux flakes.nixpkgs [ flakes.self.overlay ] (pkgs: {
 
+          inherit (pkgs) cadquery-env;
+
         });
 
       };

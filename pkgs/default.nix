@@ -26,6 +26,11 @@ with final;
 
   itd = callPackage ./itd.nix {};
 
+  launch-cadquery = on-demand-shell {
+    name = "cadquery";
+    installable = "${flakes.self}#cadquery-env";
+  };
+
   lego =
     if lib.versionOlder prev.lego.version "4.9.1"
     then flakes.nixpkgs.legacyPackages.${system}.lego
