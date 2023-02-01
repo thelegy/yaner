@@ -37,6 +37,23 @@ with final;
 
   neovim-thelegy = flakes.qed.packages.${system}.qed;
 
+  on-demand-shell =
+    { name
+    , scriptName ? "launch-${name}"
+    , installable ? null
+    , args ? ""
+    }: writeShellScriptBin scriptName ''
+      set -euo pipefail
+      readonly gc_root_dir="''${XDG_DATA_HOME:-$HOME/.local/share}/nix-on-demand"
+      mkdir -p "$gc_root_dir"
+      ${
+        lib.optionalString
+          (!isNull installable)
+          ''nix build --out-link "$gc_root_dir/${name}" '${installable}' ''
+      }
+      exec nix shell "$gc_root_dir/${name}" ${args} "$@"
+    '';
+
   preprocess-cancellation =
     python3Packages.preprocess-cancellation.overrideAttrs (orig:{
       postPatch = ''
