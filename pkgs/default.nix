@@ -19,10 +19,10 @@ with final;
 
   mpv_autospeed = ./mpv_autospeed.lua;
 
-  neovim-thelegy = flakes.qed.packages.${final.system}.qed;
+  neovim-thelegy = flakes.qed.packages.${system}.qed;
 
   preprocess-cancellation =
-    final.python3Packages.preprocess-cancellation.overrideAttrs (orig:{
+    python3Packages.preprocess-cancellation.overrideAttrs (orig:{
       postPatch = ''
       ${orig.postPatch}
       sed -i 's/\[tool.poetry.scripts\]/[project.scripts]/' -i pyproject.toml
