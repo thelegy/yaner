@@ -32,8 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    cadquery.url = github:bobtwinkles/cq-flake;
-
     qed.url = github:thelegy/qed/dev;
 
     qbar.url = gitlab:jens/qbar?host=git.c3pb.de;
@@ -77,8 +75,6 @@
         nixosConfigurations = findMachines ./machines;
 
         packages = wat.lib.withPkgsForLinux flakes.nixpkgs [ flakes.self.overlay ] (pkgs: {
-
-          inherit (pkgs) cadquery-env;
 
         });
 

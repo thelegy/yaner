@@ -6,29 +6,20 @@ with final;
 
   bs-oneclick = callPackage ./bs-oneclick.nix {};
 
-  cadquery-env = let
-    cadquery-python = flakes.cadquery.packages.${system}.python;
-    cq-kit = lib.head (lib.filter (p: p.pname == "cq-kit") cq-editor.propagatedBuildInputs);
-    pythonBundle = cadquery-python.withPackages (p: with p; [
-      cadquery
-      cq-kit
-      #ocp-stubs
-      #pybind11-stubgen
-    ]);
-  in buildEnv {
-    name = "cadquery-env";
-    paths = [ cq-editor pythonBundle ];
-  };
-
-  cq-editor = flakes.cadquery.packages.${system}.cq-editor;
-
   inxi-full = inxi.override { withRecommends = true; };
 
   itd = callPackage ./itd.nix {};
 
-  launch-cadquery = on-demand-shell {
+  launch-cadquery = let
+    cq-flake = final.fetchFromGitHub {
+      owner = "thelegy";
+      repo = "cq-flake";
+      rev = "9738110d48c2e38f4d03d12839684b06abf34244";
+      hash = "sha256-Yq+H4cikZb58JzZP7CPJH/ean78pGMWJDuGLZgI06Eo=";
+    };
+  in on-demand-shell {
     name = "cadquery";
-    installable = "${flakes.self}#cadquery-env";
+    installable = "path://${final.cq-flake}";
   };
 
   lego =
