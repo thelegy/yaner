@@ -48,16 +48,6 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     };
   };
 
-  services.nginx = {
-    virtualHosts."mailmetrics.0jb.de" = {
-      useACMEHost = "forever.0jb.de";
-      forceSSL = true;
-      locations."/<redacted>" = {
-        proxyPass = "<redacted>";
-      };
-    };
-  };
-
   system.stateVersion = "22.05";
 
 })
