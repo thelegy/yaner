@@ -101,7 +101,6 @@ in {
             targets = [
               "agony.0jb.de"
               "forever.0jb.de"
-              "mailmetrics.0jb.de"
               "roborock.0jb.de"
             ];
           }
