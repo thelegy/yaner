@@ -19,7 +19,7 @@ with final;
     };
   in on-demand-shell {
     name = "cadquery";
-    installable = "path://${final.cq-flake}";
+    installable = "path://${cq-flake}";
   };
 
   lego =
