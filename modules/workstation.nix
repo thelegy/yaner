@@ -21,6 +21,7 @@ mkTrivialModule {
 
   users.users.beinke = {
     packages = with pkgs; [
+      anki
       cabal-install
       launch-cadquery
       direnv
