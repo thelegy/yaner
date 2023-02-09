@@ -23,17 +23,18 @@ mkTrivialModule {
     packages = with pkgs; [
       anki-bin
       cabal-install
-      launch-cadquery
       direnv
       file
       fzf
       git-filter-repo
       git-revise
-      kicad-small
       joplin
       joplin-desktop
+      kicad-small
+      launch-cadquery
       ldns
       libfaketime
+      mumble
       nixpkgs-fmt
       pass
       preprocess-cancellation
@@ -46,7 +47,6 @@ mkTrivialModule {
       tdesktop
       thunderbird
       vscode
-      mumble
     ];
   };
 
