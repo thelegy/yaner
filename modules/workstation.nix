@@ -30,6 +30,8 @@ mkTrivialModule {
       git-filter-repo
       git-revise
       kicad-small
+      joplin
+      joplin-desktop
       ldns
       libfaketime
       nixpkgs-fmt
