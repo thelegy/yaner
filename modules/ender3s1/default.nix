@@ -202,7 +202,10 @@ mkModule {
 
           "gcode_macro INIT" = {
             gcode = mkGcode ''
-              G28
+              G28 X Y
+              G90
+              G1 X110 Y110 F800
+              G28 Z
               BED_MESH_CALIBRATE
               CENTER
             '';
