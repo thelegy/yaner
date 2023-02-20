@@ -67,7 +67,7 @@ mkMachine {} ( { pkgs, config, ... }: {
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
     }
     {
-      hostName = "janpc";
+      hostName = "sirrah";
       sshUser = "nix";
       systems = [
         "x86_64-linux"
