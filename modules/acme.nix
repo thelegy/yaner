@@ -51,7 +51,7 @@ mkModule {
         inherit (cfg) extraDomainNames;
         dnsProvider = "hurricane";
         credentialsFile = config.sops.secrets.${cfg.sopsCredentialsFile}.path;
-        postRun = ''
+        postRun = mkIf (length cfg.reloadUnits > 0) ''
           systemctl reload-or-restart ${concatStringsSep " " cfg.reloadUnits}
         '';
       };
