@@ -2,6 +2,8 @@
 
 mkMachine {} ( { pkgs, config, ... }: {
 
+  system.stateVersion = "19.03";
+
   imports = [
     ./hardware-configuration.nix
   ];
@@ -116,7 +118,5 @@ mkMachine {} ( { pkgs, config, ... }: {
     tcpdump
     itd
   ];
-
-  system.stateVersion = "19.03";
 
 })
