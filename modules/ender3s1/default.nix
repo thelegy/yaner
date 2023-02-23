@@ -432,6 +432,9 @@ mkModule {
 
     services.fluidd = {
       enable = true;
+      nginx.extraConfig = ''
+        client_max_body_size 50M;
+      '';
     };
 
     networking.firewall.allowedTCPPorts = [ 80 ];
