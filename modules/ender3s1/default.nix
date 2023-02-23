@@ -276,6 +276,75 @@ mkModule {
             '';
           };
 
+          "gcode_macro PAUSE" = {
+            description = "Pause the actual running print";
+            rename_existing = "PAUSE_BASE";
+            variable_extrude = 1.0;
+            variable_extruder_temp = 150;
+            gcode = mkGcode ''
+              {% set E = printer["gcode_macro PAUSE"].extrude|float %}
+              {% set max_z = printer.toolhead.axis_maximum.z|float %}
+
+              PAUSE_BASE
+              G90
+
+              EXTRUDE_IF_POSSIBLE E=-{E}
+
+              SET_GCODE_VARIABLE MACRO=PAUSE VARIABLE=extruder_temp VALUE={printer.extruder.target}
+              M104 S{[150, printer.extruder.temperature, printer.extruder.target] | min}
+
+              {% if "xyz" in printer.toolhead.homed_axes %}
+                G1 Z{[max_z, 10+printer.toolhead.position.z] | min} F300
+                G1 X{printer.toolhead.axis_maximum.x} Y{printer.toolhead.axis_maximum.y} F6000
+              {% else %}
+                {action_respond_info("Printer not homed")}
+              {% endif %}
+            '';
+          };
+
+          "gcode_macro RESUME" = {
+            description = "Resume the actual running print";
+            rename_existing = "RESUME_BASE";
+            gcode = mkGcode ''
+              {% set E = printer["gcode_macro PAUSE"].extrude|float %}
+              {% set max_z = printer.toolhead.axis_maximum.z|float %}
+
+              {% if 'VELOCITY' in params|upper %}
+                {% set get_params = ('VELOCITY=' + params.VELOCITY)  %}
+              {%else %}
+                {% set get_params = "" %}
+              {% endif %}
+
+              M117
+              G90
+
+              {% if "xyz" in printer.toolhead.homed_axes %}
+                G1 Z{[max_z, 3+printer.toolhead.position.z] | min} F300
+                G1 X{printer.toolhead.axis_maximum.x} Y0 F6000
+              {% else %}
+                {action_respond_info("Printer not homed")}
+              {% endif %}
+
+              M109 S{printer["gcode_macro PAUSE"].extruder_temp}
+              EXTRUDE_IF_POSSIBLE E={E}
+              RESUME_BASE {get_params}
+            '';
+          };
+
+          "gcode_macro EXTRUDE_IF_POSSIBLE" = {
+            gcode = mkGcode ''
+              {% set E = params.E|float %}
+              {% set F = params.F|default(2100)|float %}
+
+              {% if printer.extruder.can_extrude|lower == 'true' %}
+                M83
+                G1 E{E} F{F}
+              {% else %}
+                {action_respond_info("Extruder not hot enough")}
+              {% endif %}
+            '';
+          };
+
           "gcode_macro CANCEL_PRINT" = {
             description = "Cancel the actual running print";
             rename_existing = "CANCEL_PRINT_BASE";
