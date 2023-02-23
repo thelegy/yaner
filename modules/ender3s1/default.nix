@@ -200,6 +200,14 @@ mkModule {
 
           exclude_object = {};
 
+          idle_timeout = {
+            timeout = 1800;
+            gcode = mkGcode ''
+              TURN_OFF_HEATERS
+              M84
+            '';
+          };
+
           "gcode_macro INIT" = {
             gcode = mkGcode ''
               G28 X Y
