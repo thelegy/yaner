@@ -210,10 +210,7 @@ mkModule {
 
           "gcode_macro INIT" = {
             gcode = mkGcode ''
-              G28 X Y
-              G90
-              G1 X110 Y110 F800
-              G28 Z
+              G28
               BED_MESH_CALIBRATE
               CENTER
             '';
@@ -223,14 +220,15 @@ mkModule {
             gcode = mkGcode ''
               {% set BED_TEMP = params.BED_TEMP|default(60)|float %}
               {% set EXTRUDER_TEMP = params.EXTRUDER_TEMP|default(190)|float %}
+              # Reset interfering state
+              CLEAR_PAUSE
+              M117
               # Start bed heating
               M140 S{BED_TEMP}
               # Set indermediate nozzle temperature
               M104 S150
               # Use absolute coordinates
               G90
-              # Reset the G-Code Z offset (adjust Z offset if needed)
-              SET_GCODE_OFFSET Z=0.0
               # Home the printer X and Y
               G28 X Y
               # Wait for bed to reach temperature
@@ -260,6 +258,8 @@ mkModule {
           "gcode_macro END_PRINT" = {
             gcode = mkGcode ''
               {% set max_z = printer.toolhead.axis_maximum.z %}
+              {% set x_park = printer.toolhead.axis_maximum.x %}
+              {% set y_park = printer.toolhead.axis_maximum.y %}
               # Turn off bed, extruder, and fan
               M140 S0
               M104 S0
@@ -269,7 +269,7 @@ mkModule {
               # Move nozzle away from print a bit
               G1 Z{[max_z, 3+printer.toolhead.position.z] | min} E-3 F300
               # Present the finished print
-              G1 X235 Y235 F1800
+              G1 X{x_park} Y{y_park} F6000
               G1 Z{[max_z, 100+printer.toolhead.position.z] | min} F300
               # Disable steppers
               M84 X Y E
