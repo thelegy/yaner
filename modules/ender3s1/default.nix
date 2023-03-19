@@ -387,16 +387,14 @@ mkModule {
     };
 
     systemd.services.moonraker = let
-      stateDirectory = "/var/lib/moonraker";
       cfgFile = iniFormat.generate "moonraker.cfg" {
         authorization.trusted_clients = [ "127.0.0.1" ];
         authorization.cors_domains = [ "*" ];
 
-        database.database_path = "${stateDirectory}/database";
-
-        file_manager.config_path = "${stateDirectory}/config";
-
-        machine.provider = "none";
+        machine = {
+          provider = "none";
+          validate_service = false;
+        };
 
         octoprint_compat = {};
 
@@ -415,7 +413,8 @@ mkModule {
       path = [ pkgs.iproute2 ];
 
       script = ''
-        mkdir -p ${stateDirectory}/config
+        ln -snf ${cfg.virtualSdcardPath} $STATE_DIRECTORY/gcodes
+        rm $STATE_DIRECTORY/gcodes/klipper
         ${pkgs.moonraker}/bin/moonraker --nologfile -d $STATE_DIRECTORY -c ${cfgFile}
       '';
 
@@ -423,7 +422,6 @@ mkModule {
         DynamicUser = true;
         SupplementaryGroups = [ "klipper" ];
         StateDirectory = "moonraker";
-        WorkingDirectory = stateDirectory;
         ReadWritePaths = [
           cfg.virtualSdcardPath
         ];
