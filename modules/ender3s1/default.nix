@@ -416,7 +416,7 @@ mkModule {
 
       script = ''
         mkdir -p ${stateDirectory}/config
-        ${pkgs.moonraker}/bin/moonraker --nologfile -c ${cfgFile}
+        ${pkgs.moonraker}/bin/moonraker --nologfile -d $STATE_DIRECTORY -c ${cfgFile}
       '';
 
       serviceConfig = {
