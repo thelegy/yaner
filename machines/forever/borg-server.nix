@@ -53,9 +53,9 @@ in {
     itkeller-mc = {
       path = "/mnt/backup-storage/itkeller-mc";
       authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+VRZSAJ+6Zv71G40gAiqbjl0qMBwAFBbuZePZIbbnP minecraft@minecraft"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDrB+AEivcQUA8Eb9LbrNoXTdLqqnutKdow040ERcI2Z mc.dfhq.eu now with create mod"
       ];
-      quota = "25G";
+      quota = "50G";
     };
     koma-valhalla = {
       path = "/mnt/backup-storage/koma-valhalla";
