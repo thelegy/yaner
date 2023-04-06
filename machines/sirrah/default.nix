@@ -21,6 +21,7 @@ in
   wat.thelegy.workstation.enable = true;
   wat.thelegy.builder.enable = true;
   wat.thelegy.prebuild.enable = true;
+  wat.thelegy.syncthing.enable = true;
 
   networking.useDHCP = false;
   networking.interfaces.${interface}.useDHCP = true;
