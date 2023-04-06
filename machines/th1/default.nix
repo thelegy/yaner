@@ -21,6 +21,7 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   wat.thelegy.workstation.enable = true;
   wat.thelegy.hw-t470.enable = true;
+  wat.thelegy.syncthing.enable = true;
 
   wat.thelegy.backup = {
     enable = true;
