@@ -35,6 +35,7 @@ mkTrivialModule {
       ldns
       libfaketime
       mumble
+      nixGL
       nixpkgs-fmt
       pass
       preprocess-cancellation
