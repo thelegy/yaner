@@ -154,7 +154,7 @@ mkModule {
             control_pin = "PC13";
             x_offset = "-31.8";
             y_offset = "-40.5";
-            z_offset = "1.605";
+            z_offset = "1.572";
             probe_with_touch_mode = "true";
             stow_on_each_sample = "false";
           };
