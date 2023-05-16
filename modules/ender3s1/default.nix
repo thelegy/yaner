@@ -258,15 +258,15 @@ mkModule {
               M109 S{EXTRUDER_TEMP}
               # Ooze some material
               G1 E40 F200
-              # Move to prime position
-              G1 X2.0 Y10 Z0.28 F3000
-              # Prime the nozzle with a double line
               G92 E0
-              G1 X2.0 Y140 E10 F1500
-              G1 X2.3 Y140 F5000
+              # Ooze while move to the edge of the bed
+              G1 X230 Z0.3 E5
               G92 E0
-              G1 X2.3 Y10 E10 F1200
+              # Move on the bed and retract a little
+              G1 X220 E-.5
               G92 E0
+              # Move up a little for more horizontal movement clearance
+              G1 Z1
             '';
           };
 
