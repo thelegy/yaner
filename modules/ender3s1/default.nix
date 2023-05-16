@@ -187,9 +187,24 @@ mkModule {
 
           bed_screws = {
             screw1 = "20, 29";
+            screw1_name = "front left";
             screw2 = "195, 29";
+            screw2_name = "front right";
             screw3 = "195, 198";
+            screw3_name = "back right";
             screw4 = "20, 198";
+            screw4_name = "back left";
+          };
+
+          screws_tilt_adjust = {
+            screw1 = "54, 67";
+            screw1_name = "front left";
+            screw2 = "227, 67";
+            screw2_name = "front right";
+            screw3 = "227, 235";
+            screw3_name = "back right";
+            screw4 = "54, 235";
+            screw4_name = "back left";
           };
 
           virtual_sdcard = {
