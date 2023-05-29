@@ -21,6 +21,11 @@ mkTrivialModule {
 
     # Enable sway to ensure pam is configured properly for swaylock
     sway.enable = true;
+
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
   };
 
   networking.networkmanager = {
