@@ -25,9 +25,34 @@ mkModule {
       default = [ "/.backup-snapshots" ];
     };
 
+    passphraseFile = mkOption {
+      type = types.str;
+      default = "/etc/secrets/borg_passphrase";
+    };
+
+    useSops = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    sopsPassphrase = mkOption {
+      type = types.str;
+      default = "borg-passphrase";
+    };
+
   };
 
-  config = cfg: {
+  config = cfg: let
+    passphraseFile =
+      if cfg.useSops
+      then config.sops.secrets.${cfg.sopsPassphrase}.path
+      else cfg.passphraseFile;
+  in {
+
+    sops.secrets.${cfg.sopsPassphrase} = mkIf cfg.useSops {
+      format = "yaml";
+      mode = "0600";
+    };
 
     services.borgbackup.jobs.offsite = {
       archiveBaseName = "${config.networking.hostName}";
@@ -36,7 +61,7 @@ mkModule {
       appendFailedSuffix = true;
       encryption = {
         mode = "repokey-blake2";
-        passCommand = "cat /etc/secrets/borg_passphrase";
+        passCommand = "cat ${passphraseFile}";
       };
       preHook = ''
         ${pkgs.callPackage ./snapshot.nix {}}
