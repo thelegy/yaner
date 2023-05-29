@@ -9,6 +9,10 @@ in {
 
   system.stateVersion = "22.11";
 
+  imports = [
+    ./audio.nix
+  ];
+
   wat.installer.btrfs = {
     enable = true;
     installDisk = "/dev/disk/by-id/ata-SanDisk_SDSSDP128G_141350402051";
