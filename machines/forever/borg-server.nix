@@ -57,6 +57,13 @@ in {
       ];
       quota = "50G";
     };
+    koma = {
+      path = "/mnt/backup-storage/koma";
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+hk1SXcUMOVMv0UHuwSms81joCah51xg527es7hfuG root@brausefrosch"
+      ];
+       quota = "50G";
+    };
     koma-valhalla = {
       path = "/mnt/backup-storage/koma-valhalla";
       authorizedKeys = [
