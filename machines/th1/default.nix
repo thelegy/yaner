@@ -34,6 +34,11 @@ mkMachine {} ( { pkgs, config, ... }: {
     ];
   };
 
+  wat.thelegy.roc-client = {
+    enable = true;
+    serverAddress = "192.168.1.14";
+  };
+
   wat.thelegy.leg-net.enable = true;
 
   # Enable systemd-networkd in addition to NetworkManager
