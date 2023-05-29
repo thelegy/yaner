@@ -96,11 +96,6 @@ mkMachine {} ( { pkgs, config, ... }: {
   };
   environment.sessionVariables.GTK_USE_PORTAL = "1";
 
-  services.pipewire = {
-    enable = true;
-    pulse.enable = false;
-  };
-
   hardware.bluetooth = {
     enable = true;
   };

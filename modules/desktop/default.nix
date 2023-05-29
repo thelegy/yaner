@@ -7,7 +7,7 @@
 mkTrivialModule {
 
   wat.thelegy.base.enable = true;
-  wat.thelegy.pulseaudio.enable = true;
+  wat.thelegy.audio.enable = true;
 
   hardware.opengl.enable = true;
 

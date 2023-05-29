@@ -1,19 +1,19 @@
+
 { mkTrivialModule
 , pkgs
 , ... }:
 
 mkTrivialModule {
 
-  hardware.pulseaudio = {
-    enable = pkgs.lib.mkDefault true;
-    zeroconf.discovery.enable = true;
-    package = pkgs.pulseaudioFull;
-  };
-
   environment.systemPackages = with pkgs; [
-    pamixer
     pulsemixer
   ];
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+  };
 
   services.acpid = let
     volumeStep = 1;
