@@ -12,6 +12,9 @@ mkTrivialModule {
     shellInit = ''
       _exists () (( $+commands[$1] ))
 
+      # Disable new-user configuration
+      zsh-newuser-install() { :; }
+
       bindkey -e
     '';
 
