@@ -72,7 +72,7 @@ mkTrivialModule {
       export VISUAL=$EDITOR
 
 
-      hash -d yaner=~/repos/yaner
+      hash -d yaner=$(echo ~/repos/yaner(:A))
 
       # extra navigation keys
       bindkey ''${key[C-Left]} emacs-backward-word
