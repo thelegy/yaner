@@ -22,10 +22,14 @@ mkTrivialModule {
 
     shellAliases = {
       cal = "cal --monday";
+      diff = "diff --color=auto";
+      ip = "ip --color=auto";
       l = "ls -Alh";
       la = "ls -al";
-      ll = "ls -l";
       lg = "lazygit";
+      ll = "ls -l";
+      rg = "rg -S";
+      icat = "print; ncplayer -k -t0 -q -b pixel -s none";
     };
 
     setOptions = [
