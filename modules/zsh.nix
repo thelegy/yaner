@@ -11,6 +11,8 @@ mkTrivialModule {
 
     shellInit = ''
       _exists () (( $+commands[$1] ))
+
+      bindkey -e
     '';
 
     promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
@@ -36,6 +38,11 @@ mkTrivialModule {
 
     interactiveShellInit = ''
 
+      key[C-Left]=''${terminfo[kLFT5]}
+      key[C-Right]=''${terminfo[kRIT5]}
+      key[C-Up]=''${terminfo[kUP5]}
+      key[C-Down]=''${terminfo[kDN5]}
+
       if {_exists direnv} {
         eval "$(direnv hook zsh)"
         # Manually call the hook to ensure it is not run while the instant prompt is shown
@@ -57,9 +64,12 @@ mkTrivialModule {
       _exists nvim && EDITOR=nvim
       export VISUAL=$EDITOR
 
-      bindkey -e
 
       hash -d yaner=~/repos/yaner
+
+      # extra navigation keys
+      bindkey ''${key[C-Left]} emacs-backward-word
+      bindkey ''${key[C-Right]} emacs-forward-word
 
       tmp () (
         readonly tmpdir=$(mktemp -d ''${1:-})
