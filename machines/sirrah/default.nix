@@ -37,6 +37,12 @@ in
     inherit interface;
   };
 
+  # Enable systemd-networkd in addition to NetworkManager
+  systemd.network.enable = true;
+  systemd.network.wait-online.enable = false;
+
+  wat.thelegy.rtlan-net.enable = true;
+
   wat.thelegy.roc-client = {
     enable = true;
     serverAddress = "192.168.1.14";

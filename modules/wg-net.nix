@@ -32,10 +32,14 @@ let
       };
       allowedIPs = mkOption {
         type = types.listOf types.str;
-        default = forEach config.address (addr: "${head (strings.match "(.+)/[0-9]+" addr)}/32");
+        default = forEach config.addresses (addr: "${head (strings.match "(.+)/[0-9]+" addr)}/32");
       };
       address = mkOption {
+        type = types.str;
+      };
+      addresses = mkOption {
         type = types.listOf types.str;
+        default = [ config.address ];
       };
       port = mkOption {
         type = types.nullOr types.port;
@@ -104,11 +108,9 @@ in {
 
     enabledNets = filter (x: x.enable) nets;
     enabledNetNames = map (x: x.name) enabledNets;
-
-    foo = nets;
   in {
 
-    assertions = traceSeqN 10 foo [
+    assertions = [
       {
         message = "wg-net needs systemd-networkd enabled";
         assertion = anyNetEnabled -> config.systemd.network.enable;
@@ -144,7 +146,7 @@ in {
 
     systemd.network.networks = (mapAttrs (_: net: mkIf net.enable {
       name = net.name;
-      address = net.thisNode.address;
+      address = net.thisNode.addresses;
     }) cfg);
 
     #systemd.network.wait-online.ignoredInterfaces = enabledNetNames;

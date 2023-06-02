@@ -40,6 +40,7 @@ mkMachine {} ( { pkgs, config, ... }: {
   };
 
   wat.thelegy.leg-net.enable = true;
+  wat.thelegy.rtlan-net.enable = true;
 
   # Enable systemd-networkd in addition to NetworkManager
   systemd.network.enable = true;

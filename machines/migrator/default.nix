@@ -25,6 +25,8 @@ in {
   wat.thelegy.hass.enable = true;
   wat.thelegy.hw-t410.enable = true;
 
+  wat.thelegy.rtlan-net.enable = true;
+
   networking.nftables.firewall = {
     zones.hass = {
       ipv4Addresses = [ "192.168.1.30" ];
