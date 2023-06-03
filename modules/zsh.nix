@@ -72,8 +72,8 @@ mkTrivialModule {
       export VISUAL=$EDITOR
 
       # extra navigation keys
-      bindkey ''${key[C-Left]} emacs-backward-word
-      bindkey ''${key[C-Right]} emacs-forward-word
+      [[ -n "''${key[C-Left]}" ]] && bindkey ''${key[C-Left]} emacs-backward-word
+      [[ -n "''${key[C-Right]}" ]] && bindkey ''${key[C-Right]} emacs-forward-word
 
       tmp () (
         readonly tmpdir=$(mktemp -d ''${1:-})
