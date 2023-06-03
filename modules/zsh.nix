@@ -71,9 +71,6 @@ mkTrivialModule {
       _exists nvim && EDITOR=nvim
       export VISUAL=$EDITOR
 
-
-      hash -d yaner=$(echo ~/repos/yaner(:A))
-
       # extra navigation keys
       bindkey ''${key[C-Left]} emacs-backward-word
       bindkey ''${key[C-Right]} emacs-forward-word
