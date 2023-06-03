@@ -1,6 +1,6 @@
 { mkMachine, ... }:
 
-mkMachine {} ({ lib, pkgs, ... }:
+mkMachine {} ({ lib, pkgs, config, ... }:
 with lib;
 
 let
@@ -45,7 +45,8 @@ in
 
   wat.thelegy.roc-client = {
     enable = true;
-    serverAddress = "192.168.1.14";
+    serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.migrator.address);
+    localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
   };
 
   wat.thelegy.bs-oneclick.enable = true;

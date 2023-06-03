@@ -21,4 +21,10 @@ mkTrivialModule {
 
   networking.firewall.allowedUDPPorts = [ 1333 ];
 
+  networking.nftables.firewall = {
+    zones.rtlan = {
+      interfaces = [ "rtlan" ];
+    };
+  };
+
 }

@@ -140,7 +140,6 @@ in {
             else "${node.endpoint}:${toString node.port}"
           );
         }))
-        (traceValSeqN 10)
       ];
     }) cfg);
 

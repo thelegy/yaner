@@ -1,6 +1,6 @@
 { mkMachine, ... }:
 
-mkMachine {} ( { pkgs, config, ... }: {
+mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
 
   system.stateVersion = "19.03";
 
@@ -36,7 +36,8 @@ mkMachine {} ( { pkgs, config, ... }: {
 
   wat.thelegy.roc-client = {
     enable = true;
-    serverAddress = "192.168.1.14";
+    serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.migrator.address);
+    localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
   };
 
   wat.thelegy.leg-net.enable = true;
