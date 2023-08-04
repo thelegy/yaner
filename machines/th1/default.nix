@@ -36,7 +36,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
 
   wat.thelegy.roc-client = {
     enable = true;
-    serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.migrator.address);
+    serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.y.address);
     localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
   };
 

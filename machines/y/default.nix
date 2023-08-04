@@ -11,6 +11,7 @@ in {
 
   imports = [
     ./hardware-configuration.nix
+    ./audio.nix
   ];
 
   wat.installer.btrfs = {
@@ -24,6 +25,7 @@ in {
 
   wat.thelegy.base.enable = true;
   wat.thelegy.firewall.enable = true;
+  wat.thelegy.rtlan-net.enable = true;
 
   networking.useDHCP = false;
 
