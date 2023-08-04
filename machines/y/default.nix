@@ -25,6 +25,7 @@ in {
 
   wat.thelegy.base.enable = true;
   wat.thelegy.firewall.enable = true;
+  wat.thelegy.hass.enable = true;
   wat.thelegy.rtlan-net.enable = true;
 
   networking.useDHCP = false;
@@ -49,6 +50,45 @@ in {
         [CAKE]
         Bandwidth =
       '';
+    };
+  };
+
+  networking.nftables.firewall = {
+    zones.hass = {
+      ipv4Addresses = [ "192.168.1.30" ];
+    };
+    rules.hass-inbound = {
+      from = "all";
+      to = [ "hass" ];
+      verdict = "accept";
+    };
+    rules.hass-outbound = {
+      from = [ "hass" ];
+      to = "all";
+      verdict = "accept";
+    };
+  };
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ENV{ID_PATH}=="pci-0000:05:00.4-usb-0:2:1.0", SYMLINK+="zigstar", GROUP="zigbee", ENV{SYSTEMD_WANTS}="ser2net-zigstar.service"
+  '';
+
+  users.groups.zigbee = {};
+
+  systemd.services.ser2net-zigstar = let
+    conf = pkgs.writeText "ser2net.yaml" ''
+      connection: &con01
+        accepter: tcp,20108
+        connector: serialdev,/dev/zigstar,115200n81,local,dtr=off,rts=off
+        options:
+          kickolduser: true
+    '';
+  in {
+    serviceConfig = {
+      DynamicUser = true;
+      Type = "simple";
+      ExecStart = "${pkgs.ser2net}/bin/ser2net -d -u -c ${conf}";
+      SupplementaryGroups = [ "zigbee" ];
     };
   };
 
