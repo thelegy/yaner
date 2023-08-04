@@ -3,7 +3,6 @@ keys:
 
 - &agony 954ab1770044b7bc35bfa2b004bb211e9f8ae7c3
 - &forever 739759680da462402111a08f4081a822387c18d0
-- &migrator 1db99b44ae18613145dd110bf226588d3e6e2294
 - &roborock 2d59898b69126a28647dda7de82e1978fd768662
 - &sirrah ab9a4004133c9e02091db7e53b6203a9abeb522d
 - &th1 efb1200339303eab0ac3ce783c966b47b84d969e
@@ -20,11 +19,6 @@ creation_rules:
   - pgp:
     - *thelegy
     - *forever
-- path_regex: machines/migrator/.*
-  key_groups:
-  - pgp:
-    - *thelegy
-    - *migrator
 - path_regex: machines/roborock/.*
   key_groups:
   - pgp:
