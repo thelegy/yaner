@@ -9,6 +9,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ./pipewire.nix
   ];
 
   wat.installer.btrfs = {
@@ -20,6 +21,7 @@ in
 
   wat.thelegy.workstation.enable = true;
   wat.thelegy.builder.enable = true;
+  wat.thelegy.firewall.enable = true;
   wat.thelegy.prebuild.enable = true;
   wat.thelegy.syncthing.enable = true;
 
@@ -40,14 +42,6 @@ in
   # Enable systemd-networkd in addition to NetworkManager
   systemd.network.enable = true;
   systemd.network.wait-online.enable = false;
-
-  wat.thelegy.rtlan-net.enable = true;
-
-  wat.thelegy.roc-client = {
-    enable = true;
-    serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.migrator.address);
-    localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
-  };
 
   wat.thelegy.bs-oneclick.enable = true;
 
