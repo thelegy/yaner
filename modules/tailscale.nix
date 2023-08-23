@@ -1,4 +1,5 @@
 { mkModule
+, liftToNamespace
 , lib
 , config
 , pkgs
@@ -7,7 +8,7 @@
 with lib;
 
 # Initial setup (login):
-# > sudo -u tailscale tailscale up
+# > sudo -u tailscale tailscale up --netfilter-mode=off
 
 mkModule {
   options = cfg: liftToNamespace {
@@ -20,7 +21,7 @@ mkModule {
 
     interfaceName = mkOption {
       type = types.str;
-      default = "tailscale0";
+      default = "tailscale";
       description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
@@ -80,6 +81,26 @@ mkModule {
       group = "tailscale";
     };
     users.groups.tailscale = { };
+
+    networking.nftables.firewall = {
+      zones.tailscale-range = {
+        ipv4Addresses = [ "100.64.0.0/10" ];
+        ipv6Addresses = [ "fd7a:115c:a1e0:ab12::/64" ];
+      };
+      zones.tailscale = {
+        parent = "tailscale-range";
+        interfaces = [ cfg.interfaceName ];
+      };
+      rules.tailscale-spoofing = {
+        from = [ "tailscale-range" ];
+        to = "all";
+        extraLines = [
+          "iifname \"${cfg.interfaceName}\" return"
+          "ip saddr 100.115.92.0/23 return"
+          "counter drop"
+        ];
+      };
+    };
 
   };
 }
