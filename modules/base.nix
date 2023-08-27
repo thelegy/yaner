@@ -7,6 +7,7 @@ in mkTrivialModule {
 
   wat.thelegy.homeManager.enable = true;
   wat.thelegy.emergencyStorage.enable = mkDefault true;
+  wat.thelegy.hosts.enable = mkDefault true;
   wat.thelegy.zsh.enable = mkDefault true;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
