@@ -27,6 +27,7 @@ in {
   wat.thelegy.firewall.enable = true;
   wat.thelegy.hass.enable = true;
   wat.thelegy.rtlan-net.enable = true;
+  wat.thelegy.tailscale.enable = true;
 
   networking.useDHCP = false;
 
