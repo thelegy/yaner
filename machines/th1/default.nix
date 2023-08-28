@@ -19,9 +19,11 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
 
   services.ratbagd.enable = true;
 
-  wat.thelegy.workstation.enable = true;
+  wat.thelegy.firewall.enable = true;
   wat.thelegy.hw-t470.enable = true;
   wat.thelegy.syncthing.enable = true;
+  wat.thelegy.tailscale.enable = true;
+  wat.thelegy.workstation.enable = true;
 
   wat.thelegy.backup = {
     enable = true;
