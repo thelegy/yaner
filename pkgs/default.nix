@@ -10,6 +10,8 @@ with final;
 
   itd = callPackage ./itd.nix {};
 
+  klipper = flakes.nixpkgs-stable.legacyPackages.${final.system}.klipper;
+
   launch-cadquery = let
     cq-flake = final.fetchFromGitHub {
       owner = "thelegy";

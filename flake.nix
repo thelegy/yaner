@@ -41,7 +41,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-20.09;
+    nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-23.05;
 
     nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
 
