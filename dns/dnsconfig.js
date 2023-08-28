@@ -14,6 +14,13 @@ function HOST(record_name, hostname) {
   return recs;
 }
 
+function CNAME_ACME(record_name, target) {
+  return [
+    CNAME(record_name, target),
+    CNAME("_acme-challenge."+record_name, "_acme-challenge."+target)
+  ];
+}
+
 
 D("0jb.de", REG_NONE, DnsProvider("he"),
   DefaultTTL("1h"),
@@ -30,26 +37,20 @@ D("0jb.de", REG_NONE, DnsProvider("he"),
   TXT("_keybase", "keybase-site-verification=q79aAfVelFuToBXZ8s4I5G1lzFA7JoJanP8np029Z7U"),
 
   CNAME("_acme-challenge", "_acme-challenge.forever.0jb.de."),
-  CNAME("_acme-challenge.anki", "_acme-challenge.forever.0jb.de."),
-  CNAME("_acme-challenge.matrix", "_acme-challenge.forever.0jb.de."),
-  CNAME("_acme-challenge.element", "_acme-challenge.forever.0jb.de."),
-  CNAME("_acme-challenge.mailmetrics", "_acme-challenge.forever.0jb.de."),
-  CNAME("_acme-challenge.autoconfig", "_acme-challenge.agony.0jb.de."),
-  CNAME("_acme-challenge.ha", "_acme-challenge.y.0jb.de."),
-  CNAME("_acme-challenge.klipper", "_acme-challenge.y.0jb.de."),
 
-  CNAME("anki", "forever.0jb.de."),
-  CNAME("autoconfig", "agony.0jb.de."),
   CNAME("backup", "forever.0jb.de."),
-  CNAME("element", "forever.0jb.de."),
   CNAME("grafana", "roborock.0jb.de."),
   CNAME("grocy", "roborock.0jb.de."),
-  CNAME("ha", "y.0jb.de."),
-  CNAME("klipper", "y.0jb.de."),
   CNAME("mail", "maildeb9.0jb.de."),
   CNAME("maildeb", "maildeb9.0jb.de."),
-  CNAME("mailmetrics", "forever.0jb.de."),
-  CNAME("matrix", "forever.0jb.de."),
+
+  CNAME_ACME("anki", "forever.0jb.de."),
+  CNAME_ACME("autoconfig", "agony.0jb.de."),
+  CNAME_ACME("element", "forever.0jb.de."),
+  CNAME_ACME("ha", "y.0jb.de."),
+  CNAME_ACME("klipper", "y.0jb.de."),
+  CNAME_ACME("mailmetrics", "forever.0jb.de."),
+  CNAME_ACME("matrix", "forever.0jb.de."),
 
   IGNORE("ever"),
   IGNORE("home"),
