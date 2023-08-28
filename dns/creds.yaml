@@ -1,0 +1,35 @@
+INWX_USER: ENC[AES256_GCM,data:RroGsdfuWA==,iv:VpbhqmQTSKYau4wxBKTYyCL9/rrH+HtYBCkJngEiSLA=,tag:g0A/QYDFFjALYGUAN3HCCg==,type:str]
+INWX_PASS: ENC[AES256_GCM,data:8inNm0nft1W9unaNGwt5t1SMM5fqGPH5g6e8k+BYVCq1ftiIP7ehTPBJ,iv:W3j/HNa931dU+pb84z514y7JkYVFDyBzzsrK2GEnqoQ=,tag:Mv0pHxjqU26EJXbeY1E0MQ==,type:str]
+HEDNS_USER: ENC[AES256_GCM,data:Hg2UcnuKAA==,iv:kGMwijPp3C6/XK9FRAYlza16PI65+Suc7RXtNz/A9t8=,tag:d6Pun4c1irX++sNsBOgymw==,type:str]
+HEDNS_PASS: ENC[AES256_GCM,data:nS9dlZHwbl0+NDiOLbXdfPb4C7ZIWYL8,iv:wvzj88gOZZi56MauOMYCJBJnvwtp5GE+YAgWSGRfx08=,tag:qd7OH+mN6sRmWmXSk4r5hQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2023-08-28T15:16:17Z"
+    mac: ENC[AES256_GCM,data:gnVLCcMKEdX/AOa7F/fk02bWyVx+j7qaQ/aflLyTDZOsyb2gnObHPIurojOPSPzU20+mP53i4Nn1RrVdjXdssAEVCtB0pmjb8ImBVGLqL7V0yhl8eEMtWwQ6p5xrg2dQfBstMeH3UxxL5kmSPVZEx2sSwN1IKdXVGqVVOM22bF8=,iv:I77khj+vXcAovTYzZucBBlWpjiuOL/xPaZStzZLUtkw=,tag:obWRt6CIaTdVVMMFD6AlrQ==,type:str]
+    pgp:
+        - created_at: "2023-08-28T12:09:37Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA/4M/x68UV3EAQ//ZbcdDiO8qNBtnpKVP7e4b1rdCcecaqohnB5YXDGztfOb
+            yYTMLP21KQ2PKIvGXYlM91aazOg6WGtkR8yI4TAvkQy9lUxkS8/C0TTsbO6psXl9
+            G0+e5NB5yv89mbCpB+LTdVoanb5xVl4A63t3kDHS2KaldGK460SAUgTlqaTKHz6l
+            UEp+rSovAUXSiXsFfuLgpPn3/XxeK0vn9Qa9vVhoMbT+JlD39+jTfYlxzxtnQ20C
+            I+DooGyy/ge5gZrliYTR9rpLbroaGEdPXn4LGZSf8xHHLluAC0Drp09O9IG4Qnuw
+            znl2jX5/HrvksX4JLbjgB3EBskMy8sftaduyGzTIZ4PJnIdoRL/bprIKxMwbQNf4
+            mtJjHJFdbdNP7OT2TwgAln3QsQQGYspvIm64Agp5ARqJl3hheZgwd0k5tNaXLh/p
+            Y5OOJZMmZcXypfgt8+IqOw/7/zSNqrCekqsyF1gyXjzbCO3wssYNUOCm4qN5l574
+            U8vLMPogH5fbdCSFHfPxdTLNMDpr6z9ugiz5wE79+qsYKkNDvOfxRqvqIPRkfLpp
+            4sA60dnudL9nqg5BjSS2Li8/NOMQ5jfl5Jfwoq2lx7yoTX+3HHxoS2/au5MaOjj6
+            ofcTDL8NJF4U9svyOtWb7HbqoujH4qC5Glo+f+MCsl6lVlqBMjFoPSS3UXSPomzS
+            XAFGIWRzQa7h8dMcIoGqHbIDSfR7DuOOPR0vLarpsSgQkc0sxY8fP5w6GgQDv6S5
+            rYr/RiKMJzFgwkqfZNi6YXYMqM0WF9tHY3VcP96LK9oIubXFVtVtMQ48ag4g
+            =fyVN
+            -----END PGP MESSAGE-----
+          fp: CC340A1392661DD38B0DE83DABB80FCB4FFE0BC5
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3

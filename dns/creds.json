@@ -1,0 +1,12 @@
+{
+  "inwx": {
+    "TYPE": "INWX",
+    "username": "$INWX_USER",
+    "password": "$INWX_PASS",
+  },
+  "he": {
+    "TYPE": "HEDNS",
+    "username": "$HEDNS_USER",
+    "password": "$HEDNS_PASS",
+  },
+}

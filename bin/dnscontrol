@@ -1,0 +1,4 @@
+#!/usr/bin/env -S nix shell nixpkgs#zsh nixpkgs#dnscontrol -c zsh
+
+cd ${0:A:h:h}/dns
+sops exec-env creds.yaml "dnscontrol $*"
