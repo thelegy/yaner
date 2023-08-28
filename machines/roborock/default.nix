@@ -21,6 +21,7 @@ with lib;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.grocy.enable = true;
   wat.thelegy.monitoring.enable = true;
+  wat.thelegy.tailscale.enable = true;
 
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
@@ -212,7 +213,7 @@ with lib;
       };
 
       insecure-to-fw = {
-        from = [ "insecure" "internal" ];
+        from = [ "insecure" "internal" "tailscale" ];
         to = [ "fw" ];
         allowedTCPPorts = [
           80  # http
@@ -224,7 +225,7 @@ with lib;
         ];
       };
 
-      nixos-firewall.from = [ "insecure" "internal" ];
+      nixos-firewall.from = [ "insecure" "internal" "tailscale" ];
 
       int-to-fw = {
         from = [ "internal" ];
