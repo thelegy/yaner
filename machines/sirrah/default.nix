@@ -19,11 +19,12 @@ in
     luks.enable = true;
   };
 
-  wat.thelegy.workstation.enable = true;
   wat.thelegy.builder.enable = true;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.prebuild.enable = true;
   wat.thelegy.syncthing.enable = true;
+  wat.thelegy.tailscale.enable = true;
+  wat.thelegy.workstation.enable = true;
 
   networking.useDHCP = false;
   networking.interfaces.${interface}.useDHCP = true;
