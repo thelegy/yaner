@@ -14,10 +14,15 @@ function HOST(record_name, hostname) {
   return recs;
 }
 
+function ACME(record_name, target) {
+  record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
+  return [ CNAME(record_name, "_acme-challenge."+target) ];
+}
+
 function CNAME_ACME(record_name, target) {
   return [
     CNAME(record_name, target),
-    CNAME("_acme-challenge."+record_name, "_acme-challenge."+target)
+    ACME(record_name, target)
   ];
 }
 
@@ -25,7 +30,6 @@ function CNAME_ACME(record_name, target) {
 D("0jb.de", REG_NONE, DnsProvider("he"),
   DefaultTTL("1h"),
 
-  HOST("@", "forever"),
   MX("@", 10, "agony"),
   TXT("@", "v=spf1 mx -all"),
   TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de; ruf=mailto:admin+dmarc-forensic@0jb.de; fo=1; adkim=s; aspf=s"),
@@ -36,13 +40,14 @@ D("0jb.de", REG_NONE, DnsProvider("he"),
   TXT("_keybase", "keybase-site-verification=EO_b3ub9rlX1xBO3KbEPfOh6PkrvTZXOOC0EzfIW0TI"),
   TXT("_keybase", "keybase-site-verification=q79aAfVelFuToBXZ8s4I5G1lzFA7JoJanP8np029Z7U"),
 
-  CNAME("_acme-challenge", "_acme-challenge.forever.0jb.de."),
+  HOST("@", "forever"),
+  ACME("@", "forever.0jb.de."),
 
-  CNAME("backup", "forever.0jb.de."),
-  CNAME("grafana", "roborock.0jb.de."),
-  CNAME("grocy", "roborock.0jb.de."),
-  CNAME("mail", "maildeb9.0jb.de."),
-  CNAME("maildeb", "maildeb9.0jb.de."),
+  CNAME("backup", "forever"),
+  CNAME("grafana", "roborock"),
+  CNAME("grocy", "roborock"),
+  CNAME("mail", "maildeb9"),
+  CNAME("maildeb", "maildeb9"),
 
   CNAME_ACME("anki", "forever.0jb.de."),
   CNAME_ACME("autoconfig", "agony.0jb.de."),
