@@ -36,7 +36,8 @@ D("he.0jb.de", REG_NONE, DnsProvider("he"),
 )
 
 
-D("0jb.de", REG_NONE, DnsProvider("he"),
+D("0jb.de", REG_NONE, DnsProvider("inwx"),
+  NAMESERVER_TTL("1d"),
   DefaultTTL("1h"),
 
   NS("he", "ns1.he.net."),
