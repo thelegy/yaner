@@ -15,6 +15,18 @@ with lib;
     ./usb.nix
   ];
 
+  wat.thelegy.acme = {
+    enable = true;
+    staging = false;
+    extraDomainNames = [
+      "home.0jb.de"
+      "grafana.0jb.de"
+      "grocy.0jb.de"
+    ];
+    reloadUnits = [
+      "nginx.service"
+    ];
+  };
   wat.thelegy.backup.enable = true;
   wat.thelegy.base.enable = true;
   wat.thelegy.builder.enable = true;
@@ -332,29 +344,9 @@ with lib;
     };
   };
 
-  security.acme = {
-    acceptTerms = true;
-    #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-    defaults.email = "mail+letsencrypt@0jb.de";
-    preliminarySelfsigned = false;
-    certs = {
-      "roborock.0jb.de" = {
-        extraDomainNames = [
-          "home.0jb.de"
-          "grafana.0jb.de"
-          "grocy.0jb.de"
-        ];
-        dnsProvider = "hurricane";
-        credentialsFile = "/etc/secrets/acme";
-        group = "nginx";
-        postRun = ''
-          systemctl start --failed nginx.service
-          systemctl reload nginx.service
-        '';
-      };
-    };
-  };
+  security.acme.defaults.extraLegoFlags = [ "--dns.disable-cp" ];
 
+  users.users.nginx.extraGroups = [ "acme" ];
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
