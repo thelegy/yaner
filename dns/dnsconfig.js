@@ -16,6 +16,7 @@ function HOST(record_name, hostname) {
 
 function ACME(record_name, target) {
   record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
+  target = target[target.length-1] == "." ? target : target + ".he.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target) ];
 }
 
@@ -27,8 +28,21 @@ function CNAME_ACME(record_name, target) {
 }
 
 
+D("he.0jb.de", REG_NONE, DnsProvider("he"),
+  NAMESERVER_TTL("2d"),
+  IGNORE("_acme-challenge.*", "TXT"),
+  []
+)
+
+
 D("0jb.de", REG_NONE, DnsProvider("he"),
   DefaultTTL("1h"),
+
+  NS("he", "ns1.he.net."),
+  NS("he", "ns2.he.net."),
+  NS("he", "ns3.he.net."),
+  NS("he", "ns4.he.net."),
+  NS("he", "ns5.he.net."),
 
   MX("@", 10, "agony"),
   TXT("@", "v=spf1 mx -all"),
