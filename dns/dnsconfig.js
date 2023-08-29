@@ -72,9 +72,6 @@ D("0jb.de", REG_NONE, DnsProvider("he"),
   CNAME_ACME("mailmetrics", "forever"),
   CNAME_ACME("matrix", "forever"),
 
-  IGNORE("ever"),
-  IGNORE("_acme-challenge.ever"),
-
   []
 );
 
