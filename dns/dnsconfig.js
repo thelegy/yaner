@@ -11,6 +11,7 @@ function HOST(record_name, hostname) {
   ipv6 = hosts[hostname]["ipv6Addresses"] || [];
   for (var a in ipv4) { recs.push(A(record_name, ipv4[a])); }
   for (var a in ipv6) { recs.push(AAAA(record_name, ipv6[a])); }
+  if (recs.length > 0) { recs.push(ACME(record_name, hostname)); }
   return recs;
 }
 
@@ -55,33 +56,24 @@ D("0jb.de", REG_NONE, DnsProvider("he"),
   TXT("_keybase", "keybase-site-verification=q79aAfVelFuToBXZ8s4I5G1lzFA7JoJanP8np029Z7U"),
 
   HOST("@", "forever"),
-  ACME("@", "forever.0jb.de."),
 
   CNAME("backup", "forever"),
-  CNAME("grafana", "roborock"),
-  CNAME("grocy", "roborock"),
   CNAME("mail", "maildeb9"),
   CNAME("maildeb", "maildeb9"),
 
-  CNAME_ACME("anki", "forever.0jb.de."),
-  CNAME_ACME("autoconfig", "agony.0jb.de."),
-  CNAME_ACME("element", "forever.0jb.de."),
-  CNAME_ACME("ha", "y.0jb.de."),
-  CNAME_ACME("klipper", "y.0jb.de."),
-  CNAME_ACME("mailmetrics", "forever.0jb.de."),
-  CNAME_ACME("matrix", "forever.0jb.de."),
+  CNAME_ACME("anki", "forever"),
+  CNAME_ACME("autoconfig", "agony"),
+  CNAME_ACME("element", "forever"),
+  CNAME_ACME("grafana", "roborock"),
+  CNAME_ACME("grocy", "roborock"),
+  CNAME_ACME("ha", "y"),
+  CNAME_ACME("home", "roborock"),
+  CNAME_ACME("klipper", "y"),
+  CNAME_ACME("mailmetrics", "forever"),
+  CNAME_ACME("matrix", "forever"),
 
   IGNORE("ever"),
-  IGNORE("home"),
-
-  IGNORE("_acme-challenge.agony"),
   IGNORE("_acme-challenge.ever"),
-  IGNORE("_acme-challenge.forever"),
-  IGNORE("_acme-challenge.grafana"),
-  IGNORE("_acme-challenge.grocy"),
-  IGNORE("_acme-challenge.home"),
-  IGNORE("_acme-challenge.roborock"),
-  IGNORE("_acme-challenge.y"),
 
   []
 );
