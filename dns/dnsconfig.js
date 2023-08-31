@@ -100,6 +100,20 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   []
 )
 
+D("janbeinke.com", REG_NONE, DnsProvider("inwx"),
+  INWX_PARKING("@"),
+
+  MX("@", 10, "agony.0jb.de."),
+  TXT("@", "v=spf1 mx -all"),
+  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de;"),
+  TXT("mail._domainkey", "v=DKIM1; h=sha256; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2wZEpewvXaeyQoGkB2sgT1NRfm2zBtX6vge0v2OpP/Ii42R+KC+/IS9a0v79SEa35l+4Oki8fm4I+hwhvNROpQiynJ4rZLE5X2Iu9dQpqjiCBsCTkrbA8TeGsm4jHwMcPgrVs8AgFN854YcWENMDMrEOv2Fw5gAAygPM0gU/ohwIDAQAB"),
+  TXT("mail._domainkey", "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDsz47OcupjnUuIZZv1ktwmcB8eve4tfjFAfnsYjZBkamcu5UuI6BxrAh5toiX82qDO7YOGiIWb9kkVKaJBwxAAXIOJ1L8SkLyf1qnuOE/6cws+qXaU4OIVgRPTcpR4BdQwWIfCjnoaZaXmv4BMhxpGU5zoFEAIm/CkbMzVNuUWkwIDAQAB"),
+  TXT("2018-10._domainkey", "v=DKIM1; k=rsa; p=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmqyppEu6rgRpwRIZ9eVgTiXCP8RIzEoZLve5R7aJDlo9qawiVeG1ReLXvTEcbSGpHMZXg+Ew3OkwF3KbT8xAnPelw8E5DrB1pf3IkQKdYILJRNEdarNOnd03Cs4ZDNnpd/sNFeqKVLfSBY9pq8YJ5k7yFYjgVm5KiuB1dqgffiJZ6PiERfMx9yb79NYCNv3JNkfohgcfZtUEZf/WXdJQQzAGzEUkvih12DjFa6JMliAP2c0+ZquMO6aeL+KxKHaN1gimWi/bxpaLXPXSmnFuTJIxQsRGuL5XHwtW+iKJz/1a0WJfhINQ+nipOzZsUsaeui7zaxYGeeLwbc113pJXKsnMc7fw7htFEupHEXOHvcxaBZre+DyLKK/jjK+lM8rOQPUu1V9lUsZ9R4m1FHafMIXYhWmRp72NZpqtmcjXdqaPgAgGlbzxfn0219H5UDT0Yymd6RZN89AaY/ms3sm8L2RCWbcQk64WM8QmO2L9CHMdbhSDknYx3w6/j7BWQO3O8syXZy3sc3/PySr3nqks9syEekqp6HH48znGJblu/bSjXegtOZ+s+bHLoSKsPKCXYPt6DKfoOrnxNVRElG0Op3Ou3idxFNnZxgfAp9wvYrOui9WIJZ6Xe8GUkvVA8eTDEXHAQc577NrQYNd30puusblfRlZ9xG8JwLkrz1jyq6ECAwEAAQ==" ),
+  TXT("_keybase", "keybase-site-verification=zHhKLQ9z6u8O1qIS1irkZmAQng6Z--lzJMyMEjp5KFw"),
+
+  []
+)
+
 for (var hostname in hosts) {
   D_EXTEND("0jb.de", HOST(hostname));
 }
