@@ -30,17 +30,20 @@ function CNAME_ACME(record_name, target) {
 }
 
 
+DEFAULTS(
+  NAMESERVER_TTL("1d"),
+  DefaultTTL("1h"),
+  []
+)
+
+
 D("he.0jb.de", REG_NONE, DnsProvider("he"),
   NAMESERVER_TTL("2d"),
   IGNORE("_acme-challenge.*", "TXT"),
   []
 )
 
-
 D("0jb.de", REG_NONE, DnsProvider("inwx"),
-  NAMESERVER_TTL("1d"),
-  DefaultTTL("1h"),
-
   NS("he", "ns1.he.net."),
   NS("he", "ns2.he.net."),
   NS("he", "ns3.he.net."),
