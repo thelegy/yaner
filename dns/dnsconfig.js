@@ -85,6 +85,21 @@ D("0jb.de", REG_NONE, DnsProvider("inwx"),
   []
 );
 
+D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
+  INWX_PARKING("@"),
+
+  MX("@", 10, "agony.0jb.de."),
+  TXT("@", "v=spf1 mx -all"),
+  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de;"),
+  TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdd8tHEdS2GXue5+o131MbV4I8uXYqOxq5qK0oFaChxvUC1sYdXwE+YUsWArT6SFZSADWQIJfvXDtc6JL+dvzQZGsnh9M8CqbIfTo1FHLOWpeKv/wPEbB7fJwqP0mKW9l72DRX7Gyic8VY6ZgTaCA1UjSKlC39FX/AEoyDFpMEwwIDAQAB"),
+
+  CNAME_ACME("autoconfig", "agony"),
+  CNAME_ACME("imap", "agony"),
+  CNAME_ACME("smtp", "agony"),
+
+  []
+)
+
 for (var hostname in hosts) {
   D_EXTEND("0jb.de", HOST(hostname));
 }
