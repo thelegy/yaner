@@ -23,8 +23,9 @@ function ACME(record_name, target) {
 }
 
 function CNAME_ACME(record_name, target) {
+  target_cname = target[target.length-1] == "." ? target : target + ".0jb.de.";
   return [
-    CNAME(record_name, target),
+    CNAME(record_name, target_cname),
     ACME(record_name, target)
   ];
 }
