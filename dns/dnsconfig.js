@@ -114,6 +114,14 @@ D("janbeinke.com", REG_NONE, DnsProvider("inwx"),
   []
 )
 
+D("thelegy.de", REG_NONE, DnsProvider("inwx"),
+  INWX_PARKING("@"),
+
+  TXT("_keybase", "keybase-site-verification=EO_b3ub9rlX1xBO3KbEPfOh6PkrvTZXOOC0EzfIW0TI"),
+
+  []
+)
+
 for (var hostname in hosts) {
   D_EXTEND("0jb.de", HOST(hostname));
 }
