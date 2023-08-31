@@ -30,6 +30,10 @@ function CNAME_ACME(record_name, target) {
   ];
 }
 
+function INWX_PARKING(record_name) {
+  return A(record_name, "185.181.104.242")
+}
+
 
 DEFAULTS(
   NAMESERVER_TTL("1d"),
