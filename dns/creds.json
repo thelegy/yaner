@@ -9,4 +9,8 @@
     "username": "$HEDNS_USER",
     "password": "$HEDNS_PASS",
   },
+  "hetzner": {
+    "TYPE": "HETZNER",
+    "api_key": "$HETZNER_APIKEY",
+  },
 }
