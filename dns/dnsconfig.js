@@ -122,6 +122,17 @@ D("thelegy.de", REG_NONE, DnsProvider("inwx"),
   []
 )
 
+D("die-cloud.org", REG_NONE, DnsProvider("hetzner"),
+  INWX_PARKING("@"),
+
+  MX("@", 10, "agony.0jb.de."),
+  TXT("@", "v=spf1 mx -all"),
+  TXT("_dmarc", "v=DMARC1; p=none;"),
+  TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsxQl+3emCeP60AckIGqRBo1+lxPeDyV7G1QPBI5nvMWJV8u18oX1m5ULUmJ/8PAbzHerNFP2IEIw2bG+bNiwdyr+dEAJOYIXqwV0atdWFZDjPy2vpYMQcXJXknIjl5SEnj8cz++O8Smn5dXSouvNR7HxRVn3SCX5qZCaPhJ9lswIDAQAB"),
+
+  []
+)
+
 for (var hostname in hosts) {
   D_EXTEND("0jb.de", HOST(hostname));
 }
