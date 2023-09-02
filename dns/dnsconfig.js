@@ -133,7 +133,7 @@ D("die-cloud.org", REG_NONE, DnsProvider("hetzner"),
   []
 )
 
-D("janbeinke.de", REG_NONE, DnsProvider("hetzner"),
+D("janbeinke.de", REG_NONE, DnsProvider("inwx"),
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
