@@ -145,7 +145,7 @@ D("janbeinke.de", REG_NONE, DnsProvider("inwx"),
   []
 )
 
-D("peterbeinke.de", REG_NONE, DnsProvider("hetzner"),
+D("peterbeinke.de", REG_NONE, DnsProvider("inwx"),
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
