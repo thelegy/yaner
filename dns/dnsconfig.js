@@ -70,6 +70,7 @@ D("0jb.de", REG_NONE, DnsProvider("inwx"),
   CNAME("backup", "forever"),
   CNAME("mail", "maildeb9"),
   CNAME("maildeb", "maildeb9"),
+  CNAME("mc", "forever"),
 
   CNAME_ACME("anki", "forever"),
   CNAME_ACME("autoconfig", "agony"),
