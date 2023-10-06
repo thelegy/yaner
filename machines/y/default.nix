@@ -64,16 +64,16 @@ in {
   };
 
   networking.nftables.firewall = {
-    zones.hass = {
+    zones.hass-external = {
       ipv4Addresses = [ "192.168.1.30" ];
     };
     rules.hass-inbound = {
       from = "all";
-      to = [ "hass" ];
-      verdict = "accept";
+      to = [ "hass-external" ];
+      allowedTCPPorts = [ 22 ];
     };
     rules.hass-outbound = {
-      from = [ "hass" ];
+      from = [ "hass-external" ];
       to = "all";
       verdict = "accept";
     };

@@ -8,6 +8,8 @@
 
 let
 
+  domain = "ha.0jb.de";
+
   targetDir = "/var/lib/libvirt/hass";
   fileName = "hass.qcow2";
   imageUrl = "https://github.com/home-assistant/operating-system/releases/download/9.4/haos_ova-9.4.qcow2.xz";
@@ -60,6 +62,12 @@ in mkTrivialModule {
     '';
   };
 
+  networking.nftables.firewall = {
+    zones.hass = {
+      interfaces = [ "hass" ];
+    };
+  };
+
   systemd.services.hass-vm = {
     serviceConfig = {
       Restart = "always";
@@ -100,6 +108,16 @@ in mkTrivialModule {
       done
     '';
     wantedBy = [ "multi-user.target" ];
+  };
+
+  services.nginx.virtualHosts.${domain} = {
+    useACMEHost = config.networking.fqdn;
+    forceSSL = true;
+    locations."/" = {
+      recommendedProxySettings = true;
+      proxyWebsockets = true;
+      proxyPass = "http://192.168.1.30:8123";
+    };
   };
 
 }
