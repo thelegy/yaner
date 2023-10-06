@@ -21,6 +21,7 @@ mkTrivialModule {
         cabextract
         glxinfo
         libbsd
+        openssl
       ];
     };
   };
