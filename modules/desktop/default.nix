@@ -61,7 +61,7 @@ mkTrivialModule {
   };
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       (nerdfonts.override {fonts = [ "FiraCode" ];})
     ];
     fontconfig.defaultFonts.monospace = [ "FiraCode Nerd Font" ];
