@@ -44,11 +44,54 @@ let
           <mac address="52:54:00:8b:02:8b" />
           <model type="virtio" />
         </interface>
+        <interface type="bridge">
+          <source bridge="hass" />
+          <model type="virtio" />
+        </interface>
       </devices>
     </domain>
   '';
 
 in mkTrivialModule {
+
+  systemd.network = {
+    enable = true;
+    netdevs.hass = {
+      netdevConfig = {
+        Name = "hass";
+        Kind = "bridge";
+      };
+    };
+    networks.hass = {
+      name = "hass";
+      address = [ "d4:8892:cf78:1::/48" ];
+    };
+  };
+
+  users.users.hass = {
+    uid = 2000;
+    group = "hass";
+    isSystemUser = true;
+  };
+  users.groups.hass.gid = 2000;
+
+  systemd.tmpfiles.rules = [
+    "d /srv/hass-backup 0700 hass hass - -"
+    "d /exports 0555 nobody nobody - -"
+    "d /exports/hass-backup 0700 hass hass - -"
+  ];
+
+  fileSystems."/exports/hass-backup" = {
+    options = [ "bind" ];
+    device = "/srv/hass-backup";
+  };
+
+  services.nfs.server = {
+    enable = true;
+    exports = ''
+      /exports/hass-backup d4:8892:cf78::/48(rw,insecure,all_squash,anonuid=2000,anongid=2000)
+    '';
+  };
 
   wat.thelegy.libvirtd.enable = true;
 
@@ -65,6 +108,11 @@ in mkTrivialModule {
   networking.nftables.firewall = {
     zones.hass = {
       interfaces = [ "hass" ];
+    };
+    rules.hass-nfs = {
+      from = [ "hass" ];
+      to = [ "fw" ];
+      allowedTCPPorts = [ 2049 ];
     };
   };
 
