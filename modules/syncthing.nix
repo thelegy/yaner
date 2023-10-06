@@ -46,7 +46,7 @@ mkModule {
 
       overrideDevices = false;
       overrideFolders = false;
-      extraOptions = {
+      settings = {
         options = {
           urAccepted = -1;
           crashReportingEnabled = false;
