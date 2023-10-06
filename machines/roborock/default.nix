@@ -2,7 +2,6 @@
 
 mkMachine {
   system = "aarch64-linux";
-  nixpkgs = flakes.nixpkgs-roborock;
 } ({ lib, config, pkgs, ... }:
 with lib;
 

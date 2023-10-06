@@ -45,8 +45,6 @@
 
     nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
 
-    nixpkgs-roborock.url = github:NixOS/nixpkgs/b573a7f69484a7d213680abb70b4f95bdc28eee5;
-
     nixpkgs-snm = {
       url = github:NixOS/nixpkgs/nixos-21.11;
       follows = "snm/nixpkgs-22_11";
