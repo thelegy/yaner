@@ -57,6 +57,9 @@ with lib;
       # Static kickstart ips (cloudflare anycast) to counteract missing rtc battery
       server 162.159.200.1 iburst xleave presend 512
       server 162.159.200.123 iburst xleave presend 512
+
+      # Since we are running without an rtc allow to makestep at any time, if the diff is larger than 30 seconds
+      makestep 30 -1
     '';
   };
 
