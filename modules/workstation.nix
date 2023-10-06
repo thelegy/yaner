@@ -35,6 +35,7 @@ mkTrivialModule {
       launch-cadquery
       ldns
       libfaketime
+      lua-language-server
       mumble
       nil
       nixGL
@@ -47,6 +48,7 @@ mkTrivialModule {
       signal-desktop
       sops
       stack
+      stylua
       tdesktop
       thunderbird
       vscode
