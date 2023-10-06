@@ -90,6 +90,7 @@ mkModule {
         "sh:home/*/.stack"
         "sh:home/*/.thunderbird"
       ] ++ cfg.extraExcludes;
+      extraArgs = "--lock-wait 300";
       extraCreateArgs = "--stats --exclude-caches";
       paths = [ "." ];
       prune = {
