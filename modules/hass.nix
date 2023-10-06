@@ -27,10 +27,10 @@ let
       <features>
         <acpi/>
       </features>
-      <vcpu>2</vcpu>
+      <vcpu>4</vcpu>
       <cpu mode="host-model" />
-      <memory unit="G">3</memory>
-      <currentMemory unit="G">1</currentMemory>
+      <memory unit="G">4</memory>
+      <currentMemory unit="G">2</currentMemory>
       <devices>
         <emulator>/run/libvirt/nix-emulators/qemu-kvm</emulator>
         <console type="pty" />
