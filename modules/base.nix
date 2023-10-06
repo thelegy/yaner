@@ -5,8 +5,8 @@ let
   nixos2311 = versionAtLeast version "23.11pre";
 in mkTrivialModule {
 
-  wat.thelegy.homeManager.enable = true;
   wat.thelegy.emergencyStorage.enable = mkDefault true;
+  wat.thelegy.homeManager.enable = true;
   wat.thelegy.hosts.enable = mkDefault true;
   wat.thelegy.zsh.enable = mkDefault true;
 
@@ -18,6 +18,7 @@ in mkTrivialModule {
   sops.defaultSopsFile = config.wat.machines.${config.networking.hostName}."secrets.yaml".file;
 
   networking.domain = mkDefault "0jb.de";
+  networking.search = [ "0jb.de" ];
 
   console = {
     font = "Lat2-Terminus16";
