@@ -19,6 +19,10 @@ mkTrivialModule {
     extraPackages = [ pkgs.intel-media-driver ];
   };
 
+  # Disable extremely spammy acpi interrupt (probably usb-c related)
+  # https://askubuntu.com/questions/1275749/acpi-event-69-made-my-system-unusable
+  boot.kernelParams = [ "acpi_mask_gpe=0x69" ];
+
   # Enable brightness switches
   services.illum.enable = true;
 }
