@@ -23,6 +23,14 @@ in {
   hardware.cpu.amd.updateMicrocode = true;
   powerManagement.cpuFreqGovernor = "schedutil";
 
+  wat.thelegy.acme = {
+    enable = true;
+    staging = false;
+    extraDomainNames = [
+      "ha.0jb.de"
+      "klipper.0jb.de"
+    ];
+  };
   wat.thelegy.base.enable = true;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.hass.enable = true;
