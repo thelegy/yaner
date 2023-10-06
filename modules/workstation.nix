@@ -21,6 +21,7 @@ mkTrivialModule {
 
   users.users.beinke = {
     packages = with pkgs; [
+      alejandra
       anki-bin
       cabal-install
       direnv
@@ -35,13 +36,14 @@ mkTrivialModule {
       ldns
       libfaketime
       mumble
+      nil
       nixGL
+      nixfmt
       nixpkgs-fmt
       pass
       preprocess-cancellation
       prusa-slicer
       pyright
-      rnix-lsp
       signal-desktop
       sops
       stack
