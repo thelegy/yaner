@@ -82,6 +82,7 @@ D("0jb.de", REG_NONE, DnsProvider("inwx"),
   CNAME_ACME("klipper", "y"),
   CNAME_ACME("mailmetrics", "forever"),
   CNAME_ACME("matrix", "forever"),
+  CNAME_ACME("pw", "forever"),
 
   []
 );
