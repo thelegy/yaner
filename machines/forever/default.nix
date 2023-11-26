@@ -22,6 +22,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
       "element.0jb.de"
       "matrix.0jb.de"
       "mailmetrics.0jb.de"
+      "pw.0jb.de"
     ];
   };
   wat.thelegy.base.enable = true;
@@ -35,6 +36,11 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     sopsSecretsFile = "matrix-synapse-keys";
   };
   wat.thelegy.monitoring.enable = true;
+  wat.thelegy.vaultwarden = {
+    enable = true;
+    useACMEHost = "forever.0jb.de";
+    sopsSecretsFile = "vaultwarden";
+  };
 
 
   networking.nftables.firewall = {
