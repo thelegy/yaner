@@ -61,7 +61,7 @@ let
         results[$(cut -d' ' -f 3- <<< $result)]=$(cut -d' ' -f 1 <<< $result)
       }
       for result in ''${(f)oldBuildOutput}; {
-        oldResults[$(cut -d' ' -f 3- <<< $result)]=$(cut -d' ' -f 1 <<< $result)
+        oldResults[$(cut -d' ' -f 3 <<< $result)]=$(cut -d' ' -f 1 <<< $result)
       }
 
       for target in ''${(k)results}; {
@@ -76,7 +76,7 @@ let
 
     for branch in $(git branch --format '%(refname:strip=2)'); {
       [[ $branch == *-${postfix} ]] && continue
-      if git verify-commit $branch 2>&-; {
+      if {git verify-commit $branch} {
         echo Build for branch '"'$branch'"'
         git switch $branch
         nix flake lock --update-input nixpkgs
@@ -105,7 +105,6 @@ mkTrivialModule {
 
   systemd.services.yaner-prebuild = {
     startAt = "*:00";
-    script = "${script}";
     path = with pkgs; [
       git
       gnupg
@@ -114,6 +113,9 @@ mkTrivialModule {
       strace
     ];
     serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${script}";
+      Restart = "on-failure";
       DynamicUser = true;
       ProtectHome = "tmpfs";
       RuntimeDirectory = jobName;
@@ -128,6 +130,10 @@ mkTrivialModule {
       ReadWritePaths = [
         "/nix/var/nix/daemon-socket/"
       ];
+      RestartSec = "10s";
+      RestartMaxDelaySec = "1h";
+      RestartSteps = 4;
+      TimeoutStartSec = "2h";
     };
   };
 
