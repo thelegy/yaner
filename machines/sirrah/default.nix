@@ -7,6 +7,9 @@ let
   interface = "enp6s0";
 in
 {
+
+  system.stateVersion = "22.05";
+
   imports = [
     ./hardware-configuration.nix
     ./pipewire.nix
@@ -107,7 +110,5 @@ in
     patchelf
     prismlauncher
   ];
-
-  system.stateVersion = "22.05";
 
 })
