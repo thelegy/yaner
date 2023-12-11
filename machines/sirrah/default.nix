@@ -45,7 +45,6 @@ in
   systemd.network.enable = true;
   systemd.network.wait-online.enable = false;
 
-  wat.thelegy.bs-oneclick.enable = true;
 
   wat.thelegy.libvirtd.enable = true;
 
@@ -106,6 +105,7 @@ in
   };
 
   users.users.beinke.packages = with pkgs; [
+    BeatSaberModManager
     blender
     patchelf
     prismlauncher
