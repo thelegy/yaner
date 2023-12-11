@@ -35,9 +35,7 @@ mkMachine {
     ];
   };
   wat.thelegy.base.enable = true;
-  wat.thelegy.firewall.enable = true;
   wat.thelegy.nginx.enable = true;
-  wat.thelegy.monitoring.enable = true;
 
   wat.thelegy.mailserver = {
     enable = true;

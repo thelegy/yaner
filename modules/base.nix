@@ -6,8 +6,11 @@ let
 in mkTrivialModule {
 
   wat.thelegy.emergencyStorage.enable = mkDefault true;
+  wat.thelegy.firewall.enable = mkDefault true;
   wat.thelegy.homeManager.enable = true;
   wat.thelegy.hosts.enable = mkDefault true;
+  wat.thelegy.monitoring.enable = mkDefault true;
+  wat.thelegy.tailscale.enable = mkDefault true;
   wat.thelegy.zsh.enable = mkDefault true;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;

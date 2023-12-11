@@ -32,14 +32,12 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     lapi.enable = true;
   };
   wat.thelegy.dfhq-mc.enable = true;
-  wat.thelegy.firewall.enable = true;
   wat.thelegy.nginx.enable = true;
   wat.thelegy.matrix = {
     enable = true;
     useACMEHost = "forever.0jb.de";
     sopsSecretsFile = "matrix-synapse-keys";
   };
-  wat.thelegy.monitoring.enable = true;
   wat.thelegy.vaultwarden = {
     enable = true;
     useACMEHost = "forever.0jb.de";

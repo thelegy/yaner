@@ -29,10 +29,7 @@ with lib;
   wat.thelegy.backup.enable = true;
   wat.thelegy.base.enable = true;
   wat.thelegy.builder.enable = true;
-  wat.thelegy.firewall.enable = true;
   wat.thelegy.grocy.enable = true;
-  wat.thelegy.monitoring.enable = true;
-  wat.thelegy.tailscale.enable = true;
 
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
