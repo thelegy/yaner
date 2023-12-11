@@ -90,6 +90,12 @@ in {
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPMkJA05G5ozn/pYRxrbQbk8lRynG4jH5LG1fua0Jo7c root@th1"
       ];
     };
+    y = {
+      path = "/mnt/backup-storage/y";
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILbZzyD6W2QQVyq9D36jkITPV8uA2Enf4gSwvWB49YEP root@y"
+      ];
+    };
   };
 
   systemd.services = mapAttrs' (repo: repoCfg: {

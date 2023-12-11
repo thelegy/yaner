@@ -31,6 +31,13 @@ in {
       "klipper.0jb.de"
     ];
   };
+  wat.thelegy.backup = {
+    enable = true;
+    extraExcludes = [
+      "exports"
+      "var/lib/libvirt/hass"
+    ];
+  };
   wat.thelegy.base.enable = true;
   wat.thelegy.hass.enable = true;
   wat.thelegy.monitoring-server.enable = true;
