@@ -27,6 +27,10 @@ mkMachine {} ({ lib, config, ... }: with lib; {
   };
   wat.thelegy.base.enable = true;
   wat.thelegy.backup.enable = true;
+  wat.thelegy.crowdsec = {
+    enable = true;
+    lapi.enable = true;
+  };
   wat.thelegy.dfhq-mc.enable = true;
   wat.thelegy.firewall.enable = true;
   wat.thelegy.nginx.enable = true;

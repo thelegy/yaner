@@ -6,6 +6,8 @@ with final;
 
   bs-oneclick = callPackage ./bs-oneclick.nix {};
 
+  cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix {};
+
   inxi-full = inxi.override { withRecommends = true; };
 
   itd = callPackage ./itd.nix {};
