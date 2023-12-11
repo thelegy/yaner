@@ -105,6 +105,17 @@ mkModule {
       repo = cfg.repo;
     };
 
+    systemd.services.borgbackup-job-offsite = {
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "on-failure";
+        RestartSec = "10s";
+        RestartMaxDelaySec = "1h";
+        RestartSteps = 4;
+        TimeoutStartSec = "2h";
+      };
+    };
+
     systemd.tmpfiles.rules = [
       "d /.backup 0700 root root - -"
     ] ++ (map (x: "d ${x} 0700 root root - -") cfg.extraReadWritePaths);
