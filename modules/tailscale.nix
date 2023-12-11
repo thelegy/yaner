@@ -84,7 +84,10 @@ mkModule {
 
     networking.nftables.firewall = {
       zones.tailscale-range = {
-        ipv6Addresses = [ "fd7a:115c:a1e0:ab12::/64" ];
+        ipv6Addresses = [
+          "fd7a:115c:a1e0:ab12::/64"
+          "fd7a:115c:a1e0::/96"
+        ];
       };
       zones.tailscale = {
         parent = "tailscale-range";
