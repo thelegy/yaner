@@ -84,7 +84,6 @@ mkModule {
 
     networking.nftables.firewall = {
       zones.tailscale-range = {
-        ipv4Addresses = [ "100.64.0.0/10" ];
         ipv6Addresses = [ "fd7a:115c:a1e0:ab12::/64" ];
       };
       zones.tailscale = {
@@ -96,7 +95,6 @@ mkModule {
         to = "all";
         extraLines = [
           "iifname \"${cfg.interfaceName}\" return"
-          "ip saddr 100.115.92.0/23 return"
           "counter drop"
         ];
       };
