@@ -210,7 +210,7 @@ in
         };
       };
 
-      networking.nftables.ruleset = ''
+      networking.nftables.ruleset = mkBefore ''
         table inet firewall {
           set crowdsec-blacklists {
             type ipv4_addr
