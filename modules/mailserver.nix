@@ -144,7 +144,7 @@ in mkModule {
       virusScanning = false;
 
       # Manual certificate setup
-      certificateScheme = 1;
+      certificateScheme = "manual";
       keyFile = "${acmePath}/key.pem";
       certificateFile = "${acmePath}/cert.pem";
     };

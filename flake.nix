@@ -44,11 +44,11 @@
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-23.05;
 
     nixpkgs-snm = {
-      url = github:NixOS/nixpkgs/nixos-21.11;
-      follows = "snm/nixpkgs-22_11";
+      url = github:NixOS/nixpkgs/nixos-23.05;
+      follows = "snm/nixpkgs-23_05";
     };
     snm = {
-      url = gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-22.11;
+      url = gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.05;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

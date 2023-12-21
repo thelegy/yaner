@@ -1,9 +1,7 @@
 { lib, config, pkgs, mkTrivialModule, ... }:
 with lib;
 
-let
-  nixos2311 = versionAtLeast version "23.11pre";
-in mkTrivialModule {
+mkTrivialModule {
 
   wat.thelegy.emergencyStorage.enable = mkDefault true;
   wat.thelegy.firewall.enable = mkDefault true;
@@ -31,29 +29,18 @@ in mkTrivialModule {
   };
   time.timeZone = "Europe/Berlin";
 
-  # TODO: remove switch once all machines are updated
-  boot.${if nixos2311 then "tmp" else "tmpOnTmpfs"} = if nixos2311 then { useTmpfs = true; } else true;
+  boot.tmp.useTmpfs = true;
 
   services = {
     acpid.enable = mkDefault true;
     avahi.enable = mkDefault true;
   };
 
-  # TODO: remove switch once all machines are updated
-  services.openssh = mkDefault (mkMerge [
-    { enable = true; }
-    (
-      if nixos2311
-      then {
-        settings.PasswordAuthentication = true;
-        settings.KbdInteractiveAuthentication = true;
-      }
-      else {
-        passwordAuthentication = true;
-        kbdInteractiveAuthentication = true;
-      }
-    )
-  ]);
+  services.openssh = mkDefault {
+    enable = true;
+    settings.PasswordAuthentication = true;
+    settings.KbdInteractiveAuthentication = true;
+  };
 
   hardware.rasdaemon.enable = mkDefault true;
 
