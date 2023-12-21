@@ -24,6 +24,11 @@ with final; {
       };
     };
 
+  grafana-agent =
+    if lib.versionOlder prev.grafana-agent.version "0.36.0"
+    then flakes.nixpkgs.legacyPackages.${system}.grafana-agent
+    else prev.grafana-agent;
+
   inxi-full = inxi.override {withRecommends = true;};
 
   itd = callPackage ./itd.nix {};
