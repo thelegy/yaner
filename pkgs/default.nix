@@ -4,6 +4,26 @@ with final; {
 
   cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix {};
 
+  formats =
+    prev.formats
+    // {
+      yaml = {}: {
+        type = (prev.formats.yaml {}).type;
+        generate = name: value:
+          final.callPackage ({
+            runCommand,
+            yq-go,
+          }:
+            runCommand name {
+              nativeBuildInputs = [yq-go];
+              value = builtins.toJSON value;
+              passAsFile = ["value"];
+            } ''
+              yq --prettyPrint --no-colors "$valuePath" > $out
+            '') {};
+      };
+    };
+
   inxi-full = inxi.override {withRecommends = true;};
 
   itd = callPackage ./itd.nix {};
