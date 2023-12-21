@@ -61,6 +61,8 @@ with final; {
 
   nixGL = final.nixgl.nixGLCommon final.nixgl.nixGLIntel;
 
+  obsidian = prev.obsidian.override { electron = final.electron_28; };
+
   on-demand-shell = {
     name,
     scriptName ? "launch-${name}",

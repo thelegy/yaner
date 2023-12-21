@@ -43,8 +43,6 @@
 
     nixpkgs-stable.url = github:NixOS/nixpkgs/nixos-23.05;
 
-    nixpkgs-staging-next.url = github:NixOS/nixpkgs/staging-next;
-
     nixpkgs-snm = {
       url = github:NixOS/nixpkgs/nixos-21.11;
       follows = "snm/nixpkgs-22_11";
