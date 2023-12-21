@@ -178,6 +178,14 @@ mkModule {
       };
     };
 
+    wat.thelegy.monitoring.scrapeConfigs.synapse = {
+      static_configs = [
+        {
+          targets = [ "localhost:9008" ];
+        }
+      ];
+    };
+
   };
 
 }

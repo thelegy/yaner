@@ -15,21 +15,6 @@ in
   mkTrivialModule {
     wat.thelegy.acme.extraDomainNames = [domain];
 
-    wat.thelegy.monitoring = {
-      enable = true;
-      scrapeConfigs = [
-        {
-          job_name = "prometheus";
-          static_configs = [
-            {
-              targets = ["127.0.0.1:${toString localPort}"];
-              labels.instance = config.networking.hostName;
-            }
-          ];
-        }
-      ];
-    };
-
     services.prometheus = {
       enable = true;
       stateDir = "prometheus";
@@ -40,52 +25,12 @@ in
         "--web.enable-remote-write-receiver"
         "--web.enable-admin-api"
       ];
-      scrapeConfigs = [
+    };
+
+    wat.thelegy.monitoring.scrapeConfigs.prometheus = {
+      static_configs = [
         {
-          job_name = "mirror_agony";
-          scrape_interval = "15s";
-          # honor_labels = true;
-          metrics_path = "/federate";
-          params."match[]" = [
-            ''{instance=~"agony.0jb.de:.*"}''
-          ];
-          static_configs = [
-            {
-              targets = ["roborock.0jb.de:9090"];
-              labels.instance = "agony";
-            }
-          ];
-          relabel_configs = [
-            {
-              source_labels = ["exported_job"];
-              target_label = "job";
-              regex = "(.*)";
-              replacement = "\${1}";
-            }
-          ];
-        }
-        {
-          job_name = "mirror_roborock";
-          scrape_interval = "15s";
-          # honor_labels = true;
-          metrics_path = "/federate";
-          params."match[]" = [
-            ''{instance=~"roborock.0jb.de:.*"}''
-          ];
-          static_configs = [
-            {
-              targets = ["roborock.0jb.de:9090"];
-              labels.instance = "roborock";
-            }
-          ];
-          relabel_configs = [
-            {
-              source_labels = ["exported_job"];
-              target_label = "job";
-              regex = "(.*)";
-              replacement = "\${1}";
-            }
-          ];
+          targets = ["127.0.0.1:${toString localPort}"];
         }
       ];
     };

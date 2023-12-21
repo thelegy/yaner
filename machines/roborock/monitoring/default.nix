@@ -79,6 +79,14 @@ in {
     ];
   };
 
+  wat.thelegy.monitoring.scrapeConfigs.grafana = {
+    static_configs = [
+      {
+        targets = [ "${local_ip}:${toString local_port}" ];
+      }
+    ];
+  };
+
   services.nginx.virtualHosts.${domain} = {
     locations."/" = {
       proxyPass = "http://${local_ip}:${toString local_port}/";
@@ -93,26 +101,8 @@ in {
     ];
     scrapeConfigs = [
       {
-        job_name = "node";
-        metrics_path = "<redacted>";
-        scheme = "https";
-        static_configs = [
-          {
-            targets = [
-              "agony.0jb.de"
-              "forever.0jb.de"
-              "roborock.0jb.de"
-            ];
-          }
-        ];
-      }
-      {
         job_name = "prometheus";
         static_configs = [{ targets = [ "localhost:9090" ]; }];
-      }
-      {
-        job_name = "grafana";
-        static_configs = [{ targets = [ "${local_ip}:${toString local_port}" ]; }];
       }
       {
         job_name = "synapse";
