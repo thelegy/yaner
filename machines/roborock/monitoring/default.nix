@@ -65,7 +65,7 @@ in {
       {
         name = "prometheus";
         type = "prometheus";
-        url = "http://localhost:9090";
+        url = "https://prometheus.0jb.de:9090/";
       }
     ];
     provision.dashboards.settings.providers = [
@@ -92,25 +92,6 @@ in {
       proxyPass = "http://${local_ip}:${toString local_port}/";
       proxyWebsockets = true;
     };
-  };
-
-  services.prometheus = {
-    enable = true;
-    extraFlags = [
-      "--storage.tsdb.retention.size=50GB"
-    ];
-    scrapeConfigs = [
-      {
-        job_name = "prometheus";
-        static_configs = [{ targets = [ "localhost:9090" ]; }];
-      }
-      {
-        job_name = "synapse";
-        metrics_path = "<redacted>";
-        scheme = "https";
-        static_configs = [{ targets = [ "forever.0jb.de" ]; }];
-      }
-    ];
   };
 
 }
