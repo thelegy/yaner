@@ -25,6 +25,7 @@ mkTrivialModule {
       anki-bin
       cabal-install
       direnv
+      element-desktop
       file
       fzf
       git-filter-repo
