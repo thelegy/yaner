@@ -83,27 +83,6 @@ in
   users.groups.libvirt = {};
   users.users.beinke.extraGroups = [ "vboxusers" "dialout" "libvirt" ];
 
-  programs.sway.extraSessionCommands = ''
-    export GTK_THEME=Blackbird
-    export GTK_ICON_THEME=Tango
-    export MOZ_ENABLE_WAYLAND=1
-    export MOZ_USE_XINPUT2=1
-    export XDG_SESSION_TYPE=wayland
-    export XDG_CURRENT_DESKTOP=sway
-  '';
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
-  };
-  environment.sessionVariables.GTK_USE_PORTAL = "1";
-
-  security.rtkit.enable = true;
-  services.pipewire = {
-    alsa.support32Bit = true;
-    jack.enable = true;
-  };
-
   users.users.beinke.packages = with pkgs; [
     BeatSaberModManager
     blender
