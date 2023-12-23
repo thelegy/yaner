@@ -46,6 +46,7 @@ mkTrivialModule {
       preprocess-cancellation
       prusa-slicer
       pyright
+      obsidian
       signal-desktop
       sops
       stack
