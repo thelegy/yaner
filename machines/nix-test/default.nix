@@ -38,10 +38,6 @@ in {
         yggdrasil-port
       ];
     };
-    rules.home-services = {
-      from = [ "ygg-home" ];
-      to = [ "fw" ];
-    };
   };
 
   services.nginx.enable = true;

@@ -218,11 +218,6 @@ with lib;
         verdict = "accept";
       };
 
-      ext-to-fw = {
-        from = [ "external" ];
-        to = [ "fw" ];
-      };
-
       insecure-to-fw = {
         from = [ "insecure" "internal" "tailscale" ];
         to = [ "fw" ];

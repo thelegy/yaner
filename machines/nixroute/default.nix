@@ -105,7 +105,6 @@ with lib;
 
   networking = {
     firewall = {
-      enable = true;
       allowedTCPPorts = [ 631 ];
       allowedUDPPorts = [ 631 ];
     };
