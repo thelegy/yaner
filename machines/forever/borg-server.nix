@@ -70,7 +70,7 @@ in {
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIc+1VOzezO7njdd9Ma6o3+SYUzpvfWjnAI4v10MuzIN ansible-generated on valhalla"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOql+/Ly/ey2XGg5hzZnrBg3xqpWIQz7t9FSbdWz3lus root@honigkuchenpferd"
       ];
-      quota = "25G";
+      quota = "30G";
     };
     mail = {
       path = "/mnt/backup-storage/mailserver";
