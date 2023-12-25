@@ -1,17 +1,17 @@
-{ lib, config, pkgs, ... }:
-with lib;
-
-let
-
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+with lib; let
   automountOptions = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
   backupDir = "/mnt/backup-storage";
   backupUser = "borg";
-
 in {
+  users.users."${backupUser}" = {};
 
-  users.users."${backupUser}" = { };
-
-  systemd.tmpfiles.rules = [ "d ${backupDir} 0755 root root - -" ];
+  systemd.tmpfiles.rules = ["d ${backupDir} 0755 root root - -"];
   fileSystems."${backupDir}" = {
     device = "//u189274-sub1.your-storagebox.de/u189274-sub1";
     fsType = "cifs";
@@ -62,7 +62,7 @@ in {
       authorizedKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+hk1SXcUMOVMv0UHuwSms81joCah51xg527es7hfuG root@brausefrosch"
       ];
-       quota = "50G";
+      quota = "50G";
     };
     koma-valhalla = {
       path = "/mnt/backup-storage/koma-valhalla";
@@ -98,21 +98,22 @@ in {
     };
   };
 
-  systemd.services = mapAttrs' (repo: repoCfg: {
-    name = "borgbackup-compact-${repo}";
-    value = {
-      path = with pkgs; [ borgbackup ];
-      script = "borg compact --verbose ${repoCfg.path}";
-      serviceConfig = {
-        CPUSchedulingPolicy = "idle";
-        IOSchedulingClass = "idle";
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = repoCfg.path;
-        User = backupUser;
+  systemd.services =
+    mapAttrs' (repo: repoCfg: {
+      name = "borgbackup-compact-${repo}";
+      value = {
+        path = with pkgs; [borgbackup];
+        script = "borg compact --verbose ${repoCfg.path}";
+        serviceConfig = {
+          CPUSchedulingPolicy = "idle";
+          IOSchedulingClass = "idle";
+          PrivateTmp = true;
+          ProtectSystem = "strict";
+          ReadWritePaths = repoCfg.path;
+          User = backupUser;
+        };
+        startAt = "Mon 4:55";
       };
-      startAt = "Mon 4:55";
-    };
-  }) config.services.borgbackup.repos;
-
+    })
+    config.services.borgbackup.repos;
 }
