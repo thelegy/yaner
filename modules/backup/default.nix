@@ -115,6 +115,13 @@ with lib;
         };
       };
 
+      systemd.timers.borgbackup-job-offsite = {
+        timerConfig = {
+          RandomizedDelaySec = "1h";
+          FixedRandomDelay = true;
+        };
+      };
+
       systemd.tmpfiles.rules =
         [
           "d /.backup 0700 root root - -"
