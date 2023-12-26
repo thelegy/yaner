@@ -2,7 +2,6 @@
   config,
   lib,
   mkTrivialModule,
-  pkgs,
   ...
 }:
 with lib; let
@@ -15,6 +14,14 @@ in
   mkTrivialModule {
     wat.thelegy.acme.extraDomainNames = [domain];
 
+    wat.thelegy.monitoring.scrapeConfigs.prometheus = {
+      static_configs = [
+        {
+          targets = ["127.0.0.1:${toString localPort}"];
+        }
+      ];
+    };
+
     services.prometheus = {
       enable = true;
       stateDir = "prometheus";
@@ -24,14 +31,6 @@ in
         "--storage.tsdb.retention.size=32GB"
         "--web.enable-remote-write-receiver"
         "--web.enable-admin-api"
-      ];
-    };
-
-    wat.thelegy.monitoring.scrapeConfigs.prometheus = {
-      static_configs = [
-        {
-          targets = ["127.0.0.1:${toString localPort}"];
-        }
       ];
     };
 
@@ -57,4 +56,5 @@ in
       to = ["fw"];
       allowedTCPPorts = [remotePort];
     };
+
   }
