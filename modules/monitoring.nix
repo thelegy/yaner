@@ -28,6 +28,7 @@ in
         extraFlags = ["-disable-reporting" "-disable-support-bundle"];
         settings = {
           metrics = {
+            wal_directory = "\${STATE_DIRECTORY}/metrics-wal";
             global.remote_write = [{url = cfg.remoteWriteUrl;}];
             configs = [
               {
