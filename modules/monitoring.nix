@@ -57,16 +57,13 @@ in
           };
           integrations = {
             agent = {
-              # enabled = true;
-              # scrape_integration = true;
               instance = config.networking.hostName;
             };
 
             node_exporter = {
-              # enabled = true;
-              # scrape_integration = true;
               instance = config.networking.hostName;
               enable_collectors = ["systemd"];
+              disable_collectors = ["nfsd"];
             };
           };
           logs = mkIf (! isNull cfg.lokiUrl) {
@@ -91,8 +88,6 @@ in
                         target_label = target;
                       };
                     in [
-                      (label "cmdLine" "_cmdline")
-                      (label "pid" "_pid")
                       (label "priority" "priority")
                       (label "slice" "_systemd_slice")
                       (label "syslogFacility" "syslog_facility")
