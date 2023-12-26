@@ -31,6 +31,7 @@ in
         server = {
           http_listen_address = ip;
           http_listen_port = localPort;
+          log_level = "warn";
         };
         compactor = {
           working_directory = "compactor";
