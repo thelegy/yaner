@@ -40,6 +40,7 @@ in {
   };
   wat.thelegy.base.enable = true;
   wat.thelegy.hass.enable = true;
+  wat.thelegy.loki.enable = true;
   wat.thelegy.monitoring-server.enable = true;
   wat.thelegy.nginx.enable = true;
   wat.thelegy.rtlan-net.enable = true;
