@@ -82,6 +82,7 @@ mkModule {
     # Matrix Server
     services.matrix-synapse = {
       enable = true;
+      log.root.level = "WARNING";
 
       settings = {
         server_name = cfg.baseDomain;
