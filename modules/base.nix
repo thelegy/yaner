@@ -44,6 +44,10 @@ mkTrivialModule {
 
   hardware.rasdaemon.enable = mkDefault true;
 
+  services.udev.extraRules = ''
+    SUBSYSTEM=="nvme", GROUP="disk"
+  '';
+
   programs = {
     less.enable = true;
     mtr.enable = true;
