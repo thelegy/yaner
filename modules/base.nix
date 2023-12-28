@@ -8,6 +8,7 @@ mkTrivialModule {
   wat.thelegy.homeManager.enable = true;
   wat.thelegy.hosts.enable = mkDefault true;
   wat.thelegy.monitoring.enable = mkDefault true;
+  wat.thelegy.monitoring-smart.enable = mkDefault true;
   wat.thelegy.tailscale.enable = mkDefault true;
   wat.thelegy.zsh.enable = mkDefault true;
 
