@@ -44,6 +44,13 @@ mkTrivialModule {
   };
 
   hardware.rasdaemon.enable = mkDefault true;
+  systemd.services.rasdaemon = {
+    serviceConfig = {
+      RestartSec = "20s";
+      StartLimitIntervalSec = "1h";
+      StartLimitBurst = 100;
+    };
+  };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="nvme", GROUP="disk"
