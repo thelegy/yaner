@@ -25,12 +25,6 @@ in {
   };
 
   services.borgbackup.repos = {
-    agony = {
-      path = "/mnt/backup-storage/agony";
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHPhOxyZXi5Y44EJh3yHgQB5ZevQBA+YU1aaAM9at89d root@agony"
-      ];
-    };
     ender = {
       path = "/mnt/backup-storage/ender";
       authorizedKeys = [
@@ -43,19 +37,6 @@ in {
       authorizedKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG3r0YJIUoGGIzmCrF/uiF5rEzD/B1nszoNhHehVLjXw root@ever"
       ];
-    };
-    forever = {
-      path = "/mnt/backup-storage/forever";
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGl9EWHsYRe7cvISO1wlFdQ2I7jxqlEZ9NNjzykKdsTg root@forever"
-      ];
-    };
-    itkeller-mc = {
-      path = "/mnt/backup-storage/itkeller-mc";
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDrB+AEivcQUA8Eb9LbrNoXTdLqqnutKdow040ERcI2Z mc.dfhq.eu now with create mod"
-      ];
-      quota = "50G";
     };
     koma = {
       path = "/mnt/backup-storage/koma";
@@ -76,24 +57,6 @@ in {
       path = "/mnt/backup-storage/mailserver";
       authorizedKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICC+tSHBpxjuQWw4awATyFUAB8TTYHYi/54vh/ijXP+R root@mail"
-      ];
-    };
-    roborock = {
-      path = "/mnt/backup-storage/roborock";
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFFAkNZbkfRNHy8sbL44yCxqmVpe0NjH3P/dl+XH9icH root@roborock"
-      ];
-    };
-    th1 = {
-      path = "/mnt/backup-storage/th1";
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPMkJA05G5ozn/pYRxrbQbk8lRynG4jH5LG1fua0Jo7c root@th1"
-      ];
-    };
-    y = {
-      path = "/mnt/backup-storage/y";
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILbZzyD6W2QQVyq9D36jkITPV8uA2Enf4gSwvWB49YEP root@y"
       ];
     };
   };
