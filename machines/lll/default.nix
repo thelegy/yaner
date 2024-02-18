@@ -15,86 +15,25 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
     swapSize = "8GiB";
   };
 
-  # imports = [
-  #   ./hardware-configuration.nix
-  # ];
-
-  # Fix the LTE modem not being detected
-  # systemd.services.NetworkManager = let
-  #   modemmanager = "ModemManager.service";
-  # in {
-  #   after = [ modemmanager ];
-  #   requires = [ modemmanager ];
-  # };
-  # systemd.services.ModemManager.path = [ pkgs.libqmi ];
-
-  # services.ratbagd.enable = true;
-
-  # wat.thelegy.hw-t470.enable = true;
-  # wat.thelegy.syncthing.enable = true;
   wat.thelegy.workstation.enable = true;
 
-  # wat.thelegy.backup = {
-  #   enable = true;
-  #   extraExcludes = [
-  #     "/home/.pre-repair-2020-11-19"
-  #   ];
-  #   extraReadWritePaths = [
-  #     "/.backup-snapshots"
-  #     "/nix/.backup-snapshots"
-  #   ];
-  # };
+  wat.thelegy.syncthing.enable = true;
+  services.syncthing.user = "lisa";
 
-  # wat.thelegy.roc-client = {
-  #   enable = true;
-  #   serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.y.address);
-  #   localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
-  # };
-
-  # boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-  # boot.supportedFilesystems = [ "ntfs" ];
-
-  # wat.thelegy.leg-net.enable = true;
-  # wat.thelegy.wg-net.leg.nodes.roborock.endpoint = mkForce "localhost:2222";
-  # wat.thelegy.rtlan-net.enable = true;
+  wat.thelegy.backup = {
+    enable = true;
+    borgbaseRepo = "u02zl465";
+    extraReadWritePaths = [
+      "/.backup-snapshots"
+      "/nix/.backup-snapshots"
+    ];
+  };
 
   # Enable systemd-networkd in addition to NetworkManager
   systemd.network.enable = true;
   systemd.network.wait-online.enable = false;
 
-  # Networking for containers
-  # networking = {
-  #   nat = {
-  #     enable  = true;
-  #     internalInterfaces = ["ve-+"];
-  #     externalInterface = "wlp4s0";
-  #   };
-  #   networkmanager.unmanaged = [ "interface-name:ve-*" ];
-  #   networkmanager.fccUnlockScripts = [rec{
-  #     id = "1199:9079";
-  #     path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
-  #   }];
-  #   #networkmanager.wifi.backend = "iwd";
-  # };
   services.resolved.enable = true;
-
-  # users.users.beinke.extraGroups = [ "dialout" "adbusers" ];
-  #
-  # programs.adb.enable = true;
-
-  # networking.firewall.allowedTCPPorts = [
-  #   8000
-  # ];
-  # networking.firewall.allowedUDPPorts = [
-  #   2223  # tunnelbore
-  # ];
-
-  # networking.nftables.firewall.rules.kdeconnect = {
-  #   from = "all";
-  #   to = [ "fw" ];
-  #   allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
-  #   allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
-  # };
 
   users.users.lisa = {
     uid = 1001;
@@ -109,47 +48,18 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
 
   nix.settings.trusted-users = [ "beinke" "lisa" ];
 
-  # nix.buildMachines = [
-  #   {
-  #     hostName = "roborock";
-  #     sshUser = "nix";
-  #     system = "aarch64-linux";
-  #     supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-  #   }
-  #   {
-  #     hostName = "sirrah";
-  #     sshUser = "nix";
-  #     systems = [
-  #       "x86_64-linux"
-  #       "aarch64-linux"
-  #     ];
-  #     speedFactor = 5;
-  #     supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-  #     maxJobs = 48;
-  #   }
-  # ];
-  # nix.distributedBuilds = true;
-
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
   services.xserver.displayManager.defaultSession = "plasmawayland";
 
-  programs.sway.extraSessionCommands = ''
-    export GTK_THEME=Blackbird
-    export GTK_ICON_THEME=Tango
-    export MOZ_ENABLE_WAYLAND=1
-    export MOZ_USE_XINPUT2=1
-    export XDG_SESSION_TYPE=wayland
-    export XDG_CURRENT_DESKTOP=sway
-  '';
-
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
   };
   environment.sessionVariables.GTK_USE_PORTAL = "1";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   programs.ssh.setXAuthLocation = true;
 
@@ -160,7 +70,18 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
   # Enable udev rules for mtp and such
   services.gvfs.enable = true;
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = let
+    r-custom = pkgs.rWrapper.override {
+        packages = with pkgs.rPackages; [
+          rlang
+          tidyverse
+          rstatix
+          ggpubr
+          rcompanion
+          xtable
+        ];
+      };
+  in with pkgs; [
     anki-bin
     chromium
     element-desktop
@@ -174,8 +95,11 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
     mpv
     mumble
     obsidian
+    r-custom
     spotify
     tcpdump
+    telegram-desktop
+    texlive.combined.scheme-full
     thunderbird
     viddy
     vscode
