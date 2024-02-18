@@ -33,6 +33,7 @@ in {
   };
   wat.thelegy.backup = {
     enable = true;
+    borgbaseRepo = "i65tsnc2";
     extraExcludes = [
       "exports"
       "var/lib/libvirt/hass"
