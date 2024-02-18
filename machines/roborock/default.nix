@@ -26,7 +26,10 @@ with lib;
       "nginx.service"
     ];
   };
-  wat.thelegy.backup.enable = true;
+  wat.thelegy.backup = {
+    enable = true;
+    borgbaseRepo = "lobrjbrb";
+  };
   wat.thelegy.base.enable = true;
   wat.thelegy.builder.enable = true;
   wat.thelegy.grocy.enable = true;
