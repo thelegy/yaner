@@ -29,6 +29,7 @@ mkMachine {
   };
   wat.thelegy.backup = {
     enable = true;
+    borgbaseRepo = "fdkpjo8i";
     extraReadWritePaths = [
       "/.backup-snapshots"
       "/var/vmail/.backup-snapshots"
