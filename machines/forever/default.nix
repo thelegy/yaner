@@ -26,7 +26,10 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     ];
   };
   wat.thelegy.base.enable = true;
-  wat.thelegy.backup.enable = true;
+  wat.thelegy.backup = {
+    enable = true;
+    borgbaseRepo = "dlj1no3s";
+  };
   wat.thelegy.crowdsec = {
     enable = true;
     lapi.enable = true;
