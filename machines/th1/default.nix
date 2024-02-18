@@ -25,6 +25,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
 
   wat.thelegy.backup = {
     enable = true;
+    borgbaseRepo = "v0ggts06";
     extraExcludes = [
       "/home/.pre-repair-2020-11-19"
     ];
