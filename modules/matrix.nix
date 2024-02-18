@@ -134,7 +134,7 @@ mkModule {
         disable_3pid_login = true;
         disable_custom_urls = true;
         disable_guests = true;
-        showLabsSettings = true;
+        show_labs_settings = true;
         enable_presence_by_hs_url = {
           "https://matrix-client.matrix.org" = false;
           "https://matrix.org" = false;
