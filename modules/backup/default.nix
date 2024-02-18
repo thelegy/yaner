@@ -19,6 +19,11 @@ with lib;
         default = "borg@backup.0jb.de:.";
       };
 
+      borgbaseRepo = mkOption {
+        type = with types; nullOr str;
+        default = null;
+      };
+
       extraReadWritePaths = mkOption {
         type = with types; listOf str;
         default = ["/.backup-snapshots"];
@@ -45,11 +50,18 @@ with lib;
         if cfg.useSops
         then config.sops.secrets.${cfg.sopsPassphrase}.path
         else cfg.passphraseFile;
+      isBorgBase = !isNull cfg.borgbaseRepo;
     in {
       sops.secrets.${cfg.sopsPassphrase} = mkIf cfg.useSops {
         format = "yaml";
         mode = "0600";
       };
+
+      programs.ssh.knownHosts.borgbase = mkIf isBorgBase {
+        hostNames = ["${cfg.borgbaseRepo}.repo.borgbase.com"];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMS3185JdDy7ffnr0nLWqVy8FaAQeVh1QYUSiNpW5ESq";
+      };
+      wat.thelegy.backup.repo = mkIf isBorgBase "ssh://${cfg.borgbaseRepo}@${cfg.borgbaseRepo}.repo.borgbase.com/./repo";
 
       services.borgbackup.jobs.offsite = {
         archiveBaseName = "${config.networking.hostName}";
