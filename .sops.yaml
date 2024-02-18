@@ -3,6 +3,7 @@ keys:
 
 - &agony 954ab1770044b7bc35bfa2b004bb211e9f8ae7c3
 - &forever 739759680da462402111a08f4081a822387c18d0
+- &lll 2c5a72d79e02dc880d79e581a83151cff3207f68
 - &mininet be5ca689432e1d9918f78feeaadd18c7d8c5bd4a
 - &roborock 2d59898b69126a28647dda7de82e1978fd768662
 - &sirrah ab9a4004133c9e02091db7e53b6203a9abeb522d
@@ -20,6 +21,11 @@ creation_rules:
   - pgp:
     - *thelegy
     - *forever
+- path_regex: machines/lll/.*
+  key_groups:
+  - pgp:
+    - *thelegy
+    - *lll
 - path_regex: machines/mininet/.*
   key_groups:
   - pgp:

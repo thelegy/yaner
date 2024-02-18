@@ -12,6 +12,11 @@
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIErYhKa5txjGtmdUNcUWOF3tgto5OmHo+i+pZeF6P0+G"
   },
 
+  "lll": {
+    "ipv6Addresses": [ "fd7a:115c:a1e0::3f7e:aa28" ],
+    "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAEcp72MalMNwlpcnTjZbC2mPJS5M49RWA1KL+rcc7An"
+  },
+
   "maildeb9": {
     "ipv4Addresses": [ "138.201.187.202" ],
     "ipv6Addresses": [ "2a01:4f8:1c17:66af::1" ]
