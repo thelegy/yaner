@@ -31,6 +31,18 @@ in
         type = types.str;
         default = "crowdsec-bouncer-credentials";
       };
+      parsers = mkOption {
+        type = types.listOf types.str;
+        default = [];
+      };
+      scenarios = mkOption {
+        type = types.listOf types.str;
+        default = [];
+      };
+      journalctlFilters = mkOption {
+        type = types.listOf types.str;
+        default = [];
+      };
     };
 
     config = cfg: let
@@ -70,9 +82,7 @@ in
 
         "${configDir}/acquisition/journal.yaml".text = toYAML {
           source = "journalctl";
-          journalctl_filter = [
-            "_SYSTEMD_UNIT=sshd.service"
-          ];
+          journalctl_filter = intersperse "+" cfg.journalctlFilters;
           labels.type = "syslog";
         };
 
@@ -128,7 +138,20 @@ in
         #!/bin/sh
         STATE_DIRECTORY=/var/lib/crowdsec-lapi exec ${pkgs.crowdsec}/bin/cscli -c ${mainConfig} "$@"
       '';
-    in {
+    in (liftToNamespace {
+      parsers = [
+        "crowdsecurity/geoip-enrich"
+        "crowdsecurity/sshd-logs"
+        "crowdsecurity/syslog-logs"
+      ];
+      scenarios = [
+        "crowdsecurity/ssh-bf"
+        "crowdsecurity/ssh-slow-bf"
+      ];
+      journalctlFilters = [
+        "_SYSTEMD_UNIT=sshd.service"
+      ];
+    }) // {
       environment.systemPackages = mkMerge [
         [pkgs.crowdsec]
         (mkIf cfg.lapi.enable [cscli-lapi])
@@ -177,9 +200,9 @@ in
           rm -rf /etc/crowdsec/{parsers,scenarios}/* || true
           # mkdir -p /etc/crowdsec/{parsers,scenarios}
 
-          ${pkgs.crowdsec}/bin/cscli parsers install crowdsecurity/syslog-logs crowdsecurity/sshd-logs crowdsecurity/geoip-enrich
+          ${pkgs.crowdsec}/bin/cscli parsers install ${escapeShellArgs cfg.parsers}
 
-          ${pkgs.crowdsec}/bin/cscli scenarios install crowdsecurity/ssh-bf crowdsecurity/ssh-slow-bf
+          ${pkgs.crowdsec}/bin/cscli scenarios install ${escapeShellArgs cfg.scenarios}
         '';
       in {
         description = "Crowdsec agent";
