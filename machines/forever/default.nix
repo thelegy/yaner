@@ -22,7 +22,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
       "element.0jb.de"
       "matrix.0jb.de"
       "mailmetrics.0jb.de"
-      "pw.0jb.de"
+      "pw.beinke.cloud"
     ];
   };
   wat.thelegy.base.enable = true;

@@ -84,7 +84,6 @@ D("0jb.de", REG_NONE, DnsProvider("inwx"),
   CNAME_ACME("mailmetrics", "forever"),
   CNAME_ACME("matrix", "forever"),
   CNAME_ACME("prometheus", "y"),
-  CNAME_ACME("pw", "forever"),
 
   []
 );
@@ -100,6 +99,7 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   CNAME_ACME("autoconfig", "agony"),
   CNAME_ACME("imap", "agony"),
   CNAME_ACME("smtp", "agony"),
+  CNAME_ACME("pw", "forever"),
 
   []
 )

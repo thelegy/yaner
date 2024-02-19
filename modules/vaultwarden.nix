@@ -12,7 +12,7 @@ with lib;
       liftToNamespace {
         baseDomain = mkOption {
           type = types.str;
-          default = "0jb.de";
+          default = "beinke.cloud";
         };
 
         domain = mkOption {
