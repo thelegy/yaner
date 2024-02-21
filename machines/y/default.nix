@@ -31,6 +31,7 @@ in {
       "klipper.0jb.de"
     ];
   };
+  wat.thelegy.audiobookshelf.enable = true;
   wat.thelegy.backup = {
     enable = true;
     borgbaseRepo = "i65tsnc2";

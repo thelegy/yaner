@@ -96,6 +96,9 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de;"),
   TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdd8tHEdS2GXue5+o131MbV4I8uXYqOxq5qK0oFaChxvUC1sYdXwE+YUsWArT6SFZSADWQIJfvXDtc6JL+dvzQZGsnh9M8CqbIfTo1FHLOWpeKv/wPEbB7fJwqP0mKW9l72DRX7Gyic8VY6ZgTaCA1UjSKlC39FX/AEoyDFpMEwwIDAQAB"),
 
+  ACME("audiobooks", "y"),
+  CNAME("audiobooks", "y.0jb.de.", TTL(60)),
+
   CNAME_ACME("autoconfig", "agony"),
   CNAME_ACME("imap", "agony"),
   CNAME_ACME("smtp", "agony"),
