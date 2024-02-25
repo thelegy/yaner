@@ -48,6 +48,11 @@ mkMachine {} ({ lib, config, ... }: with lib; {
   };
 
   wat.thelegy.static-net.enable = true;
+  wat.thelegy.remote-ip-y = {
+    enable = true;
+    role = "proxy";
+  };
+
 
   networking.nftables.firewall = {
     rules.nixos-firewall.enable = false;
