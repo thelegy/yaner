@@ -74,9 +74,14 @@ in {
   };
 
   networking.nftables.firewall = {
+    zones.home = {
+      interfaces = [ "br0" "rtlan" ];
+    };
     zones.hass-external = {
+      parent = "home";
       ipv4Addresses = [ "192.168.1.30" ];
     };
+    rules.nixos-firewall.from = [ "home" "tailscale" ];
     rules.hass-inbound = {
       from = "all";
       to = [ "hass-external" ];
@@ -84,11 +89,12 @@ in {
     };
     rules.hass-outbound = {
       from = [ "hass-external" ];
-      to = "all";
+      to = ["home"];
       verdict = "accept";
     };
   };
 
+  services.nginx.defaultListenAddresses = ["[fd7a:115c:a1e0::fd1a:221e]"];
   services.udev.extraRules = ''
     SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ENV{ID_PATH}=="pci-0000:05:00.4-usb-0:2:1.0", SYMLINK+="zigstar", GROUP="zigbee", ENV{SYSTEMD_WANTS}="ser2net-zigstar.service"
     SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ENV{ID_PATH}=="pci-0000:01:00.0-usb-0:1:1.0", SYMLINK+="ender3s1"
@@ -112,6 +118,11 @@ in {
       ExecStart = "${pkgs.ser2net}/bin/ser2net -d -u -c ${conf}";
       SupplementaryGroups = [ "zigbee" ];
     };
+  };
+  networking.nftables.firewall.rules.zigstar-hass = {
+    from = ["hass-external"];
+    to = ["fw"];
+    allowedTCPPorts = [20108];
   };
 
   wat.thelegy.ender3s1 = {
