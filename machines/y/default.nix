@@ -46,6 +46,7 @@ in {
   wat.thelegy.monitoring-server.enable = true;
   wat.thelegy.nginx.enable = true;
   wat.thelegy.rtlan-net.enable = true;
+  wat.thelegy.static-net.enable = true;
 
   networking.useDHCP = false;
 

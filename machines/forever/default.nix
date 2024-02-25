@@ -47,6 +47,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     sopsSecretsFile = "vaultwarden";
   };
 
+  wat.thelegy.static-net.enable = true;
 
   networking.nftables.firewall = {
     rules.nixos-firewall.enable = false;
