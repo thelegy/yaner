@@ -48,6 +48,11 @@ in {
   wat.thelegy.rtlan-net.enable = true;
   wat.thelegy.static-net.enable = true;
 
+  wat.thelegy.remote-ip-y = {
+    enable = true;
+    role = "satelite";
+  };
+
   networking.useDHCP = false;
 
   systemd.network = {
