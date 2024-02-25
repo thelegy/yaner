@@ -1,7 +1,6 @@
 { mkTrivialModule
 , ... }: mkTrivialModule {
 
-  networking.firewall.enable = false;
   networking.nftables.stopRuleset = ''
     table inet filter {
       chain input {
@@ -28,6 +27,7 @@
 
   networking.nftables.firewall = {
     enable = true;
+    snippets.nnf-common.enable = true;
   };
 
 }
