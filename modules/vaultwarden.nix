@@ -73,6 +73,13 @@ with lib;
         };
       };
 
+      wat.thelegy.crowdsec = {
+        enable = true;
+        parsers = ["Dominic-Wagner/vaultwarden-logs"];
+        scenarios = ["Dominic-Wagner/vaultwarden-bf"];
+        journalctlFilters = ["SYSLOG_IDENTIFIER=vaultwarden"];
+      };
+
       services.nginx.virtualHosts.${cfg.domain} = {
         forceSSL = true;
         useACMEHost = cfg.useACMEHost;
