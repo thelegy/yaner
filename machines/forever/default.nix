@@ -30,10 +30,8 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     enable = true;
     borgbaseRepo = "dlj1no3s";
   };
-  wat.thelegy.crowdsec = {
-    enable = true;
-    lapi.enable = true;
-  };
+  wat.thelegy.crowdsec.enable = true;
+  wat.thelegy.crowdsec-lapi.enable = true;
   wat.thelegy.dfhq-mc.enable = true;
   wat.thelegy.nginx.enable = true;
   wat.thelegy.matrix = {

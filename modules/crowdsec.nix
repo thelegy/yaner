@@ -20,8 +20,9 @@ with lib; let
 in
   mkModule {
     options = liftToNamespace {
-      lapi = {
-        enable = mkEnableOption "crowdsec local api server";
+      lapiDomain = mkOption {
+        type = types.str;
+        default = "crowdsec.0jb.de";
       };
       sopsLapiCredentialsFile = mkOption {
         type = types.str;
@@ -87,57 +88,12 @@ in
         };
 
         "${configDir}/local_api_credentials.yaml".text = toYAML {
-          url = "http://127.0.0.1:8080/";
+          url = "https://${cfg.lapiDomain}/";
         };
         "${configDir}/local_api_credentials.yaml.local".source = config.sops.secrets.${cfg.sopsLapiCredentialsFile}.path;
 
         "${configDir}/hub".source = hub;
       };
-
-      confDir = pkgs.runCommandLocal "crowdsec-lapi-config" {} ''
-        mkdir $out
-        ln -s ${pkgs.crowdsec}/share/crowdsec/config/patterns $out/
-        ln -s ${pkgs.crowdsec}/share/crowdsec/config/simulation.yaml $out/
-        ln -s ${pkgs.crowdsec}/share/crowdsec/config/profiles.yaml $out/
-      '';
-      mainConfig = yaml.generate "crowdsec-lapi.yaml" {
-        common = {
-          daemonize = true;
-          log_media = "stdout";
-          log_level = "info";
-        };
-        config_paths = {
-          config_dir = "${confDir}";
-          data_dir = "\$STATE_DIRECTORY";
-        };
-        crowdsec_service = {
-          enable = false;
-        };
-        db_config = {
-          type = "sqlite";
-          db_path = "\$STATE_DIRECTORY/crowdsec.db";
-          use_wal = true;
-        };
-        api.client = {
-          insecure_skip_verify = false;
-          credentials_path = lapi_credentials_path;
-        };
-        api.server = {
-          enable = true;
-          listen_uri = "127.0.0.1:8080";
-          profiles_path = "${confDir}/profiles.yaml";
-        };
-        prometheus = {
-          enabled = true;
-          level = "full";
-          listen_addr = "127.0.0.1";
-          listen_port = 6059;
-        };
-      };
-      cscli-lapi = pkgs.writeScriptBin "cscli-lapi" ''
-        #!/bin/sh
-        STATE_DIRECTORY=/var/lib/crowdsec-lapi exec ${pkgs.crowdsec}/bin/cscli -c ${mainConfig} "$@"
-      '';
     in (liftToNamespace {
       parsers = [
         "crowdsecurity/geoip-enrich"
@@ -152,10 +108,7 @@ in
         "_SYSTEMD_UNIT=sshd.service"
       ];
     }) // {
-      environment.systemPackages = mkMerge [
-        [pkgs.crowdsec]
-        (mkIf cfg.lapi.enable [cscli-lapi])
-      ];
+      environment.systemPackages = [pkgs.crowdsec];
       environment.etc = etcConfig;
 
       users.groups.crowdsec = {};
@@ -173,24 +126,6 @@ in
         group = "crowdsec";
         restartUnits = ["cs-firewall-bouncer.service"];
       };
-
-      systemd.services.crowdsec-lapi =
-        mkIf cfg.lapi.enable
-        {
-          description = "Crowdsec local api server";
-          wantedBy = ["multi-user.target"];
-
-          serviceConfig = {
-            Type = "notify";
-            ExecStart = "${pkgs.crowdsec}/bin/crowdsec -c ${mainConfig}";
-            Environment = "LC_ALL=C LANG=C";
-            Restart = "always";
-            RestartSec = 60;
-            DynamicUser = true;
-            StateDirectory = "crowdsec-lapi";
-            SyslogIdentifier = "crowdsec-lapi";
-          };
-        };
 
       systemd.services.crowdsec-agent = let
         preStartScript = pkgs.writeScript "crowdsec-agent-pre-start" ''
@@ -270,7 +205,7 @@ in
           mode = "nftables";
           log_mode = "stdout";
           update_frequency = "10s";
-          api_url = "http://127.0.0.1:8080";
+          api_url = "https://${cfg.lapiDomain}/";
           nftables = {
             ipv4 = {
               set-only = true;

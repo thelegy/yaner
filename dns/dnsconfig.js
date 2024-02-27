@@ -77,6 +77,7 @@ D("0jb.de", REG_NONE, DnsProvider("inwx"),
 
   CNAME_ACME("anki", "forever"),
   CNAME_ACME("autoconfig", "agony"),
+  CNAME_ACME("crowdsec", "forever"),
   CNAME_ACME("element", "forever"),
   CNAME_ACME("grafana", "roborock"),
   CNAME_ACME("grocy", "roborock"),
