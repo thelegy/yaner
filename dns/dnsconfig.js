@@ -5,27 +5,27 @@ var DNS_HETZNER = NewDnsProvider("hetzner");
 
 
 hosts = require("../modules/hosts/hosts.json");
-function HOST(record_name, hostname) {
+function HOST(record_name, hostname, options) {
   var hostname = hostname || record_name;
   var recs = [];
   ipv4 = hosts[hostname]["ipv4Addresses"] || [];
   ipv6 = hosts[hostname]["ipv6Addresses"] || [];
-  for (var a in ipv4) { recs.push(A(record_name, ipv4[a])); }
-  for (var a in ipv6) { recs.push(AAAA(record_name, ipv6[a])); }
+  for (var a in ipv4) { recs.push(A(record_name, ipv4[a], options || [])); }
+  for (var a in ipv6) { recs.push(AAAA(record_name, ipv6[a]), options || []); }
   if (recs.length > 0) { recs.push(ACME(record_name, hostname)); }
   return recs;
 }
 
-function ACME(record_name, target) {
+function ACME(record_name, target, options) {
   record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
   target = target[target.length-1] == "." ? target : target + ".he.0jb.de.";
-  return [ CNAME(record_name, "_acme-challenge."+target) ];
+  return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
 }
 
-function CNAME_ACME(record_name, target) {
+function CNAME_ACME(record_name, target, options) {
   target_cname = target[target.length-1] == "." ? target : target + ".0jb.de.";
   return [
-    CNAME(record_name, target_cname),
+    CNAME(record_name, target_cname, options || []),
     ACME(record_name, target)
   ];
 }
