@@ -48,7 +48,7 @@
   },
 
   "y": {
-    "ipv6Addresses": [ "fd7a:115c:a1e0:ab12:4843:cd96:6263:bc3c" ],
+    "ipv6Addresses": [ "fd7a:115c:a1e0::fd1a:221e" ],
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEOH29k7eZQMrCzgDRgVzzN2nQVUoP/SCEsS/ov4vOPv"
   }
 
