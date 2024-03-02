@@ -201,6 +201,10 @@ in
             "counter drop"
           ];
         };
+        networking.nftables.chains.conntrack.cs-block.rules = [
+          "ip saddr @crowdsec-blacklists reject"
+          "ip6 saddr @crowdsec6-blacklists reject"
+        ];
 
         systemd.services.cs-firewall-bouncer = let
           configFile = yaml.generate "cs-firewall-bouncer.yaml" {
