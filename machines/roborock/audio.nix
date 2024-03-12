@@ -13,31 +13,33 @@ in
     systemWide = true;
     alsa.enable = true;
     pulse.enable = true;
+    configPackages = [
+      (pkgs.writeTextDir "70-snapcast.conf" (
+        json.generate "pipewire-snapcast.conf" {
+          "context.modules" = [
+            {
+              name = "libpipewire-module-pipe-tunnel";
+              args = {
+                "tunnel.mode" = "sink";
+                "pipe.filename" = "/run/pipewire/snapfifo";
+                "audio.format" = "S16LE";
+                "audio.rate" = 48000;
+                "audio.channels" = 2;
+                "stream.props" = {
+                  "node.name" = "Snapcast";
+                  "audio.position" = "FL,FR";
+                };
+              };
+            }
+          ];
+        }
+      ))
+    ];
   };
   systemd.services.pipewire.wantedBy = [ "multi-user.target" ];
 
   #systemd.services.wireplumber.environment.WIREPLUMBER_DEBUG = "3";
 
-  environment.etc."pipewire/pipewire.conf.d/70-snapcast.conf" = {
-    source = json.generate "pipewire-snapcast.conf" {
-        "context.modules" = [
-          {
-          name = "libpipewire-module-pipe-tunnel";
-          args = {
-            "tunnel.mode" = "sink";
-            "pipe.filename" = "/run/pipewire/snapfifo";
-            "audio.format" = "S16LE";
-            "audio.rate" = 48000;
-            "audio.channels" = 2;
-            "stream.props" = {
-              "node.name" = "Snapcast";
-              "audio.position" = "FL,FR";
-            };
-          };
-        }
-      ];
-    };
-  };
 
   #environment.etc."pipewire/pipewire.conf.d/70-loopback.conf" = {
   #  source = json.generate "pipewire-loopback.conf" {
@@ -109,12 +111,13 @@ in
   systemd.services.snapserver.serviceConfig.SupplementaryGroups = [ "pipewire" ];
 
   services.spotifyd = {
-    enable = true;
+    # enable = true;
     config = ''
       [global]
       username_cmd = "cat $CREDENTIALS_DIRECTORY/user"
       password_cmd = "cat $CREDENTIALS_DIRECTORY/password"
       backend = "alsa"
+      use_mpris = false
       device_name = "${config.networking.hostName}"
       device_type = "speaker"
     '';

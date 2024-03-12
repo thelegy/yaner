@@ -15,34 +15,32 @@ with lib;
     enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
+    configPackages = [
+      (pkgs.writeTextDir "50-proxy-output-2_0.conf" ''
+        context.modules = [
+          {
+            name = libpipewire-module-combine-stream
+            args = {
+              combine.mode = sink
+              node.name = "proxy-output-2_0"
+              node.description = "Output Proxy 2.0"
+              combine.latency-compensate = true   # if true, match latencies by adding delays
+              combine.props = {
+                audio.position = [ FL FR ]
+              }
+              stream.props = {
+              }
+              stream.rules = [
+                {
+                  matches = [ { media.class = "Audio/Sink" } ]
+                  actions = { create-stream = { } }
+                }
+              ]
+            }
+      )
+    ];
   };
 
   # systemd.services.pipewire.environment.PIPEWIRE_DEBUG = "W,mod.combine*:D,mod.roc-sink:D";
   # systemd.services.wireplumber.environment.WIREPLUMBER_DEBUG = "3";
-
-  environment.etc."pipewire/pipewire.conf.d/50-proxy-output-2_0.conf".text = ''
-    context.modules = [
-      {
-        name = libpipewire-module-combine-stream
-        args = {
-          combine.mode = sink
-          node.name = "proxy-output-2_0"
-          node.description = "Output Proxy 2.0"
-          combine.latency-compensate = true   # if true, match latencies by adding delays
-          combine.props = {
-            audio.position = [ FL FR ]
-          }
-          stream.props = {
-          }
-          stream.rules = [
-            {
-              matches = [ { media.class = "Audio/Sink" } ]
-              actions = { create-stream = { } }
-            }
-          ]
-        }
-      }
-    ]
-  '';
-
 }

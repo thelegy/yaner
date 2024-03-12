@@ -26,11 +26,12 @@ in {
     ensureUsers = [
       {
         name = "grafana";
-        ensurePermissions = {
-          "DATABASE \"grafana\"" = "ALL PRIVILEGES";
-          "DATABASE \"timescaledb\"" = "CONNECT";
-          "ALL TABLES IN SCHEMA public" = "SELECT";
-        };
+        # Not supported any longer
+        #ensurePermissions = {
+        #  "DATABASE \"grafana\"" = "ALL PRIVILEGES";
+        #  "DATABASE \"timescaledb\"" = "CONNECT";
+        #  "ALL TABLES IN SCHEMA public" = "SELECT";
+        #};
       }
     ];
   };
