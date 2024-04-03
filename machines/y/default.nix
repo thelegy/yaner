@@ -41,6 +41,7 @@ in {
     ];
   };
   wat.thelegy.base.enable = true;
+  wat.thelegy.crowdsec.enable = true;
   wat.thelegy.hass.enable = true;
   wat.thelegy.libation.enable = true;
   wat.thelegy.loki.enable = true;
@@ -48,6 +49,7 @@ in {
   wat.thelegy.nginx.enable = true;
   wat.thelegy.rtlan-net.enable = true;
   wat.thelegy.static-net.enable = true;
+  wat.thelegy.syncthing.enable = true;
 
   wat.thelegy.remote-ip-y = {
     enable = true;
