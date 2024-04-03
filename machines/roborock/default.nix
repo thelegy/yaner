@@ -32,6 +32,7 @@ with lib;
   };
   wat.thelegy.base.enable = true;
   wat.thelegy.builder.enable = true;
+  wat.thelegy.crowdsec.enable = true;
   wat.thelegy.grocy.enable = true;
 
 
