@@ -14,8 +14,8 @@ with lib; let
   hub = pkgs.fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "hub";
-    rev = "v1.5.5";
-    hash = "sha256-04t+lZj51weHbgY0ygmARMa/CMHu1imHLFH981st9Fc=";
+    rev = "v1.5.6";
+    hash = "sha256-mR1JuaGBtTrSOEpCWRMhq9vfe3xhNbVmSV4HNhIQK18=";
   };
 in
   mkModule {
@@ -119,7 +119,7 @@ in
           format = "yaml";
           mode = "0640";
           group = "crowdsec";
-          restartUnits = ["crowdsec.service" "crowdsec-lapi.service"];
+          restartUnits = ["crowdsec-agent.service" "crowdsec-lapi.service"];
         };
 
         sops.secrets.${cfg.sopsBouncerCredentialsFile} = {
@@ -159,8 +159,7 @@ in
             RestartSec = 10;
             DynamicUser = true;
             ReadWritePaths = [
-              "/etc/crowdsec/parsers"
-              "/etc/crowdsec/scenarios"
+              "/etc/crowdsec"
             ];
             SupplementaryGroups = [
               "crowdsec"
