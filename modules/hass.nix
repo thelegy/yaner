@@ -8,11 +8,11 @@
 
 let
 
+  ip = "192.168.1.30";
   domain = "ha.0jb.de";
 
   targetDir = "/var/lib/libvirt/hass";
   fileName = "hass.qcow2";
-  imageUrl = "https://github.com/home-assistant/operating-system/releases/download/9.4/haos_ova-9.4.qcow2.xz";
 
   machineUuid = "352e0f3b-494d-446c-98bf-8b3ee0728356";
 
@@ -44,77 +44,13 @@ let
           <mac address="52:54:00:8b:02:8b" />
           <model type="virtio" />
         </interface>
-        <interface type="bridge">
-          <source bridge="hass" />
-          <model type="virtio" />
-        </interface>
       </devices>
     </domain>
   '';
 
 in mkTrivialModule {
 
-  systemd.network = {
-    enable = true;
-    netdevs.hass = {
-      netdevConfig = {
-        Name = "hass";
-        Kind = "bridge";
-      };
-    };
-    networks.hass = {
-      name = "hass";
-      address = [ "d4:8892:cf78:1::/48" ];
-    };
-  };
-
-  users.users.hass = {
-    uid = 2000;
-    group = "hass";
-    isSystemUser = true;
-  };
-  users.groups.hass.gid = 2000;
-
-  systemd.tmpfiles.rules = [
-    "d /srv/hass-backup 0700 hass hass - -"
-    "d /exports 0555 nobody nobody - -"
-    "d /exports/hass-backup 0700 hass hass - -"
-  ];
-
-  fileSystems."/exports/hass-backup" = {
-    options = [ "bind" ];
-    device = "/srv/hass-backup";
-  };
-
-  services.nfs.server = {
-    enable = true;
-    exports = ''
-      /exports/hass-backup d4:8892:cf78::/48(rw,insecure,all_squash,anonuid=2000,anongid=2000)
-    '';
-  };
-
   wat.thelegy.libvirtd.enable = true;
-
-  systemd.services.hass-image = {
-    serviceConfig.Type = "oneshot";
-    unitConfig.ConditionPathExists = "!${targetDir}/${fileName}";
-    script = ''
-      ${pkgs.coreutils}/bin/mkdir -p "${targetDir}"
-      ${pkgs.curl}/bin/curl --fail --no-progress-meter --location --output "${targetDir}/${fileName}.xz" "${imageUrl}"
-      ${pkgs.xz}/bin/xz --decompress "${targetDir}/${fileName}.xz"
-    '';
-  };
-
-  networking.nftables.firewall = {
-    zones.hass = {
-      interfaces = [ "hass" ];
-    };
-    rules.hass-nfs = {
-      from = [ "hass" ];
-      to = [ "fw" ];
-      allowedTCPPorts = [ 2049 ];
-    };
-  };
 
   systemd.services.hass-vm = {
     serviceConfig = {
@@ -164,7 +100,7 @@ in mkTrivialModule {
     locations."/" = {
       recommendedProxySettings = true;
       proxyWebsockets = true;
-      proxyPass = "http://192.168.1.30:8123";
+      proxyPass = "http://${ip}:8123";
     };
   };
 
