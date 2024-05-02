@@ -27,11 +27,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    queezle-dotfiles = {
-      url = gitlab:jens/dotfiles?host=git.c3pb.de;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     qed.url = github:thelegy/qed/dev;
 
     qbar.url = gitlab:jens/qbar?host=git.c3pb.de;
@@ -63,7 +58,6 @@
       namespace = [ "thelegy" ];
       loadOverlays = [
         flakes.nixGL.overlays.default
-        flakes.queezle-dotfiles.overlay
       ];
       loadModules = [
         flakes.homemanager.nixosModules.home-manager
