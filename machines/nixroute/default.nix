@@ -100,7 +100,7 @@ with lib;
     enable = true;
     publish.enable = true;
     publish.userServices = true;
-    nssmdns = true;
+    nssmdns4 = true;
   };
 
   networking = {

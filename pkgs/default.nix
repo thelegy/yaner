@@ -61,8 +61,6 @@ with final; {
 
   nixGL = final.nixgl.nixGLCommon final.nixgl.nixGLIntel;
 
-  obsidian = prev.obsidian.override { electron = final.electron_28; };
-
   on-demand-shell = {
     name,
     scriptName ? "launch-${name}",
@@ -85,6 +83,11 @@ with final; {
     postPatch = ''
       ${orig.postPatch}
       sed -i 's/\[tool.poetry.scripts\]/[project.scripts]/' -i pyproject.toml
+      sed -i 's/\[tool.poetry\]/[project]/' -i pyproject.toml
+      sed -i 's/license *=.*//' -i pyproject.toml
+      sed -i 's/authors *=.*//' -i pyproject.toml
+      sed -i 's/repository *=.*//' -i pyproject.toml
+      cat pyproject.toml
     '';
   });
 

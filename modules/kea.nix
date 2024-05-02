@@ -23,6 +23,7 @@ let
     "kea" = {
       description = "Kea DHCP server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       preStart = ''
         [[ -d /var/kea && ! -d /var/lib/kea ]] && mv /var/kea /var/lib/kea

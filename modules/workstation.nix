@@ -40,7 +40,7 @@ mkTrivialModule {
       mumble
       nil
       nixGL
-      nixfmt
+      nixfmt-rfc-style
       nixpkgs-fmt
       pass
       preprocess-cancellation
