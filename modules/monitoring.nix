@@ -63,7 +63,6 @@ in
             node_exporter = {
               instance = config.networking.hostName;
               enable_collectors = ["systemd"];
-              disable_collectors = ["nfsd"];
             };
           };
           logs = mkIf (! isNull cfg.lokiUrl) {
