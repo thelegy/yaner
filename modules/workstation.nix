@@ -6,6 +6,7 @@
 
 mkTrivialModule {
 
+  wat.thelegy.cups.enable = true;
   wat.thelegy.desktop.enable = true;
   wat.thelegy.steam.enable = true;
   wat.thelegy.irb-kerberos.enable = true;
