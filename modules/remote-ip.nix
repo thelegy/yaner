@@ -106,6 +106,7 @@ with lib;
               Family = "ipv4";
               From = cfg.staticIp;
               Table = "main";
+              Priority = 12000;
               SuppressPrefixLength = 0;
             };
           }
@@ -114,6 +115,7 @@ with lib;
               Family = "ipv4";
               From = cfg.staticIp;
               Table = cfg.tableId;
+              Priority = 12500;
             };
           }
         ];
