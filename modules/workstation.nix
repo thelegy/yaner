@@ -27,6 +27,7 @@ mkTrivialModule {
       cabal-install
       direnv
       element-desktop
+      entr
       file
       fzf
       git-filter-repo
