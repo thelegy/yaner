@@ -1,5 +1,7 @@
 flakes: final: prev:
 with final; {
+  atopile = python-atopile.pkgs.atopile;
+
   bs-oneclick = callPackage ./bs-oneclick.nix {};
 
   cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix {};
@@ -90,6 +92,17 @@ with final; {
       cat pyproject.toml
     '';
   });
+
+  python-atopile = python311.override {
+    self = __splicedPackages.python-atopile;
+    packageOverrides = pfinal: pprev: {
+      atopile = pfinal.callPackage ./atopile/atopile.nix {};
+      case-converter = pfinal.callPackage ./atopile/case-converter.nix {};
+      docopt_subcommands = pfinal.callPackage ./atopile/docopt-subcommands.nix {};
+      easyeda2ato = pfinal.callPackage ./atopile/easyeda2ato.nix {};
+      eseries = pfinal.callPackage ./atopile/eseries.nix {};
+    };
+  };
 
   qbar = flakes.qbar.packages.${system}.qbar;
 
