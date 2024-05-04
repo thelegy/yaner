@@ -52,7 +52,6 @@ mkTrivialModule {
       obsidian
       signal-desktop
       sops
-      stack
       stylua
       tdesktop
       thunderbird
