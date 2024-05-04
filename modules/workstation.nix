@@ -23,6 +23,7 @@ mkTrivialModule {
     packages = with pkgs; [
       alejandra
       anki-bin
+      atopile
       cabal-install
       direnv
       element-desktop
