@@ -57,6 +57,9 @@ mkTrivialModule {
       stylua
       tdesktop
       thunderbird
+      typst
+      typst-lsp
+      typst-preview
       vscode
     ];
   };
