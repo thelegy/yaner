@@ -106,4 +106,6 @@ with final; {
 
   qbar = flakes.qbar.packages.${system}.qbar;
 
+  typst-languagetool = callPackage ./typst-languagetool.nix {};
+  typst-languagetool-lsp = callPackage ./typst-languagetool.nix {lsp = true;};
 }

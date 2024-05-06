@@ -58,9 +58,12 @@ mkTrivialModule {
       tdesktop
       thunderbird
       typst
+      typst-languagetool
+      typst-languagetool-lsp
       typst-lsp
       typst-preview
       vscode
+      zotero
     ];
   };
 }
