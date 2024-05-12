@@ -110,5 +110,6 @@ mkTrivialModule {
     tig
     lazygit
     w3m
+    with-scope
   ];
 }

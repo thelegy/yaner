@@ -108,4 +108,6 @@ with final; {
 
   typst-languagetool = callPackage ./typst-languagetool.nix {};
   typst-languagetool-lsp = callPackage ./typst-languagetool.nix {lsp = true;};
+
+  with-scope = callPackage ./with-scope.nix {};
 }
