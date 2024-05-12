@@ -1,16 +1,17 @@
-INWX_USER: ENC[AES256_GCM,data:RroGsdfuWA==,iv:VpbhqmQTSKYau4wxBKTYyCL9/rrH+HtYBCkJngEiSLA=,tag:g0A/QYDFFjALYGUAN3HCCg==,type:str]
-INWX_PASS: ENC[AES256_GCM,data:8inNm0nft1W9unaNGwt5t1SMM5fqGPH5g6e8k+BYVCq1ftiIP7ehTPBJ,iv:W3j/HNa931dU+pb84z514y7JkYVFDyBzzsrK2GEnqoQ=,tag:Mv0pHxjqU26EJXbeY1E0MQ==,type:str]
+DESEC_AUTHTOKEN: ENC[AES256_GCM,data:clRfzN0E3ObJF/FraksEeZ4NTJCSWkCNnDJglg==,iv:+aCAQPU5smU0c2+xcA2xCjJKuWSSbUIq/kWT+urKIXY=,tag:Rorgoto7tFoVezn+55GXxA==,type:str]
 HEDNS_USER: ENC[AES256_GCM,data:Hg2UcnuKAA==,iv:kGMwijPp3C6/XK9FRAYlza16PI65+Suc7RXtNz/A9t8=,tag:d6Pun4c1irX++sNsBOgymw==,type:str]
 HEDNS_PASS: ENC[AES256_GCM,data:nS9dlZHwbl0+NDiOLbXdfPb4C7ZIWYL8,iv:wvzj88gOZZi56MauOMYCJBJnvwtp5GE+YAgWSGRfx08=,tag:qd7OH+mN6sRmWmXSk4r5hQ==,type:str]
 HETZNER_APIKEY: ENC[AES256_GCM,data:c0f/t4X/sPUvPg5hvIpRUIOfUQUOAFTkONRrk20LAKA=,iv:L6Wf9BIzaD3FEaM4AEwWKhFkMqiqDH/jWr1AcZStAQ8=,tag:LFptzQQ4FgGb2bcIsWPCGw==,type:str]
+INWX_USER: ENC[AES256_GCM,data:RroGsdfuWA==,iv:VpbhqmQTSKYau4wxBKTYyCL9/rrH+HtYBCkJngEiSLA=,tag:g0A/QYDFFjALYGUAN3HCCg==,type:str]
+INWX_PASS: ENC[AES256_GCM,data:8inNm0nft1W9unaNGwt5t1SMM5fqGPH5g6e8k+BYVCq1ftiIP7ehTPBJ,iv:W3j/HNa931dU+pb84z514y7JkYVFDyBzzsrK2GEnqoQ=,tag:Mv0pHxjqU26EJXbeY1E0MQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2023-08-31T08:27:44Z"
-    mac: ENC[AES256_GCM,data:8cLc7CkILVhbprsAZ+vaLg/32oMMcFYhywjlp0JbLbILdSiuyxM0KFCTU+VPBfYnkV4YQWa1h/vSrGkGQ50R52mNUURazBhc02dPBRvua1TOGlTxZALhSpS20icJiofyNXpzA1ZMIb+L9n02D2RcGB9ivftsQLJ0D7NL69i86jU=,iv:cDj2QvCo+HxfygXwvyFcXf0XBUtLfiu3g+TBvTgGm6I=,tag:TE4jOrJIxHMvUAzCrN+qqA==,type:str]
+    lastmodified: "2024-05-12T09:35:58Z"
+    mac: ENC[AES256_GCM,data:hg8Ffg1S0vXMu/Qr8OlgMh2hx8OWBN3pKilrkRspVURnrgPNZhi60ck6oymFR5CcE4sg/QhSjVCkwy4DjbgyNTcU7zrKKDU7iWlJj8QMbHzrFiX1tcH1cpuvct6tvc3RkvfUNLQhn31m5lo/+Pnk+d4YkoSkqQxS+9abragV8/Q=,iv:F7evemgqqTXNQdB5mg2Y3B8ZW0QNKlzhdBKMRWGQBac=,tag:IJDSrwr50QCzxsWR2xO+WA==,type:str]
     pgp:
         - created_at: "2023-08-28T12:09:37Z"
           enc: |
@@ -33,4 +34,4 @@ sops:
             -----END PGP MESSAGE-----
           fp: CC340A1392661DD38B0DE83DABB80FCB4FFE0BC5
     unencrypted_suffix: _unencrypted
-    version: 3.7.3
+    version: 3.8.1

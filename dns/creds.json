@@ -1,8 +1,7 @@
 {
-  "inwx": {
-    "TYPE": "INWX",
-    "username": "$INWX_USER",
-    "password": "$INWX_PASS",
+  "desec": {
+    "TYPE": "DESEC",
+    "auth-token": "$DESEC_AUTHTOKEN",
   },
   "he": {
     "TYPE": "HEDNS",
@@ -12,5 +11,10 @@
   "hetzner": {
     "TYPE": "HETZNER",
     "api_key": "$HETZNER_APIKEY",
+  },
+  "inwx": {
+    "TYPE": "INWX",
+    "username": "$INWX_USER",
+    "password": "$INWX_PASS",
   },
 }

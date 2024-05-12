@@ -1,7 +1,10 @@
 var REG_NONE = NewRegistrar("none");
-var DNS_INWX = NewDnsProvider("inwx");
+var REG_INWX = NewRegistrar("inwx");
+
+var DNS_DESEC = NewDnsProvider("desec")
 var DNS_HE = NewDnsProvider("he");
 var DNS_HETZNER = NewDnsProvider("hetzner");
+var DNS_INWX = NewDnsProvider("inwx");
 
 
 hosts = require("../modules/hosts/hosts.json");
