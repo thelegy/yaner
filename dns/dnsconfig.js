@@ -38,6 +38,14 @@ function INWX_PARKING(record_name) {
   return A(record_name, "185.181.104.242")
 }
 
+function CAA_LETSENCRYPT(record_name) {
+  return CAA_BUILDER({
+    label: record_name || "@",
+    issue: ["letsencrypt.org;validationmethods=dns-01"],
+    issue_critical: true,
+  });
+}
+
 
 DEFAULTS(
   NAMESERVER_TTL("1d"),
@@ -53,6 +61,8 @@ D("he.0jb.de", REG_NONE, DnsProvider("he"),
 )
 
 D("0jb.de", REG_NONE, DnsProvider("desec"),
+  CAA_LETSENCRYPT(),
+
   NS("he", "ns1.he.net."),
   NS("he", "ns2.he.net."),
   NS("he", "ns3.he.net."),
@@ -96,6 +106,8 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
 );
 
 D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
+  CAA_LETSENCRYPT(),
+
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
@@ -113,6 +125,8 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
 )
 
 D("janbeinke.com", REG_NONE, DnsProvider("inwx"),
+  CAA_LETSENCRYPT(),
+
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
@@ -127,6 +141,8 @@ D("janbeinke.com", REG_NONE, DnsProvider("inwx"),
 )
 
 D("thelegy.de", REG_NONE, DnsProvider("inwx"),
+  CAA_LETSENCRYPT(),
+
   INWX_PARKING("@"),
 
   TXT("_keybase", "keybase-site-verification=EO_b3ub9rlX1xBO3KbEPfOh6PkrvTZXOOC0EzfIW0TI"),
@@ -135,6 +151,8 @@ D("thelegy.de", REG_NONE, DnsProvider("inwx"),
 )
 
 D("die-cloud.org", REG_NONE, DnsProvider("hetzner"),
+  CAA_LETSENCRYPT(),
+
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
@@ -146,6 +164,8 @@ D("die-cloud.org", REG_NONE, DnsProvider("hetzner"),
 )
 
 D("janbeinke.de", REG_NONE, DnsProvider("inwx"),
+  CAA_LETSENCRYPT(),
+
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
@@ -158,6 +178,8 @@ D("janbeinke.de", REG_NONE, DnsProvider("inwx"),
 )
 
 D("peterbeinke.de", REG_NONE, DnsProvider("inwx"),
+  CAA_LETSENCRYPT(),
+
   INWX_PARKING("@"),
 
   MX("@", 10, "agony.0jb.de."),
