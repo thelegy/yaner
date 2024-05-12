@@ -18,6 +18,7 @@ function HOST(record_name, hostname, options) {
 
 function ACME(record_name, target, options) {
   record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
+  if(target.substring(0,7) === "static-") target = target.substring(7);
   target = target[target.length-1] == "." ? target : target + ".he.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
 }
@@ -68,7 +69,6 @@ D("0jb.de", REG_NONE, DnsProvider("inwx"),
   HOST("@", "forever"),
 
   A("static-y", "195.201.46.105"),
-  ACME("static-y", "y"),
 
   CNAME("backup", "forever"),
   CNAME("mail", "maildeb9"),
