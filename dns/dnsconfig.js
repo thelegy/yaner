@@ -52,7 +52,7 @@ D("he.0jb.de", REG_NONE, DnsProvider("he"),
   []
 )
 
-D("0jb.de", REG_NONE, DnsProvider("inwx"),
+D("0jb.de", REG_NONE, DnsProvider("desec"),
   NS("he", "ns1.he.net."),
   NS("he", "ns2.he.net."),
   NS("he", "ns3.he.net."),
