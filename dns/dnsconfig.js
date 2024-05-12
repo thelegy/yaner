@@ -84,8 +84,6 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
   A("static-y", "195.201.46.105"),
 
   CNAME("backup", "forever"),
-  CNAME("mail", "maildeb9"),
-  CNAME("maildeb", "maildeb9"),
   CNAME("mc", "forever"),
 
   CNAME_ACME("anki", "forever"),
