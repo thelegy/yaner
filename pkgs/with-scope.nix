@@ -33,8 +33,9 @@ writeScriptBin "with-scope" ''
   }
 
   set +e
-  ${systemd}/bin/systemd-run --user --scope --collect --unit=$unit $@
 
   # no exec because of the trap
+  ${systemd}/bin/systemd-run --user --scope --collect --unit=$unit $@
+
   exit $?
 ''
