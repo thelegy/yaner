@@ -1,45 +1,40 @@
 {
   systemd,
-  writeScript,
   writeScriptBin,
   zsh,
-}: let
-  innerScript = writeScript "with-scope-inner" ''
-    #!${zsh}/bin/zsh
+}:
+writeScriptBin "with-scope" ''
+  #!${zsh}/bin/zsh
 
-    unit_name=''${$(</proc/self/cgroup)##*/}
+  set -euo pipefail
 
-    TRAPEXIT() {
-      ${systemd}/bin/systemctl --user stop $unit_name 2>/dev/null || true
-    }
+  usage() {
+    echo "Usage: $0 [-s/--scope <scope_name>] <command...>"
+    exit 1
+  }
 
-    # No `exec`, as this will negate the effects of the trap
-    $@
-    exit $?
-  '';
-in
-  writeScriptBin "with-scope" ''
-    #!${zsh}/bin/zsh
+  zparseopts -D -F -A opts - s:=scope -scope:=scope || usage
 
-    set -euo pipefail
+  # at least one positional argument is required
+  (( $# < 1 )) && usage
 
-    usage() {
-      echo "Usage: $0 [-s/--scope <scope_name>] <command...>"
-      exit 1
-    }
+  unit_name="with-scope-%"
 
-    zparseopts -D -F -A opts - s:=scope -scope:=scope || usage
+  if (( $#scope > 0 )) {
+    # forbid multiple scope flags (each takes 2 slots in the array)
+    (( $#scope != 2 )) && usage
+    unit_name=''${scope[2]}
+  }
 
-    # at least one positional argument is required
-    (( $# < 1 )) && usage
+  unit=''${unit_name//\%/$RANDOM}.scope
 
-    args=()
+  TRAPEXIT() {
+    ${systemd}/bin/systemctl --user stop $unit_name 2>/dev/null || true
+  }
 
-    if (( $#scope > 0 )) {
-      # forbid multiple scope flags (each takes 2 slots in the array)
-      (( $#scope != 2 )) && usage
-      args+=("--unit=''${scope[2]}.scope")
-    }
+  set +e
+  ${systemd}/bin/systemd-run --user --scope --collect --unit=$unit $@
 
-    exec ${systemd}/bin/systemd-run --user --scope --collect $args ${innerScript} $@
-  ''
+  # no exec because of the trap
+  exit $?
+''
