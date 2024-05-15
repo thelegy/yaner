@@ -23,6 +23,9 @@
   ruamel-yaml,
   schema,
   scipy,
+  quart,
+  quart-cors,
+  quart-schema,
   semver,
   toolz,
   unicorn,
@@ -32,12 +35,12 @@
 }:
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.2.46";
+  version = "0.2.50";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4eyNlZt5unxU6EW7oStuxpYE2/QkPx4DzRpE0pUDcRA=";
+    hash = "sha256-nUUynMECUl0j677ZpmX6qSmhFBWsVGdVg3k30XDbluI=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +70,9 @@ buildPythonPackage rec {
     schema
     scipy
     semver
+    quart
+    quart-cors
+    quart-schema
     toolz
     unicorn
     uvicorn

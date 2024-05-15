@@ -101,6 +101,7 @@ with final; {
       docopt_subcommands = pfinal.callPackage ./atopile/docopt-subcommands.nix {};
       easyeda2ato = pfinal.callPackage ./atopile/easyeda2ato.nix {};
       eseries = pfinal.callPackage ./atopile/eseries.nix {};
+      quart-schema = pfinal.callPackage ./atopile/quart-schema.nix {};
     };
   };
 

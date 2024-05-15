@@ -6,11 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "easyeda2ato";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4p5KxiZgbjWtwZO2eFo7ym5cKfKR6RzX5uS6RqaN40g=";
+    hash = "sha256-bHhBN+h9Vx9Q4wZVKxMzkEEXzV7hKoQz8i+JpkSFsYA=";
   };
 
   propagatedBuildInputs = [requests pydantic];
