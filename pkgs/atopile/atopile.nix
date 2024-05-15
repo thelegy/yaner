@@ -32,6 +32,7 @@
   uvicorn,
   waitress,
   watchfiles,
+  pyyaml,
 }:
 buildPythonPackage rec {
   pname = "atopile";
@@ -78,5 +79,6 @@ buildPythonPackage rec {
     uvicorn
     waitress
     watchfiles
+    pyyaml
   ];
 }
