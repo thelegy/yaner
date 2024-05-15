@@ -30,7 +30,7 @@ writeScriptBin "with-scope" ''
   unit=''${unit_name//\%/$random}.scope
 
   TRAPEXIT() {
-    ${systemd}/bin/systemctl --user stop $unit_name 2>/dev/null || true
+    ${systemd}/bin/systemctl --user stop $unit 2>/dev/null || true
   }
 
   set +e
