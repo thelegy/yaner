@@ -29,9 +29,10 @@ writeScriptBin "with-scope" ''
   random=$(${systemd}/bin/systemd-id128 new)
   unit=''${unit_name//\%/$random}.scope
 
-  TRAPEXIT() {
+  cleanup() {
     ${systemd}/bin/systemctl --user stop $unit 2>/dev/null || true
   }
+  trap cleanup EXIT INT QUIT TERM
 
   set +e
 
