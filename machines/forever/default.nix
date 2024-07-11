@@ -21,7 +21,6 @@ mkMachine {} ({ lib, config, ... }: with lib; {
       "0jb.de"
       "element.0jb.de"
       "matrix.0jb.de"
-      "mailmetrics.0jb.de"
       "pw.beinke.cloud"
     ];
   };
