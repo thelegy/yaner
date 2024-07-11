@@ -14,6 +14,7 @@ mkModule {
           hostName = mkOption { type = types.str; };
           ipv4Addresses = mkOption { type = types.listOf types.str; default = [ ]; };
           ipv6Addresses = mkOption { type = types.listOf types.str; default = [ ]; };
+          ipv6Tailscale = mkOption { type = types.nullOr types.str; default = null; };
           publicKey = mkOption { type = types.nullOr types.str; default = null; };
         };
         config = { hostName = name; };
@@ -22,13 +23,15 @@ mkModule {
     };
   };
 
-  config = cfg:
+  config = cfg: let
+    nullableToList = x: if isNull x then [] else [x];
+  in
     (liftToNamespace { hosts = importJSON ./hosts.json; })
     //
     {
       networking.hosts = mkMerge
         (mapAttrsToList
-          (_: host: genAttrs (host.ipv4Addresses ++ host.ipv6Addresses) (_: [ host.hostName ]))
+          (_: host: genAttrs (if isNull host.ipv6Tailscale then (host.ipv4Addresses ++ host.ipv6Addresses) else [host.ipv6Tailscale]) (_: [ host.hostName ]))
           cfg.hosts);
       programs.ssh.knownHosts =
         mapAttrs
@@ -37,7 +40,7 @@ mkModule {
             hostNames = [
               host.hostName
               "${host.hostName}.${config.networking.domain}"
-            ] ++ host.ipv4Addresses ++ host.ipv6Addresses;
+            ] ++ host.ipv4Addresses ++ host.ipv6Addresses ++ (nullableToList host.ipv6Tailscale);
           })
           (filterAttrs (_: host: !isNull host.publicKey) cfg.hosts);
     };
