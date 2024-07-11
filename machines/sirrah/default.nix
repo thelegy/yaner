@@ -51,14 +51,14 @@ in
   hardware.cpu.amd.updateMicrocode = true;
   powerManagement.cpuFreqGovernor = "schedutil";
 
-  hardware.opengl.extraPackages = with pkgs; [
+  hardware.graphics.extraPackages = with pkgs; [
     #rocm-opencl-icd
     #rocm-opencl-runtime
     amdvlk
   ];
 
   # To enable Vulkan support for 32-bit applications, also add:
-  hardware.opengl.extraPackages32 = with pkgs.driversi686Linux; [
+  hardware.graphics.extraPackages32 = with pkgs.driversi686Linux; [
     amdvlk
   ];
   environment.variables.AMD_VULKAN_ICD = "RADV";  # as opposed to AMDVLK

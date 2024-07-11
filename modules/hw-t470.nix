@@ -14,7 +14,7 @@ mkTrivialModule {
     coreOffset = -80;  # undervolt the CPU in mV
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = [ pkgs.intel-media-driver ];
   };
