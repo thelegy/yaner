@@ -103,7 +103,6 @@ mkTrivialModule {
     inxi-full
     kitty.terminfo
     lm_sensors
-    magic-wormhole
     neovim-thelegy
     reptyr
     ripgrep
