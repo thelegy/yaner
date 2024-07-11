@@ -30,6 +30,7 @@ in {
       "ha.0jb.de"
       "klipper.0jb.de"
     ];
+    dnsProvider = "hurricane";
   };
   wat.thelegy.audiobookshelf.enable = true;
   wat.thelegy.backup = {

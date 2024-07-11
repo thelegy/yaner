@@ -26,7 +26,10 @@ function HOST(record_name, hostname, options) {
 function ACME(record_name, target, options) {
   record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
   if(target.substring(0,7) === "static-") target = target.substring(7);
-  target = target[target.length-1] == "." ? target : target + ".he.0jb.de.";
+  if(target == "agony") target = "agony.he.0jb.de.";
+  if(target == "roborock") target = "roborock.he.0jb.de.";
+  if(target == "y") target = "y.he.0jb.de.";
+  target = target[target.length-1] == "." ? target : target + ".desec.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
 }
 
@@ -72,6 +75,9 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
   NS("he", "ns3.he.net."),
   NS("he", "ns4.he.net."),
   NS("he", "ns5.he.net."),
+
+  IGNORE("_acme-challenge.*.desec", "TXT"),
+  CAA("*.desec", "issue", ";"),  // needed to prevent NXDOMAIN in acme lookup
 
   MX("@", 10, "agony"),
   TXT("@", "v=spf1 mx -all"),

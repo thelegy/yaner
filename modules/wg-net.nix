@@ -128,9 +128,9 @@ in {
         attrValues
         (filter (node: node.enable))
         (map (node: {
-          wireguardPeerConfig.PublicKey = node.publicKey;
-          wireguardPeerConfig.AllowedIPs = node.allowedIPs;
-          wireguardPeerConfig.Endpoint = let
+          PublicKey = node.publicKey;
+          AllowedIPs = node.allowedIPs;
+          Endpoint = let
             noEndpoint = isNull node.endpoint;
             noPort = isNull node.port;
             noColon = isNull (strings.match ".*:.*" node.endpoint);

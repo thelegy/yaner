@@ -23,6 +23,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
       "matrix.0jb.de"
       "pw.beinke.cloud"
     ];
+    dnsProvider = "desec";
   };
   wat.thelegy.base.enable = true;
   wat.thelegy.backup = {

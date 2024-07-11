@@ -88,16 +88,12 @@ with lib;
         networkConfig.IPForward = mkIf isProxy "ipv4";
         routes = [
           (mkIf isSatelite {
-            routeConfig = {
-              Table = cfg.tableId;
-              Gateway = cfg.internalProxyIp;
-            };
+            Table = cfg.tableId;
+            Gateway = cfg.internalProxyIp;
           })
           (mkIf isProxy {
-            routeConfig = {
-              Destination = cfg.staticIp;
-              Gateway = cfg.internalSateliteIp;
-            };
+            Destination = cfg.staticIp;
+            Gateway = cfg.internalSateliteIp;
           })
         ];
         routingPolicyRules = mkIf isSatelite [

@@ -26,6 +26,7 @@ mkMachine {
       "imap.beinke.cloud"
       "smtp.beinke.cloud"
     ];
+    dnsProvider = "hurricane";
   };
   wat.thelegy.backup = {
     enable = true;

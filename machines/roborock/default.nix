@@ -25,6 +25,7 @@ with lib;
     reloadUnits = [
       "nginx.service"
     ];
+    dnsProvider = "hurricane";
   };
   wat.thelegy.backup = {
     enable = true;
