@@ -13,8 +13,12 @@ function HOST(record_name, hostname, options) {
   var recs = [];
   ipv4 = hosts[hostname]["ipv4Addresses"] || [];
   ipv6 = hosts[hostname]["ipv6Addresses"] || [];
+  ipv6Tailscale = hosts[hostname]["ipv6Tailscale"] || null;
   for (var a in ipv4) { recs.push(A(record_name, ipv4[a], options || [])); }
   for (var a in ipv6) { recs.push(AAAA(record_name, ipv6[a]), options || []); }
+  if (recs.length == 0 && ipv6Tailscale !== null) {
+    recs.push(AAAA(record_name, ipv6Tailscale), options || []);
+  }
   if (recs.length > 0) { recs.push(ACME(record_name, hostname)); }
   return recs;
 }
