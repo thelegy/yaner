@@ -57,11 +57,10 @@ mkTrivialModule {
       stylua
       tdesktop
       thunderbird
+      tinymist
       typst
       typst-languagetool
       typst-languagetool-lsp
-      typst-lsp
-      typst-preview
       vscode
       zotero
     ];
