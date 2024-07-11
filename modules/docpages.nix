@@ -40,7 +40,7 @@ let
       };
       script = ''
         mkdir -p ${escapeShellArg docpageCfg.target_dir}
-        ${pkgs.nixUnstable}/bin/nix build \
+        ${pkgs.nix}/bin/nix build \
           --no-write-lock-file \
           --out-link ${escapeShellArg "${docpageCfg.target_dir}/${docpageCfg.tag}"} \
           ${escapeShellArg docpageCfg.flake}
