@@ -47,6 +47,7 @@ mkTrivialModule {
       spotify
       translate-shell
       wl-clipboard
+      wl-mirror
       yt-dlp
     ];
   };
