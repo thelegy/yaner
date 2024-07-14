@@ -18,7 +18,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
   wat.thelegy.workstation.enable = true;
 
   wat.thelegy.syncthing.enable = true;
-  services.syncthing.user = "lisa";
+  services.syncthing.user = "peter";
 
   wat.thelegy.backup = {
     enable = true;
@@ -42,6 +42,19 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
     shell = pkgs.zsh;
     hashedPassword = "$6$rounds=424242$n6onp6FmPbfv1VFb$tLW/WVJicio45CYydrhlRKZwmPMOnFZX7YdH8l1gm4Wja7VBVD5pmvG11UB.58m8Lh8DaClF10L.FtRJfKG7R0";
     packages = with pkgs; [
+      xdg_utils
+    ];
+  };
+
+  users.users.peter = {
+    uid = 1002;
+    isNormalUser = true;
+    #extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
+    hashedPassword = "$6$rounds=424242$4dgdzqgZPjX9ZH0U$.UMfnUAG2LXFCuuyrKCwH2ORViJ2hZK4coYW1ZzpACjhDsIexhRGHVuOmD/6A5B8/c8ndbdX5jZxfA8NxCcXI0";
+    packages = with pkgs; [
+      audacity
+      libreoffice
       xdg_utils
     ];
   };
