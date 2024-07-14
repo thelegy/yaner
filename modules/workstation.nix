@@ -35,8 +35,6 @@ mkTrivialModule {
       fzf
       git-filter-repo
       git-revise
-      joplin
-      joplin-desktop
       kicad-small
       launch-cadquery
       ldns
