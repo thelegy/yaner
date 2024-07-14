@@ -28,8 +28,6 @@ mkModule {
   };
   config = cfg: {
 
-    networking.firewall.allowedUDPPorts = [ cfg.port ];
-
     networking.networkmanager.unmanaged = [ cfg.interfaceName ];
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 
@@ -92,6 +90,11 @@ mkModule {
       zones.tailscale = {
         parent = "tailscale-range";
         interfaces = [ cfg.interfaceName ];
+      };
+      rules.tailscale-transports = {
+        from = "all";
+        to = ["fw"];
+        allowedUDPPorts = [ cfg.port ];
       };
       rules.tailscale-spoofing = {
         from = [ "tailscale-range" ];
