@@ -49,7 +49,10 @@ with lib;
 
       systemd.tmpfiles.rules = [ "d ${backupDir} 0700 ${user} ${group}" ];
 
-      systemd.services.vaultwarden.serviceConfig.SupplementaryGroups = mkIf sopsIsUsed ["keys"];
+      systemd.services.vaultwarden = {
+        preStart = "rm -f $STATE_DIRECTORY/config.json";
+        serviceConfig.SupplementaryGroups = mkIf sopsIsUsed ["keys"];
+      };
 
       sops.secrets.${cfg.sopsSecretsFile} = mkIf sopsIsUsed {
         format = "yaml";
