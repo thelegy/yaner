@@ -4,6 +4,11 @@ with final; {
 
   bs-oneclick = callPackage ./bs-oneclick.nix {};
 
+  crowdsec =
+    if lib.versionOlder prev.crowdsec.version "1.6.0"
+    then flakes.nixpkgs.legacyPackages.${system}.crowdsec
+    else prev.crowdsec;
+
   cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix {};
 
   formats =
@@ -35,7 +40,10 @@ with final; {
 
   itd = callPackage ./itd.nix {};
 
+  kicad-small = prev.kicad-small.override { python3 = python311; };
+
   klipper = flakes.nixpkgs-stable.legacyPackages.${final.system}.klipper;
+  klipper-firmware = flakes.nixpkgs-stable.legacyPackages.${final.system}.klipper-firmware;
 
   launch-cadquery = let
     cq-flake = final.fetchFromGitHub {
@@ -51,7 +59,7 @@ with final; {
     };
 
   lego =
-    if lib.versionOlder prev.lego.version "4.9.1"
+    if lib.versionOlder prev.lego.version "4.13.2"
     then flakes.nixpkgs.legacyPackages.${system}.lego
     else prev.lego;
 
