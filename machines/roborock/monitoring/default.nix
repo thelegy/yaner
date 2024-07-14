@@ -1,13 +1,17 @@
-{ lib
-, pkgs
-, ... }: with lib;
-
-
-let
+{
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   local_ip = "127.0.0.60";
   local_port = 3000;
   domain = "grafana.0jb.de";
 in {
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "timescaledb"
+    ];
 
   services.postgresql = {
     enable = true;
@@ -83,7 +87,7 @@ in {
   wat.thelegy.monitoring.scrapeConfigs.grafana = {
     static_configs = [
       {
-        targets = [ "${local_ip}:${toString local_port}" ];
+        targets = ["${local_ip}:${toString local_port}"];
       }
     ];
   };
@@ -94,5 +98,4 @@ in {
       proxyWebsockets = true;
     };
   };
-
 }
