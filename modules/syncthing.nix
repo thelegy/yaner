@@ -26,6 +26,7 @@ mkModule {
       if usesSops
       then config.sops.secrets.${cfg.sopsPasswordFile}.path
       else cfg.passwordFile;
+    port = 8384;
   in {
 
     sops.secrets.${cfg.sopsPasswordFile} = mkIf usesSops {
@@ -39,6 +40,7 @@ mkModule {
     services.syncthing = {
       enable = true;
       openDefaultPorts = true;
+      guiAddress = mkForce "0.0.0.0:${toString port}";
 
       user = mkDefault "beinke";
       group = mkDefault "users";
@@ -84,6 +86,14 @@ mkModule {
     };
 
     environment.systemPackages = [ package ];
+
+    wat.thelegy.backup.extraExcludes = ["/srv/sync/replica"];
+
+    networking.nftables.firewall.rules.syncthing-gui = {
+      from = ["tailscale"];
+      to = ["fw"];
+      allowedTCPPorts = [port];
+    };
 
   };
 }
