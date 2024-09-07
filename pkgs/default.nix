@@ -89,6 +89,11 @@ with final; {
       exec nix shell "$gc_root_dir/${name}" ${args} "$@"
     '';
 
+  opensshWithKerberos =
+    if lib.hasAttr "opensshWithKerberos" prev
+    then prev.opensshWithKerberos
+    else prev.openssh;
+
   preprocess-cancellation = python3Packages.preprocess-cancellation.overrideAttrs (orig: {
     postPatch = ''
       ${orig.postPatch}

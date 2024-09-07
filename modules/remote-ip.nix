@@ -85,7 +85,7 @@ with lib;
           (mkIf isSatelite "${cfg.staticIp}/32")
         ];
         linkConfig.RequiredForOnline = "no";
-        networkConfig.IPForward = mkIf isProxy "ipv4";
+        networkConfig.IPv4Forwarding = mkIf isProxy true;
         routes = [
           (mkIf isSatelite {
             Table = cfg.tableId;

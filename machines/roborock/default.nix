@@ -104,7 +104,8 @@ with lib;
     };
     networks.internal2 = {
       name = "internal2";
-      networkConfig.IPForward = true;
+      networkConfig.IPv4Forwarding = true;
+      networkConfig.IPv6Forwarding = true;
       extraConfig = ''
         [Network]
         #DHCPv6PrefixDelegation = yes
@@ -131,7 +132,8 @@ with lib;
       name = "uplink2";
       DHCP = "ipv6";
       networkConfig = {
-        IPForward = true;
+        IPv4Forwarding = true;
+        IPv6Forwarding = true;
         KeepConfiguration = "static";
       };
       extraConfig = ''
@@ -147,7 +149,8 @@ with lib;
       name = "uplink";
       DHCP = "yes";
       networkConfig = {
-        IPForward = true;
+        IPv4Forwarding = true;
+        IPv6Forwarding = true;
         IPv6AcceptRA = true;
         IPv6PrivacyExtensions = true;
         #IPv6PrefixDelegation = "yes";

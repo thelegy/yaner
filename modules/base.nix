@@ -59,6 +59,7 @@ mkTrivialModule {
   programs = {
     less.enable = true;
     mtr.enable = true;
+    ssh.package = pkgs.opensshWithKerberos;
     tmux.enable = true;
   };
 
