@@ -1,6 +1,19 @@
 { lib, mkTrivialModule, pkgs, ... }:
 with lib;
 
+let
+
+  toml = pkgs.formats.toml {};
+
+  direnvConfigFile = toml.generate "direnv.toml" {
+    global.hide_env_diff = true;
+  };
+  direnvConfig = pkgs.runCommandLocal "direnv" {} ''
+    mkdir $out
+    cp ${direnvConfigFile} $out/direnv.toml
+  '';
+
+in
 mkTrivialModule {
 
   programs.zsh = {
@@ -51,6 +64,7 @@ mkTrivialModule {
       key[C-Down]=''${terminfo[kDN5]}
 
       if {_exists direnv} {
+        export DIRENV_CONFIG=${direnvConfig}
         eval "$(direnv hook zsh)"
         # Manually call the hook to ensure it is not run while the instant prompt is shown
         _direnv_hook
