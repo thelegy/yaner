@@ -139,6 +139,7 @@ in {
             then node.endpoint
             else "${node.endpoint}:${toString node.port}"
           );
+          PersistentKeepalive = net.thisNode.persistentKeepalive;
         }))
       ];
     }) cfg);
