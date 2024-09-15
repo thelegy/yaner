@@ -22,6 +22,10 @@ mkTrivialModule {
   environment.systemPackages = [pkgs.man-pages pkgs.man-pages-posix];
   documentation.dev.enable = true;
 
+  services.udev.packages = [
+    pkgs.probe-rs-udev
+  ];
+
   users.users.beinke = {
     packages = with pkgs; [
       alejandra
