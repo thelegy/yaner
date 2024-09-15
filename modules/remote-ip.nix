@@ -117,7 +117,10 @@ with lib;
         ];
       };
 
-      systemd.network.networks.${cfg.internetNetwork}.networkConfig.IPv4ProxyARP = mkIf isProxy true;
+      systemd.network.networks.${cfg.internetNetwork}.networkConfig = mkIf isProxy {
+        IPv4Forwarding = true;
+        IPv4ProxyARP = true;
+      };
 
       networking.nftables.firewall = {
         zones."${cfg.name}-interface".interfaces = [cfg.name];
