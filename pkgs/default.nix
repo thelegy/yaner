@@ -5,9 +5,12 @@ with final; {
   bs-oneclick = callPackage ./bs-oneclick.nix {};
 
   crowdsec =
-    if lib.versionOlder prev.crowdsec.version "1.6.0"
-    then flakes.nixpkgs.legacyPackages.${system}.crowdsec
-    else prev.crowdsec;
+    (
+      if lib.versionOlder prev.crowdsec.version "1.6.0"
+      then flakes.nixpkgs.legacyPackages.${system}.crowdsec
+      else prev.crowdsec
+    )
+    .overrideAttrs (orig: {ldflags = builtins.map (lib.replaceStrings ["refs/tags/"] [""]) orig.ldflags;});
 
   cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix {};
 
