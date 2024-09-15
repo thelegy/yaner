@@ -109,6 +109,19 @@ with final; {
     '';
   });
 
+  probe-rs-udev =
+    runCommand "probe-rs-udev" {
+      src = fetchFromGitHub {
+        owner = "probe-rs";
+        repo = "webpage";
+        rev = "c8dbcf0";
+        hash = "sha256-hZv+rZ+aY4sxfBgS2xxdLnfNQh9W1SvYGIBjGUIcPbg=";
+      };
+    } ''
+      mkdir -p "$out/etc/udev/rules.d"
+      cp "$src/src/static/files/69-probe-rs.rules" "$out/etc/udev/rules.d/"
+    '';
+
   python-atopile = python311.override {
     self = __splicedPackages.python-atopile;
     packageOverrides = pfinal: pprev: {
