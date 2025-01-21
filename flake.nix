@@ -7,8 +7,6 @@
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nixpkgs-starblade.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     wat = {
       url = "github:thelegy/wat";
       inputs.nixpkgs.follows = "nixpkgs";

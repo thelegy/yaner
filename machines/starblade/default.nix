@@ -1,7 +1,6 @@
 { mkMachine, flakes, ... }:
 mkMachine
   {
-    nixpkgs = flakes.nixpkgs-starblade;
   }
   (
     {
