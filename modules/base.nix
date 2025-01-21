@@ -82,7 +82,7 @@ mkTrivialModule {
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMCC4cFL1xcZOsIzXg1b/M4b89ofMKErNhg9s+0NdBVC beinke@th1"
     ];
     packages = with pkgs; [
-      xdg_utils
+      xdg-utils
     ];
   };
 
@@ -95,7 +95,7 @@ mkTrivialModule {
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
-  nix.package = pkgs.nixFlakes;
+  nix.package = pkgs.lix;
 
   environment.systemPackages = with pkgs; [
     git

@@ -97,17 +97,7 @@ with final; {
     then prev.opensshWithKerberos
     else prev.openssh;
 
-  preprocess-cancellation = python3Packages.preprocess-cancellation.overrideAttrs (orig: {
-    postPatch = ''
-      ${orig.postPatch}
-      sed -i 's/\[tool.poetry.scripts\]/[project.scripts]/' -i pyproject.toml
-      sed -i 's/\[tool.poetry\]/[project]/' -i pyproject.toml
-      sed -i 's/license *=.*//' -i pyproject.toml
-      sed -i 's/authors *=.*//' -i pyproject.toml
-      sed -i 's/repository *=.*//' -i pyproject.toml
-      cat pyproject.toml
-    '';
-  });
+  preprocess-cancellation = python3Packages.preprocess-cancellation;
 
   probe-rs-udev =
     runCommand "probe-rs-udev" {

@@ -84,7 +84,7 @@ in
   users.users.beinke.extraGroups = [ "vboxusers" "dialout" "libvirt" ];
 
   users.users.beinke.packages = with pkgs; [
-    BeatSaberModManager
+    #BeatSaberModManager
     blender
     patchelf
     prismlauncher

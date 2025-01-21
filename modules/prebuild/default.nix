@@ -108,7 +108,7 @@ mkTrivialModule {
     path = with pkgs; [
       git
       gnupg
-      nixFlakes
+      lix
       openssh
       strace
     ];

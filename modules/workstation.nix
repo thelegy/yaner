@@ -13,11 +13,9 @@ mkTrivialModule {
 
   nixpkgs.config.allowUnfree = true;
 
-  boot.kernel.sysctl =
-    options.boot.kernel.sysctl.default
-    // {
-      "fs.inotify.max_user_watches" = 524288;
-    };
+  boot.kernel.sysctl = {
+    "fs.inotify.max_user_watches" = lib.mkOverride 500 524288;
+  };
 
   environment.systemPackages = [pkgs.man-pages pkgs.man-pages-posix];
   documentation.dev.enable = true;
@@ -30,7 +28,7 @@ mkTrivialModule {
     packages = with pkgs; [
       alejandra
       anki-bin
-      atopile
+      #atopile
       cabal-install
       direnv
       element-desktop
