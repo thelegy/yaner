@@ -100,15 +100,17 @@ mkTrivialModule {
   environment.systemPackages = with pkgs; [
     git
     gnupg
+    hdparm
     htop
     inxi-full
     kitty.terminfo
+    lazygit
     lm_sensors
     neovim-thelegy
     reptyr
     ripgrep
+    smartmontools
     tig
-    lazygit
     w3m
     with-scope
   ];
