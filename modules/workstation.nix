@@ -26,7 +26,6 @@ mkTrivialModule {
 
   users.users.beinke = {
     packages = with pkgs; [
-      alejandra
       anki-bin
       #atopile
       cabal-install
