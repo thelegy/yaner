@@ -31,6 +31,7 @@ in {
       "grafana.0jb.de"
       "ha.0jb.de"
       "klipper.0jb.de"
+      "snapcast.0jb.de"
     ];
     dnsProvider = "hurricane";
   };

@@ -7,6 +7,8 @@ let
   rocSourcePortIn = 10011;
   rocRepairPortIn = 10012;
   clients = [ "sirrah" "th1" ];
+  snapcast-stream-port = 1704;
+  snapcast-control-port = 1705;
 in {
 
   security.rtkit.enable = true;
@@ -111,6 +113,24 @@ in {
         '') clients}
         ]
       '')
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/70-snapcast.conf" ''
+        context.modules = [
+          {
+            name = libpipewire-module-pipe-tunnel
+            args = {
+              tunnel.mode = "sink"
+              pipe.filename = "/run/pipewire/snapfifo"
+              audio.format = S16LE
+              audio.rate = 48000
+              audio.channels = 2
+              stream.props = {
+                node.name = "Snapcast"
+                audio.position = "FL,FR"
+              }
+            }
+          }
+        ]
+      '')
     ];
   };
   systemd.services.pipewire.wantedBy = [ "multi-user.target" ];
@@ -134,6 +154,16 @@ in {
       allowedUDPPorts = [ rocSourcePortOut rocRepairPortOut ];
     };
 
+    rules.snapcast = {
+      from = [ "home" "tailscale" ];
+      to = [ "fw" ];
+      allowedTCPPorts = [
+        1780  # snapcast-http
+        1704  # snapcast-stream
+        1705  # snapcast-control
+      ];
+    };
+
   };
 
   users.users.beinke = {
@@ -144,4 +174,79 @@ in {
     ];
   };
 
+  services.snapserver = {
+    enable = true;
+    port = snapcast-stream-port;
+    streams.default = {
+      type = "pipe";
+      location = "/run/pipewire/snapfifo";
+      query = {
+        mode = "read";
+      };
+    };
+    tcp = {
+      enable = true;
+      port = snapcast-control-port;
+    };
+  };
+  systemd.services.snapserver.serviceConfig.SupplementaryGroups = [ "pipewire" ];
+
+  services.nginx.virtualHosts."snapcast.0jb.de" = {
+    forceSSL = true;
+    useACMEHost = config.networking.fqdn;
+    listenAddresses = [ "192.168.1.3" ];
+    locations."/" = {
+      alias = "${pkgs.snapweb}/";
+    };
+    locations."/jsonrpc" = {
+      proxyPass = "http://localhost:1780/jsonrpc";
+      proxyWebsockets = true;
+    };
+    locations."/stream" = {
+      proxyPass = "http://localhost:1780/stream";
+      proxyWebsockets = true;
+    };
+  };
+
+  #services.spotifyd = {
+  #  enable = true;
+  #  config = ''
+  #    [global]
+  #    username_cmd = "cat $CREDENTIALS_DIRECTORY/user"
+  #    password_cmd = "cat $CREDENTIALS_DIRECTORY/password"
+  #    backend = "alsa"
+  #    use_mpris = false
+  #    device_name = "${config.networking.hostName}"
+  #    device_type = "speaker"
+  #  '';
+  #};
+
+  #systemd.services.spotifyd = {
+  #  serviceConfig = {
+  #    SupplementaryGroups = [ "pipewire" ];
+  #    LoadCredential = [
+  #      "user:/etc/secrets/spotify_user"
+  #      "password:/etc/secrets/spotify_password"
+  #    ];
+  #  };
+  #  environment = {
+  #    SHELL = "/bin/sh";
+  #    #PULSE_LOG = "4";
+  #  };
+  #};
+
+  systemd.services.wdr2 = let
+    # streamUrl = "https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
+    streamUrl = "https://wdrhf.akamaized.net/hls/live/2027966/wdr2rheinland/master.m3u8";
+    # streamUrl = "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3?dist=veronica_web&ttag=talpa_consent:0&gdpr=0&gdpr_consent=";
+  in {
+    enable =  true;
+    serviceConfig = {
+      DynamicUser = true;
+      ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=alsa --no-terminal ${streamUrl}";
+      SupplementaryGroups = [ "pipewire" ];
+      Restart = "always";
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
 }

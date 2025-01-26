@@ -110,6 +110,9 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
   CNAME_ACME("matrix", "forever"),
   CNAME_ACME("prometheus", "y"),
 
+  ACME("snapcast", "y"),
+  A("snapcast", "192.168.1.3"),
+
   []
 );
 
