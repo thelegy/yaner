@@ -39,12 +39,12 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.05";
 
     nixpkgs-snm = {
-      url = "github:NixOS/nixpkgs/nixos-23.05";
-      follows = "snm/nixpkgs-23_05";
+      url = "github:NixOS/nixpkgs/nixos-24.11";
+      follows = "snm/nixpkgs-24_11";
     };
     snm = {
-      url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.05";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-24.11";
+      inputs.nixpkgs.follows = "nixpkgs-snm";
     };
 
   };
