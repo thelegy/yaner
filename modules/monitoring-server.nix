@@ -1,15 +1,13 @@
 {
   config,
-  lib,
   mkTrivialModule,
   ...
 }:
-with lib; let
+let
   domain = "prometheus.0jb.de";
   acmeHost = config.networking.fqdn;
   ip = "[::1]";
   localPort = 9089;
-  remotePort = 9090;
 in
   mkTrivialModule {
     wat.thelegy.acme.extraDomainNames = [domain];
@@ -35,13 +33,6 @@ in
     };
 
     services.nginx.virtualHosts.${domain} = {
-      listen = [
-        {
-          addr = "[::]";
-          port = remotePort;
-          ssl = true;
-        }
-      ];
       forceSSL = true;
       useACMEHost = acmeHost;
       locations."/" = {
@@ -50,11 +41,4 @@ in
         proxyWebsockets = true;
       };
     };
-
-    networking.nftables.firewall.rules.prometheus = {
-      from = ["tailscale"];
-      to = ["fw"];
-      allowedTCPPorts = [remotePort];
-    };
-
   }

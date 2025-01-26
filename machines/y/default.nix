@@ -11,6 +11,7 @@ in {
 
   imports = [
     ./hardware-configuration.nix
+    ./monitoring
     ./audio.nix
   ];
 
@@ -27,6 +28,7 @@ in {
     enable = true;
     staging = false;
     extraDomainNames = [
+      "grafana.0jb.de"
       "ha.0jb.de"
       "klipper.0jb.de"
     ];
@@ -103,7 +105,22 @@ in {
     };
   };
 
-  services.nginx.defaultListenAddresses = ["[fd7a:115c:a1e0::fd1a:221e]"];
+  services.nginx.virtualHosts.default = {
+    listenAddresses = ["195.201.46.105"];
+    default = true;
+    addSSL = true;
+    useACMEHost = config.networking.fqdn;
+    locations."/".return = "404";
+  };
+
+  services.nginx.virtualHosts.default2 = {
+    default = true;
+    addSSL = true;
+    useACMEHost = config.networking.fqdn;
+    locations."/".return = "404";
+  };
+
+  services.nginx.defaultListenAddresses = ["[fd7a:115c:a1e0::fd1a:221e]" "[::1]" "127.0.0.1" "127.0.0.2"];
   services.nginx.virtualHosts."audiobooks.beinke.cloud".listenAddresses = ["195.201.46.105"];
   services.nginx.virtualHosts."ha.0jb.de".listenAddresses = ["195.201.46.105"];
 

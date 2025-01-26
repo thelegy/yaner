@@ -14,11 +14,11 @@ in
       liftToNamespace {
         remoteWriteUrl = mkOption {
           type = types.str;
-          default = "https://prometheus.0jb.de:9090/api/v1/write";
+          default = "https://prometheus.0jb.de/api/v1/write";
         };
         lokiUrl = mkOption {
           type = types.nullOr types.str;
-          default = "https://loki.0jb.de:3100/loki/api/v1/push";
+          default = "https://loki.0jb.de/loki/api/v1/push";
         };
         scrapeConfigs = mkOption {
           type = types.attrsOf yaml.type;

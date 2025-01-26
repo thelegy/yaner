@@ -1,15 +1,13 @@
 {
   config,
-  lib,
   mkTrivialModule,
   ...
 }:
-with lib; let
+let
   domain = "loki.0jb.de";
   acmeHost = config.networking.fqdn;
   ip = "127.0.0.1";
   localPort = 3099;
-  remotePort = 3100;
 in
   mkTrivialModule {
     wat.thelegy.acme.extraDomainNames = [domain];
@@ -79,13 +77,6 @@ in
     };
 
     services.nginx.virtualHosts.${domain} = {
-      listen = [
-        {
-          addr = "[::]";
-          port = remotePort;
-          ssl = true;
-        }
-      ];
       forceSSL = true;
       useACMEHost = acmeHost;
       locations."/" = {
@@ -93,11 +84,5 @@ in
         recommendedProxySettings = true;
         proxyWebsockets = true;
       };
-    };
-
-    networking.nftables.firewall.rules.loki = {
-      from = ["tailscale"];
-      to = ["fw"];
-      allowedTCPPorts = [remotePort];
     };
   }
