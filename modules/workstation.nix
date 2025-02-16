@@ -1,6 +1,7 @@
 {
   mkTrivialModule,
   config,
+  lib,
   options,
   pkgs,
   ...
