@@ -98,6 +98,7 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
 
   CNAME_ACME("anki", "forever"),
   CNAME_ACME("autoconfig", "agony"),
+  CNAME_ACME("bruchstr", "forever"),
   CNAME_ACME("crowdsec", "forever"),
   CNAME_ACME("element", "forever"),
   CNAME_ACME("grafana", "y"),

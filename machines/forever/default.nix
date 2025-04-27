@@ -2,6 +2,8 @@
 
 mkMachine {} ({ lib, config, ... }: with lib; {
 
+  system.stateVersion = "22.05";
+
   imports = [
     ./borg-server.nix
     ./docpages.nix
@@ -19,6 +21,7 @@ mkMachine {} ({ lib, config, ... }: with lib; {
     staging = false;
     extraDomainNames = [
       "0jb.de"
+      "bruchstr.0jb.de"
       "element.0jb.de"
       "matrix.0jb.de"
       "pw.beinke.cloud"
@@ -52,18 +55,53 @@ mkMachine {} ({ lib, config, ... }: with lib; {
   };
 
 
-  networking.nftables.firewall = {
-    rules.nixos-firewall.enable = false;
-    rules.public-services = {
-      from = "all";
-      to = [ "fw" ];
-      allowedTCPPorts = [
-        80
-        443
-      ];
-    };
+  networking.nftables.firewall.rules.nixos-firewall.enable = false;
+  networking.nftables.firewall.rules.public-services = {
+    from = "all";
+    to = [ "fw" ];
+    allowedTCPPorts = [
+      80
+      443
+    ];
   };
 
-  system.stateVersion = "22.05";
+  systemd.network.netdevs.bruchstr = {
+    netdevConfig.Name = "bruchstr";
+    netdevConfig.Kind = "wireguard";
+    wireguardConfig.PrivateKeyFile = config.sops.secrets.wgPrivateKey.path;
+    wireguardConfig.ListenPort = 51820;
+    wireguardPeers = [
+      {
+        PublicKey = "I/2RY0P3bSNjeUZ/R/o6UE8JiRQIn6D7bMR0DyoEOGE=";
+        AllowedIPs = "192.168.241.57/32";
+      }
+    ];
+  };
+
+  systemd.network.networks.bruchstr = {
+    name = "bruchstr";
+    address = [ "192.168.241.58/30" ];
+  };
+
+  networking.nftables.firewall.rules.bruchstr = {
+    from = "all";
+    to = [ "fw" ];
+    allowedUDPPorts = [
+      config.systemd.network.netdevs.bruchstr.wireguardConfig.ListenPort
+    ];
+  };
+
+  services.nginx.virtualHosts."bruchstr.0jb.de" = {
+    useACMEHost = config.networking.fqdn;
+    forceSSL = true;
+    locations."/" = {
+      recommendedProxySettings = true;
+      proxyWebsockets = true;
+      proxyPass = "http://192.168.241.57:8123";
+      extraConfig = ''
+        client_max_body_size 100M;
+      '';
+    };
+  };
 
 })
