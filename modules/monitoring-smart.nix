@@ -3,15 +3,17 @@
   mkTrivialModule,
   ...
 }:
+
 mkTrivialModule {
   services.prometheus.exporters.smartctl.enable = true;
 
-  wat.thelegy.monitoring.scrapeConfigs.smartctl = {
-    scrape_interval = "2m";
-    static_configs = [
-      {
-        targets = ["localhost:${toString config.services.prometheus.exporters.smartctl.port}"];
-      }
-    ];
-  };
+  environment.etc."alloy/smartctl-exporter.alloy".text = ''
+    prometheus.scrape "smartctl" {
+      targets = [
+        {"__address__" = "localhost:${toString config.services.prometheus.exporters.smartctl.port}"},
+      ]
+      scrape_interval = "2m"
+      forward_to = [prometheus.remote_write.default.receiver]
+    }
+  '';
 }

@@ -40,13 +40,12 @@ in
     ];
   };
 
-  wat.thelegy.monitoring.scrapeConfigs.grafana = {
-    static_configs = [
-      {
-        targets = [ "${local_ip}:${toString local_port}" ];
-      }
-    ];
-  };
+  environment.etc."alloy/grafana-exporter.alloy".text = ''
+    prometheus.scrape "grafana" {
+      targets = [{"__address__" = "${local_ip}:${toString local_port}"}]
+      forward_to = [prometheus.remote_write.default.receiver]
+    }
+  '';
 
   services.nginx.virtualHosts.${domain} = {
     forceSSL = true;

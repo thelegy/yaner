@@ -1,6 +1,7 @@
 { mkMachine, flakes, ... }:
 mkMachine
   {
+    nixpkgs = flakes.nixpkgs-stable;
   }
   (
     {
@@ -25,6 +26,7 @@ mkMachine
 
       wat.thelegy.base.enable = true;
 
+      boot.kernelPackages = pkgs.linuxPackages;
       boot.initrd.availableKernelModules = [ "igc" ];
       boot.initrd.network.enable = true;
       boot.initrd.network.ssh = {

@@ -12,13 +12,12 @@ in
   mkTrivialModule {
     wat.thelegy.acme.extraDomainNames = [domain];
 
-    wat.thelegy.monitoring.scrapeConfigs.prometheus = {
-      static_configs = [
-        {
-          targets = ["127.0.0.1:${toString localPort}"];
-        }
-      ];
-    };
+    environment.etc."alloy/prometheus-exporter.alloy".text = ''
+      prometheus.scrape "prometheus" {
+        targets = [{"__address__" = "127.0.0.1:${toString localPort}"}]
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+    '';
 
     services.prometheus = {
       enable = true;

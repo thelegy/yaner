@@ -42,7 +42,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
     shell = pkgs.zsh;
     hashedPassword = "$6$rounds=424242$n6onp6FmPbfv1VFb$tLW/WVJicio45CYydrhlRKZwmPMOnFZX7YdH8l1gm4Wja7VBVD5pmvG11UB.58m8Lh8DaClF10L.FtRJfKG7R0";
     packages = with pkgs; [
-      xdg_utils
+      xdg-utils
     ];
   };
 
@@ -55,7 +55,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
     packages = with pkgs; [
       audacity
       libreoffice
-      xdg_utils
+      xdg-utils
     ];
   };
 

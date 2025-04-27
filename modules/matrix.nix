@@ -176,13 +176,12 @@ mkModule {
       '';
     };
 
-    wat.thelegy.monitoring.scrapeConfigs.synapse = {
-      static_configs = [
-        {
-          targets = [ "localhost:9008" ];
-        }
-      ];
-    };
+    environment.etc."alloy/synapse-exporter.alloy".text = ''
+      prometheus.scrape "synapse" {
+        targets = [{"__address__" = "localhost:9008"}]
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+    '';
 
   };
 

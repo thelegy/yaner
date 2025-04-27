@@ -1,105 +1,102 @@
 {
-  config,
   lib,
   liftToNamespace,
   mkModule,
-  pkgs,
   ...
 }:
-with lib; let
-  yaml = pkgs.formats.yaml {};
-in
-  mkModule {
-    options = cfg:
-      liftToNamespace {
-        remoteWriteUrl = mkOption {
-          type = types.str;
-          default = "https://prometheus.0jb.de/api/v1/write";
-        };
-        lokiUrl = mkOption {
-          type = types.nullOr types.str;
-          default = "https://loki.0jb.de/loki/api/v1/push";
-        };
-        scrapeConfigs = mkOption {
-          type = types.attrsOf yaml.type;
-          default = {};
-        };
+with lib;
+mkModule {
+  options =
+    cfg:
+    liftToNamespace {
+      remoteWriteUrl = mkOption {
+        type = types.str;
+        default = "https://prometheus.0jb.de/api/v1/write";
       };
-
-    config = cfg: {
-      services.grafana-agent = {
-        enable = true;
-        extraFlags = ["-disable-reporting" "-disable-support-bundle"];
-        settings = {
-          metrics = {
-            wal_directory = "\${STATE_DIRECTORY}/metrics-wal";
-            global.remote_write = [{url = cfg.remoteWriteUrl;}];
-            configs = [
-              {
-                name = "default";
-                scrape_configs = mapAttrsToList (k: v:
-                  v
-                  // {
-                    job_name = k;
-                    static_configs =
-                      map (
-                        c:
-                          recursiveUpdate {
-                            labels.instance = config.networking.hostName;
-                          }
-                          c
-                      )
-                      v.static_configs or [];
-                  })
-                cfg.scrapeConfigs;
-              }
-            ];
-          };
-          integrations = {
-            agent = {
-              instance = config.networking.hostName;
-            };
-
-            node_exporter = {
-              instance = config.networking.hostName;
-              enable_collectors = ["systemd"];
-            };
-          };
-          logs = mkIf (! isNull cfg.lokiUrl) {
-            positions_directory = "\${STATE_DIRECTORY}/logs-positions";
-            configs = [
-              {
-                name = "journal";
-                clients = [{url = cfg.lokiUrl;}];
-                scrape_configs = [
-                  {
-                    job_name = "journal";
-                    journal = {
-                      max_age = "12h";
-                      labels = {
-                        job = "journal";
-                        host = config.networking.hostName;
-                      };
-                    };
-                    relabel_configs = let
-                      label = target: source: {
-                        source_labels = ["__journal_${source}"];
-                        target_label = target;
-                      };
-                    in [
-                      (label "priority" "priority")
-                      (label "slice" "_systemd_slice")
-                      (label "syslogFacility" "syslog_facility")
-                      (label "syslogIdentifier" "syslog_identifier")
-                      (label "uid" "_uid")
-                      (label "unit" "_systemd_unit")
-                    ];
-                  }
-                ];
-              }
-            ];
-          };
-        };
+      lokiUrl = mkOption {
+        type = types.nullOr types.str;
+        default = "https://loki.0jb.de/loki/api/v1/push";
       };
     };
-  }
+
+  config = cfg: {
+    services.alloy = {
+      enable = true;
+      configPath = "/etc/alloy";
+    };
+
+    environment.etc."alloy/config.alloy".text = ''
+      prometheus.remote_write "default" {
+        endpoint {
+          url = "${cfg.remoteWriteUrl}"
+        }
+      }
+
+      loki.write "default" {
+        endpoint {
+          url = "${cfg.lokiUrl}"
+        }
+      }
+
+      loki.relabel "journal" {
+        forward_to = [loki.write.default.receiver]
+        rule {
+          source_labels = ["__journal__priority"]
+          target_label  = "priority"
+        }
+        rule {
+          source_labels = ["__journal__systemd_slice"]
+          target_label  = "slice"
+        }
+        rule {
+          source_labels = ["__journal_syslog_facility"]
+          target_label  = "syslogFacility"
+        }
+        rule {
+          source_labels = ["__journal_syslog_identifier"]
+          target_label  = "syslogIdentifier"
+        }
+        rule {
+          source_labels = ["__journal__uid"]
+          target_label  = "uid"
+        }
+        rule {
+          source_labels = ["__journal__systemd_unit"]
+          target_label  = "unit"
+        }
+      }
+
+      loki.source.journal "journal" {
+        forward_to = [loki.relabel.journal.receiver]
+        labels = {
+          job = "journal",
+          job = env("HOSTNAME"),
+        }
+        max_age = "12h"
+      }
+    '';
+
+    environment.etc."alloy/self-exporter.alloy".text = ''
+      prometheus.exporter.self "self" {
+      }
+
+      prometheus.scrape "self" {
+        targets = prometheus.exporter.self.self.targets
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+    '';
+
+    environment.etc."alloy/unix-exporter.alloy".text = ''
+      prometheus.exporter.unix "self" {
+        enable_collectors = [
+          "systemd",
+        ]
+      }
+
+      prometheus.scrape "unix" {
+        targets = prometheus.exporter.unix.self.targets
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+    '';
+  };
+}

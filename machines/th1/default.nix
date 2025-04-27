@@ -56,7 +56,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
       externalInterface = "wlp4s0";
     };
     networkmanager.unmanaged = [ "interface-name:ve-*" ];
-    networkmanager.fccUnlockScripts = [rec{
+    modemmanager.fccUnlockScripts = [rec{
       id = "1199:9079";
       path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
     }];

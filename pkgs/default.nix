@@ -45,9 +45,6 @@ with final; {
 
   kicad-small = prev.kicad-small.override { python3 = python311; };
 
-  klipper = flakes.nixpkgs-stable.legacyPackages.${final.system}.klipper;
-  klipper-firmware = flakes.nixpkgs-stable.legacyPackages.${final.system}.klipper-firmware;
-
   launch-cadquery = let
     cq-flake = final.fetchFromGitHub {
       owner = "thelegy";
