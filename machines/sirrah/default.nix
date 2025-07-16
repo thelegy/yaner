@@ -87,7 +87,6 @@ in
     #BeatSaberModManager
     blender
     patchelf
-    prismlauncher
   ];
 
 })

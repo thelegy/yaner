@@ -49,7 +49,6 @@ mkTrivialModule {
       nixpkgs-fmt
       obsidian
       pass
-      preprocess-cancellation
       prusa-slicer
       pyright
       signal-desktop
