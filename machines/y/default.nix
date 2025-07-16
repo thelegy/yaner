@@ -32,6 +32,7 @@ in {
       "ha.0jb.de"
       "klipper.0jb.de"
       "snapcast.0jb.de"
+      "spoolman.0jb.de"
     ];
     dnsProvider = "hurricane";
   };
@@ -52,6 +53,7 @@ in {
   wat.thelegy.monitoring-server.enable = true;
   wat.thelegy.nginx.enable = true;
   wat.thelegy.rtlan-net.enable = true;
+  wat.thelegy.spoolman.enable = true;
   wat.thelegy.static-net.enable = true;
   wat.thelegy.syncthing.enable = true;
 
