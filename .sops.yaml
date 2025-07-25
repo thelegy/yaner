@@ -7,6 +7,7 @@ keys:
 - &mininet be5ca689432e1d9918f78feeaadd18c7d8c5bd4a
 - &roborock 2d59898b69126a28647dda7de82e1978fd768662
 - &sirrah ab9a4004133c9e02091db7e53b6203a9abeb522d
+- &starblade c5b35bd1fc7e1957720ff70dbdc897cfc705de15
 - &th1 efb1200339303eab0ac3ce783c966b47b84d969e
 - &y c611f29dbc693fae526f32433869ef25ac9942dc
 
@@ -41,6 +42,11 @@ creation_rules:
   - pgp:
     - *thelegy
     - *sirrah
+- path_regex: machines/starblade/.*
+  key_groups:
+  - pgp:
+    - *thelegy
+    - *starblade
 - path_regex: machines/th1/.*
   key_groups:
   - pgp:
