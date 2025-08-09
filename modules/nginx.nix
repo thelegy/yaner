@@ -32,6 +32,7 @@ mkModule {
         serverName = config.networking.fqdn;
         forceSSL = true;
         useACMEHost = cfg.useACMEHost;
+        locations."/" = mkDefault { return = "404"; };
       };
     };
 
