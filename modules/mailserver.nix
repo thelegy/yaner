@@ -156,5 +156,9 @@ in mkModule {
       SupplementaryGroups = [ "acme" ];
     };
 
+    # TODO: snappymail
+    # TODO: dmarc-metrics-exporter
+    # TODO: aid with dns config, e.g. generated zonefile, ect.
+
   };
 }
