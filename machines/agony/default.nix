@@ -57,6 +57,26 @@ mkMachine {
     ];
   };
 
+  services = {
+    acpid.enable = false;
+    avahi.enable = false;
+  };
+
+  networking.nftables.firewall = {
+    zones.tarpit = {
+      ipv4Addresses = [
+        "35.86.126.184"
+      ];
+    };
+    rules.tarpit = {
+      from = [ "tarpit" ];
+      to = [ "fw" ];
+      extraLines = [
+        "counter drop"
+      ];
+    };
+  };
+
   mailserver = {
     domains = [
       "0jb.de"
