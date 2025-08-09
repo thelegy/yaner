@@ -131,6 +131,7 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
 
   CNAME_ACME("audiobooks", "static-y"),
   CNAME_ACME("autoconfig", "agony"),
+  CNAME_ACME("docs.sibylle", "static-y"),
   CNAME_ACME("imap", "agony"),
   CNAME_ACME("pw", "forever"),
   CNAME_ACME("smtp", "agony"),

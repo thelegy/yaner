@@ -29,6 +29,7 @@ mkMachine
         enable = true;
         borgbaseRepo = "wx7058j2";
         extraExcludes = [
+          "var/lib/libvirt/images"
           "storage/ollama"
         ];
       };
@@ -84,7 +85,9 @@ mkMachine
 
       systemd.tmpfiles.rules = [
         "d /storage/ollama 0750 ollama ollama -"
+        "d /storage/paperless-sibylle 0750 paperless paperless"
       ];
+
       services.ollama = {
         enable = true;
         home = "/storage/ollama";
@@ -110,6 +113,48 @@ mkMachine
       wat.thelegy.libvirtd.enable = true;
       users.groups.libvirt = { };
       users.users.beinke.extraGroups = [ "libvirt" ];
+
+      users.groups.paperless-sibylle.gid = 1550;
+      users.users.paperless-sibylle = {
+        isSystemUser = true;
+        uid = 1550;
+        group = "paperless-sibylle";
+      };
+      containers.paperless-sibylle = {
+        autoStart = true;
+        ephemeral = true;
+        bindMounts."/var/lib/paperless" = {
+          hostPath = "/storage/paperless-sibylle";
+          isReadOnly = false;
+        };
+        config = containerArgs: {
+          nixpkgs.pkgs = pkgs;
+          system.stateVersion = "24.11";
+          environment.systemPackages = [
+            containerArgs.config.services.paperless.manage
+          ];
+          users.groups.paperless-sibylle = config.users.groups.paperless-sibylle;
+          users.users.paperless-sibylle = config.users.users.paperless-sibylle;
+          services.paperless = {
+            enable = true;
+            user = "paperless-sibylle";
+            address = "192.168.1.2";
+            settings = {
+              PAPERLESS_CONSUMER_IGNORE_PATTERN = [
+                ".DS_STORE/*"
+                "desktop.ini"
+              ];
+              PAPERLESS_OCR_LANGUAGE = "deu+eng";
+              PAPERLESS_OCR_USER_ARGS = {
+                optimize = 1;
+                pdfa_image_compression = "lossless";
+              };
+              PAPERLESS_URL = "https://docs.sibylle.beinke.cloud";
+              PAPERLESS_TRUSTED_PROXIES = "192.168.1.3";
+            };
+          };
+        };
+      };
 
     }
   )
