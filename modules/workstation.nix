@@ -59,7 +59,7 @@ mkTrivialModule {
       nil
       nixGL
       nixfmt-rfc-style
-      nixpkgs-fmt
+      nixfmt-tree
       obsidian
       orca-slicer
       pass
