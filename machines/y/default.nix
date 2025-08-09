@@ -28,6 +28,7 @@ in {
     enable = true;
     staging = false;
     extraDomainNames = [
+      "ender3s1.0jb.de"
       "grafana.0jb.de"
       "ha.0jb.de"
       "klipper.0jb.de"
@@ -123,14 +124,12 @@ in {
     locations."/".return = "404";
   };
 
-  services.nginx.defaultListenAddresses = ["[fd7a:115c:a1e0::fd1a:221e]" "[::1]" "127.0.0.1" "127.0.0.2"];
+  services.nginx.defaultListenAddresses = ["[fd7a:115c:a1e0::fd1a:221e]" "[::1]" "127.0.0.1" "127.0.0.2" "192.168.1.3"];
   services.nginx.virtualHosts."audiobooks.beinke.cloud".listenAddresses = ["195.201.46.105"];
   services.nginx.virtualHosts."ha.0jb.de".listenAddresses = ["195.201.46.105"];
 
   services.udev.extraRules = ''
     SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ENV{ID_PATH}=="pci-0000:05:00.4-usb-0:2:1.0", SYMLINK+="zigstar", GROUP="zigbee", ENV{SYSTEMD_WANTS}="ser2net-zigstar.service"
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ENV{ID_PATH}=="pci-0000:01:00.0-usb-0:1:1.0", SYMLINK+="ender3s1"
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="614e", SYMLINK+="klipper_companion"
   '';
 
   users.groups.zigbee = {};
@@ -159,7 +158,6 @@ in {
 
   wat.thelegy.ender3s1 = {
     enable = true;
-    # companionSerial = "/dev/klipper_companion";
   };
 
 })
