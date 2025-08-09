@@ -7,58 +7,59 @@
   ...
 }:
 with lib;
-  mkModule {
-    options = liftToNamespace {
-      extraExcludes = mkOption {
-        type = with types; listOf str;
-        default = [];
-      };
-
-      repo = mkOption {
-        type = types.str;
-        default = "borg@backup.0jb.de:.";
-      };
-
-      borgbaseRepo = mkOption {
-        type = with types; nullOr str;
-        default = null;
-      };
-
-      extraReadWritePaths = mkOption {
-        type = with types; listOf str;
-        default = ["/.backup-snapshots"];
-      };
-
-      passphraseFile = mkOption {
-        type = types.str;
-        default = "/etc/secrets/borg_passphrase";
-      };
-
-      useSops = mkOption {
-        type = types.bool;
-        default = true;
-      };
-
-      sopsPassphrase = mkOption {
-        type = types.str;
-        default = "borg-passphrase";
-      };
+mkModule {
+  options = liftToNamespace {
+    extraExcludes = mkOption {
+      type = with types; listOf str;
+      default = [ ];
     };
 
-    config = cfg: let
+    repo = mkOption {
+      type = types.str;
+      default = "borg@backup.0jb.de:.";
+    };
+
+    borgbaseRepo = mkOption {
+      type = with types; nullOr str;
+      default = null;
+    };
+
+    extraReadWritePaths = mkOption {
+      type = with types; listOf str;
+      default = [ "/.backup-snapshots" ];
+    };
+
+    passphraseFile = mkOption {
+      type = types.str;
+      default = "/etc/secrets/borg_passphrase";
+    };
+
+    useSops = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    sopsPassphrase = mkOption {
+      type = types.str;
+      default = "borg-passphrase";
+    };
+  };
+
+  config =
+    cfg:
+    let
       passphraseFile =
-        if cfg.useSops
-        then config.sops.secrets.${cfg.sopsPassphrase}.path
-        else cfg.passphraseFile;
+        if cfg.useSops then config.sops.secrets.${cfg.sopsPassphrase}.path else cfg.passphraseFile;
       isBorgBase = !isNull cfg.borgbaseRepo;
-    in {
+    in
+    {
       sops.secrets.${cfg.sopsPassphrase} = mkIf cfg.useSops {
         format = "yaml";
         mode = "0600";
       };
 
       programs.ssh.knownHosts.borgbase = mkIf isBorgBase {
-        hostNames = ["${cfg.borgbaseRepo}.repo.borgbase.com"];
+        hostNames = [ "${cfg.borgbaseRepo}.repo.borgbase.com" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMS3185JdDy7ffnr0nLWqVy8FaAQeVh1QYUSiNpW5ESq";
       };
       wat.thelegy.backup.repo = mkIf isBorgBase "ssh://${cfg.borgbaseRepo}@${cfg.borgbaseRepo}.repo.borgbase.com/./repo";
@@ -79,37 +80,35 @@ with lib;
           ''}";
         };
         preHook = ''
-          ${pkgs.callPackage ./snapshot.nix {}}
+          ${pkgs.callPackage ./snapshot.nix { }}
           cd /.backup
         '';
-        readWritePaths = ["/.backup"] ++ cfg.extraReadWritePaths;
-        exclude =
-          [
-            "dev"
-            "mnt"
-            "nix/store"
-            "nix/var/log"
-            "proc"
-            "root/.cache"
-            "run"
-            "sys"
-            "tmp"
-            "var/cache"
-            "var/lib/docker"
-            "var/lib/systemd/coredump"
-            "var/log"
-            "var/tmp"
+        readWritePaths = [ "/.backup" ] ++ cfg.extraReadWritePaths;
+        exclude = [
+          "dev"
+          "mnt"
+          "nix/store"
+          "nix/var/log"
+          "proc"
+          "root/.cache"
+          "run"
+          "sys"
+          "tmp"
+          "var/cache"
+          "var/lib/docker"
+          "var/lib/systemd/coredump"
+          "var/log"
+          "var/tmp"
 
-            "sh:home/**/.stack-work"
-            "sh:home/*/.cabal"
-            "sh:home/*/.cache"
-            "sh:home/*/.stack"
-            "sh:home/*/.thunderbird"
-          ]
-          ++ cfg.extraExcludes;
+          "sh:home/**/.stack-work"
+          "sh:home/*/.cabal"
+          "sh:home/*/.cache"
+          "sh:home/*/.stack"
+          "sh:home/*/.thunderbird"
+        ] ++ cfg.extraExcludes;
         extraArgs = "--lock-wait 300";
         extraCreateArgs = "--stats --exclude-caches";
-        paths = ["."];
+        paths = [ "." ];
         prune = {
           keep = {
             hourly = 2;
@@ -140,10 +139,8 @@ with lib;
         };
       };
 
-      systemd.tmpfiles.rules =
-        [
-          "d /.backup 0700 root root - -"
-        ]
-        ++ (map (x: "d ${x} 0700 root root - -") cfg.extraReadWritePaths);
+      systemd.tmpfiles.rules = [
+        "d /.backup 0700 root root - -"
+      ] ++ (map (x: "d ${x} 0700 root root - -") cfg.extraReadWritePaths);
     };
-  }
+}

@@ -1,7 +1,10 @@
-{ mkTrivialModule
-, config
-, lib
-, ... }: mkTrivialModule {
+{
+  mkTrivialModule,
+  config,
+  lib,
+  ...
+}:
+mkTrivialModule {
 
   networking.nftables.stopRuleset = lib.traceSeqN 10 config.networking.nftables.ruleset ''
     table inet filter {

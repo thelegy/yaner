@@ -1,8 +1,10 @@
-{ mkTrivialModule
-, lib
-, pkgs
-, ...
-}: with lib;
+{
+  mkTrivialModule,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 let
   hostname = "mc.dfhq.dedyn.io";

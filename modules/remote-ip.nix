@@ -7,66 +7,61 @@
   ...
 }:
 with lib;
-  mkModule {
-    options = cfg:
-      liftToNamespace {
-        role = mkOption {
-          type = types.enum ["proxy" "satelite"];
-        };
-        name = mkOption {
-          type = types.str;
-        };
-        transportZone = mkOption {
-          type = types.str;
-          default = "static";
-        };
-        transportNetwork = mkOption {
-          type = types.str;
-          default = "static";
-        };
-        internetNetwork = mkOption {
-          type = types.str;
-          default = "default";
-        };
-        tableId = mkOption {
-          type = types.number;
-        };
-        staticIp = mkOption {
-          type = types.str;
-        };
-        internalProxyIp = mkOption {
-          type = types.str;
-        };
-        internalSateliteIp = mkOption {
-          type = types.str;
-        };
-        proxyIp = mkOption {
-          type = types.str;
-        };
-        sateliteIp = mkOption {
-          type = types.str;
-        };
+mkModule {
+  options =
+    cfg:
+    liftToNamespace {
+      role = mkOption {
+        type = types.enum [
+          "proxy"
+          "satelite"
+        ];
       };
-    config = cfg: let
+      name = mkOption {
+        type = types.str;
+      };
+      transportZone = mkOption {
+        type = types.str;
+        default = "static";
+      };
+      transportNetwork = mkOption {
+        type = types.str;
+        default = "static";
+      };
+      internetNetwork = mkOption {
+        type = types.str;
+        default = "default";
+      };
+      tableId = mkOption {
+        type = types.number;
+      };
+      staticIp = mkOption {
+        type = types.str;
+      };
+      internalProxyIp = mkOption {
+        type = types.str;
+      };
+      internalSateliteIp = mkOption {
+        type = types.str;
+      };
+      proxyIp = mkOption {
+        type = types.str;
+      };
+      sateliteIp = mkOption {
+        type = types.str;
+      };
+    };
+  config =
+    cfg:
+    let
       isProxy = cfg.role == "proxy";
       isSatelite = cfg.role != "proxy";
-      localIp =
-        if isProxy
-        then cfg.proxyIp
-        else cfg.sateliteIp;
-      remoteIp =
-        if isProxy
-        then cfg.sateliteIp
-        else cfg.proxyIp;
-      localTunnelIp =
-        if isProxy
-        then cfg.internalProxyIp
-        else cfg.internalSateliteIp;
-      remoteTunnelIp =
-        if isProxy
-        then cfg.internalSateliteIp
-        else cfg.internalProxyIp;
-    in {
+      localIp = if isProxy then cfg.proxyIp else cfg.sateliteIp;
+      remoteIp = if isProxy then cfg.sateliteIp else cfg.proxyIp;
+      localTunnelIp = if isProxy then cfg.internalProxyIp else cfg.internalSateliteIp;
+      remoteTunnelIp = if isProxy then cfg.internalSateliteIp else cfg.internalProxyIp;
+    in
+    {
       systemd.network.netdevs.${cfg.name} = {
         netdevConfig = {
           Kind = "gre";
@@ -123,12 +118,12 @@ with lib;
       };
 
       networking.nftables.firewall = {
-        zones."${cfg.name}-interface".interfaces = [cfg.name];
+        zones."${cfg.name}-interface".interfaces = [ cfg.name ];
         zones.${cfg.name} = {
-          ipv4Addresses = [cfg.staticIp];
+          ipv4Addresses = [ cfg.staticIp ];
         };
         rules."${cfg.name}-spoofing" = mkIf isSatelite {
-          from = ["${cfg.name}-interface"];
+          from = [ "${cfg.name}-interface" ];
           to = "all";
           ruleType = "ban";
           extraLines = [
@@ -138,9 +133,9 @@ with lib;
         };
         rules."${cfg.name}-proxy" = mkIf isProxy {
           from = "all";
-          to = [cfg.name];
-          extraLines = ["counter accept"];
+          to = [ cfg.name ];
+          extraLines = [ "counter accept" ];
         };
       };
     };
-  }
+}

@@ -18,7 +18,10 @@ mkTrivialModule {
     "fs.inotify.max_user_watches" = lib.mkOverride 500 524288;
   };
 
-  environment.systemPackages = [pkgs.man-pages pkgs.man-pages-posix];
+  environment.systemPackages = [
+    pkgs.man-pages
+    pkgs.man-pages-posix
+  ];
   documentation.dev.enable = true;
 
   services.udev.packages = [

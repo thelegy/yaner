@@ -1,14 +1,19 @@
-{ lib, mkTrivialModule, pkgs, ... }:
+{
+  lib,
+  mkTrivialModule,
+  pkgs,
+  ...
+}:
 with lib;
 
 let
 
-  toml = pkgs.formats.toml {};
+  toml = pkgs.formats.toml { };
 
   direnvConfigFile = toml.generate "direnv.toml" {
     global.hide_env_diff = true;
   };
-  direnvConfig = pkgs.runCommandLocal "direnv" {} ''
+  direnvConfig = pkgs.runCommandLocal "direnv" { } ''
     mkdir $out
     cp ${direnvConfigFile} $out/direnv.toml
   '';

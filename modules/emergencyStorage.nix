@@ -1,9 +1,11 @@
-{ mkModule
-, liftToNamespace
-, lib
-, pkgs
-, ...
-}: with lib;
+{
+  mkModule,
+  liftToNamespace,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 mkModule {
 

@@ -1,8 +1,10 @@
-{ mkTrivialModule
-, config
-, options
-, pkgs
-, ... }:
+{
+  mkTrivialModule,
+  config,
+  options,
+  pkgs,
+  ...
+}:
 
 mkTrivialModule {
 
@@ -55,9 +57,12 @@ mkTrivialModule {
   # environment.sessionVariables.GTK_USE_PORTAL = "1";
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-
   users.users.beinke = {
-    extraGroups = [ "networkmanager" "video" "audio" ];
+    extraGroups = [
+      "networkmanager"
+      "video"
+      "audio"
+    ];
     packages = with pkgs; [
       alacritty
       chromium
@@ -85,14 +90,16 @@ mkTrivialModule {
     magicOrExtension = ''\x7fELF....AI\x02'';
   };
 
-  home-manager.users.beinke = { ... }: {
-    imports = [
-      ./foot.nix
-      ./kitty.nix
-      ./mako.nix
-      ./sway
-    ];
-  };
+  home-manager.users.beinke =
+    { ... }:
+    {
+      imports = [
+        ./foot.nix
+        ./kitty.nix
+        ./mako.nix
+        ./sway
+      ];
+    };
 
   fonts = {
     packages = with pkgs; [

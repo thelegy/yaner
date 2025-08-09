@@ -1,43 +1,47 @@
-{ mkModule
-, config
-, lib
-, liftToNamespace
-, ... }:
+{
+  mkModule,
+  config,
+  lib,
+  liftToNamespace,
+  ...
+}:
 with lib;
 
 mkModule {
-  options = cfg: liftToNamespace {
+  options =
+    cfg:
+    liftToNamespace {
 
-    staging = mkOption {
-      type = types.bool;
-      default = true;
+      staging = mkOption {
+        type = types.bool;
+        default = true;
+      };
+
+      defaultCertName = mkOption {
+        type = types.str;
+        default = config.networking.fqdn;
+      };
+
+      extraDomainNames = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+      };
+
+      sopsCredentialsFile = mkOption {
+        type = types.str;
+        default = "acme-credentials-file";
+      };
+
+      reloadUnits = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+      };
+
+      dnsProvider = mkOption {
+        type = types.str;
+      };
+
     };
-
-    defaultCertName = mkOption {
-      type = types.str;
-      default = config.networking.fqdn;
-    };
-
-    extraDomainNames = mkOption {
-      type = types.listOf types.str;
-      default = [];
-    };
-
-    sopsCredentialsFile = mkOption {
-      type = types.str;
-      default = "acme-credentials-file";
-    };
-
-    reloadUnits = mkOption {
-      type = types.listOf types.str;
-      default = [];
-    };
-
-    dnsProvider = mkOption {
-      type = types.str;
-    };
-
-  };
   config = cfg: {
 
     sops.secrets.${cfg.sopsCredentialsFile} = {

@@ -1,9 +1,10 @@
-{ mkModule
-, liftToNamespace
-, lib
-, config
-, pkgs
-, ...
+{
+  mkModule,
+  liftToNamespace,
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 
@@ -11,21 +12,23 @@ with lib;
 # > sudo -u tailscale tailscale up --netfilter-mode=off
 
 mkModule {
-  options = cfg: liftToNamespace {
+  options =
+    cfg:
+    liftToNamespace {
 
-    port = mkOption {
-      type = types.port;
-      default = 41641;
-      description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
+      port = mkOption {
+        type = types.port;
+        default = 41641;
+        description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
+      };
+
+      interfaceName = mkOption {
+        type = types.str;
+        default = "tailscale";
+        description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
+      };
+
     };
-
-    interfaceName = mkOption {
-      type = types.str;
-      default = "tailscale";
-      description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
-    };
-
-  };
   config = cfg: {
 
     networking.networkmanager.unmanaged = [ cfg.interfaceName ];
@@ -34,7 +37,11 @@ mkModule {
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-pre.target" ];
-      after = [ "network-pre.target" "NetworkManager.service" "systemd-resolved.service" ];
+      after = [
+        "network-pre.target"
+        "NetworkManager.service"
+        "systemd-resolved.service"
+      ];
       serviceConfig = rec {
         AmbientCapabilities = [
           "CAP_NET_ADMIN"
@@ -93,7 +100,7 @@ mkModule {
       };
       rules.tailscale-transports = {
         from = "all";
-        to = ["fw"];
+        to = [ "fw" ];
         allowedUDPPorts = [ cfg.port ];
       };
       rules.tailscale-spoofing = {

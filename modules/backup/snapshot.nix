@@ -1,8 +1,9 @@
-{ writeScript
-, btrfs-progs
-, coreutils
-, utillinux
-, zsh
+{
+  writeScript,
+  btrfs-progs,
+  coreutils,
+  utillinux,
+  zsh,
 }:
 
 writeScript "backup_snapshot" ''

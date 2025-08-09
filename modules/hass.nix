@@ -1,10 +1,13 @@
-{ mkTrivialModule
+{
+  mkTrivialModule,
 
-, config
-, lib
-, pkgs
+  config,
+  lib,
+  pkgs,
 
-, ... }: with lib;
+  ...
+}:
+with lib;
 
 let
 
@@ -48,7 +51,8 @@ let
     </domain>
   '';
 
-in mkTrivialModule {
+in
+mkTrivialModule {
 
   wat.thelegy.libvirtd.enable = true;
 

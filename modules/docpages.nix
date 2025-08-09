@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,32 +12,37 @@ let
   cfg = config.legy.docpages;
   page_cfgs = attrValues cfg.pages;
 
-  perDocpageConfig = {name, ...}: {
-    options = {
-      tag = mkOption {
-        type = types.str;
+  perDocpageConfig =
+    { name, ... }:
+    {
+      options = {
+        tag = mkOption {
+          type = types.str;
+        };
+        flake = mkOption {
+          type = types.str;
+        };
+        target_dir = mkOption {
+          type = types.str;
+          default = cfg.target_dir;
+        };
       };
-      flake = mkOption {
-        type = types.str;
-      };
-      target_dir = mkOption {
-        type = types.str;
-        default = cfg.target_dir;
+      config = {
+        tag = mkDefault name;
       };
     };
-    config = {
-      tag = mkDefault name;
-    };
-  };
 
-  flattenList = l: builtins.foldl' (x: y: x//y) {} l;
+  flattenList = l: builtins.foldl' (x: y: x // y) { } l;
 
   docpageService = docpageCfg: {
     "docpage_${docpageCfg.tag}" = {
       description = "Generator for the docpage of ${docpageCfg.tag}";
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      path = with pkgs; [ git nix ];
+      path = with pkgs; [
+        git
+        nix
+      ];
       environment."NIX_PATH" = "nixpkgs=${pkgs.src}";
       serviceConfig = {
         Type = "oneshot";
@@ -63,11 +73,12 @@ let
     };
   };
 
-in {
+in
+{
 
   options.legy.docpages.pages = mkOption {
     type = with types; loaOf (submodule perDocpageConfig);
-    default = {};
+    default = { };
   };
 
   options.legy.docpages.target_dir = mkOption {

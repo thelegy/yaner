@@ -1,4 +1,5 @@
-{ lib, pkgs, ... }: let
+{ lib, pkgs, ... }:
+let
 
   statusCommand = ''
     ${pkgs.qbar}/bin/qbar server swaybar \
@@ -52,7 +53,8 @@
     };
   };
 
-in {
+in
+{
 
   home.packages = [
     pkgs.swaylock
@@ -130,7 +132,7 @@ in {
         };
         "*".bg = "${wallpaper} fill";
       };
-      bars = [bar];
+      bars = [ bar ];
       menu = menuCmd;
       colors.unfocused = {
         border = "#333333";

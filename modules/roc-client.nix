@@ -9,37 +9,39 @@ with lib;
 
 mkModule {
 
-  options = cfg: liftToNamespace {
+  options =
+    cfg:
+    liftToNamespace {
 
-    serverAddress = mkOption {
-      type = types.str;
+      serverAddress = mkOption {
+        type = types.str;
+      };
+
+      localAddress = mkOption {
+        type = types.str;
+      };
+
+      sourcePortOut = mkOption {
+        type = types.port;
+        default = 10001;
+      };
+
+      repairPortOut = mkOption {
+        type = types.port;
+        default = 10002;
+      };
+
+      sourcePortIn = mkOption {
+        type = types.port;
+        default = 10011;
+      };
+
+      repairPortIn = mkOption {
+        type = types.port;
+        default = 10012;
+      };
+
     };
-
-    localAddress = mkOption {
-      type = types.str;
-    };
-
-    sourcePortOut = mkOption {
-      type = types.port;
-      default = 10001;
-    };
-
-    repairPortOut = mkOption {
-      type = types.port;
-      default = 10002;
-    };
-
-    sourcePortIn = mkOption {
-      type = types.port;
-      default = 10011;
-    };
-
-    repairPortIn = mkOption {
-      type = types.port;
-      default = 10012;
-    };
-
-  };
 
   config = cfg: {
     services.pipewire.configPackages = [
@@ -86,7 +88,10 @@ mkModule {
       rules.rtlan-audio-client = {
         from = [ "rtlan" ];
         to = [ "fw" ];
-        allowedUDPPorts = [ cfg.sourcePortIn cfg.repairPortIn ];
+        allowedUDPPorts = [
+          cfg.sourcePortIn
+          cfg.repairPortIn
+        ];
       };
 
     };

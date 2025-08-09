@@ -6,9 +6,10 @@
   pkgs,
   ...
 }:
-with lib; let
-  toYAML = lib.generators.toYAML {};
-  yaml = pkgs.formats.yaml {};
+with lib;
+let
+  toYAML = lib.generators.toYAML { };
+  yaml = pkgs.formats.yaml { };
   configDir = "crowdsec";
   lapi_credentials_path = "/etc/crowdsec/local_api_credentials.yaml";
   hub = pkgs.fetchFromGitHub {
@@ -18,35 +19,37 @@ with lib; let
     hash = "sha256-mR1JuaGBtTrSOEpCWRMhq9vfe3xhNbVmSV4HNhIQK18=";
   };
 in
-  mkModule {
-    options = liftToNamespace {
-      lapiDomain = mkOption {
-        type = types.str;
-        default = "crowdsec.0jb.de";
-      };
-      sopsLapiCredentialsFile = mkOption {
-        type = types.str;
-        default = "crowdsec-lapi-credentials";
-      };
-      sopsBouncerCredentialsFile = mkOption {
-        type = types.str;
-        default = "crowdsec-bouncer-credentials";
-      };
-      parsers = mkOption {
-        type = types.listOf types.str;
-        default = [];
-      };
-      scenarios = mkOption {
-        type = types.listOf types.str;
-        default = [];
-      };
-      journalctlFilters = mkOption {
-        type = types.listOf types.str;
-        default = [];
-      };
+mkModule {
+  options = liftToNamespace {
+    lapiDomain = mkOption {
+      type = types.str;
+      default = "crowdsec.0jb.de";
     };
+    sopsLapiCredentialsFile = mkOption {
+      type = types.str;
+      default = "crowdsec-lapi-credentials";
+    };
+    sopsBouncerCredentialsFile = mkOption {
+      type = types.str;
+      default = "crowdsec-bouncer-credentials";
+    };
+    parsers = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
+    scenarios = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
+    journalctlFilters = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
+  };
 
-    config = cfg: let
+  config =
+    cfg:
+    let
       etcConfig = {
         "${configDir}/config.yaml".text = toYAML {
           common = {
@@ -90,46 +93,51 @@ in
         "${configDir}/local_api_credentials.yaml".text = toYAML {
           url = "https://${cfg.lapiDomain}/";
         };
-        "${configDir}/local_api_credentials.yaml.local".source = config.sops.secrets.${cfg.sopsLapiCredentialsFile}.path;
+        "${configDir}/local_api_credentials.yaml.local".source =
+          config.sops.secrets.${cfg.sopsLapiCredentialsFile}.path;
 
         "${configDir}/hub".source = hub;
       };
     in
-      (liftToNamespace {
-        parsers = [
-          "crowdsecurity/geoip-enrich"
-          "crowdsecurity/sshd-logs"
-          "crowdsecurity/syslog-logs"
+    (liftToNamespace {
+      parsers = [
+        "crowdsecurity/geoip-enrich"
+        "crowdsecurity/sshd-logs"
+        "crowdsecurity/syslog-logs"
+      ];
+      scenarios = [
+        "crowdsecurity/ssh-bf"
+        "crowdsecurity/ssh-slow-bf"
+      ];
+      journalctlFilters = [
+        "_SYSTEMD_UNIT=sshd.service"
+      ];
+    })
+    // {
+      environment.systemPackages = [ pkgs.crowdsec ];
+      environment.etc = etcConfig;
+
+      users.groups.crowdsec = { };
+
+      sops.secrets.${cfg.sopsLapiCredentialsFile} = {
+        format = "yaml";
+        mode = "0640";
+        group = "crowdsec";
+        restartUnits = [
+          "crowdsec-agent.service"
+          "crowdsec-lapi.service"
         ];
-        scenarios = [
-          "crowdsecurity/ssh-bf"
-          "crowdsecurity/ssh-slow-bf"
-        ];
-        journalctlFilters = [
-          "_SYSTEMD_UNIT=sshd.service"
-        ];
-      })
-      // {
-        environment.systemPackages = [pkgs.crowdsec];
-        environment.etc = etcConfig;
+      };
 
-        users.groups.crowdsec = {};
+      sops.secrets.${cfg.sopsBouncerCredentialsFile} = {
+        format = "yaml";
+        mode = "0640";
+        group = "crowdsec";
+        restartUnits = [ "cs-firewall-bouncer.service" ];
+      };
 
-        sops.secrets.${cfg.sopsLapiCredentialsFile} = {
-          format = "yaml";
-          mode = "0640";
-          group = "crowdsec";
-          restartUnits = ["crowdsec-agent.service" "crowdsec-lapi.service"];
-        };
-
-        sops.secrets.${cfg.sopsBouncerCredentialsFile} = {
-          format = "yaml";
-          mode = "0640";
-          group = "crowdsec";
-          restartUnits = ["cs-firewall-bouncer.service"];
-        };
-
-        systemd.services.crowdsec-agent = let
+      systemd.services.crowdsec-agent =
+        let
           preStartScript = pkgs.writeScript "crowdsec-agent-pre-start" ''
             #!/bin/sh
             set -e
@@ -141,11 +149,12 @@ in
 
             ${pkgs.crowdsec}/bin/cscli scenarios install ${escapeShellArgs cfg.scenarios}
           '';
-        in {
+        in
+        {
           description = "Crowdsec agent";
-          wantedBy = ["multi-user.target"];
+          wantedBy = [ "multi-user.target" ];
 
-          restartTriggers = [(builtins.toJSON etcConfig)];
+          restartTriggers = [ (builtins.toJSON etcConfig) ];
 
           serviceConfig = {
             Type = "notify";
@@ -169,43 +178,44 @@ in
           };
         };
 
-        networking.nftables.ruleset = mkBefore ''
-          table inet firewall {
-            set crowdsec-blacklists {
-              type ipv4_addr
-              flags timeout
-            }
-            set crowdsec6-blacklists {
-              type ipv6_addr
-              flags timeout
-            }
+      networking.nftables.ruleset = mkBefore ''
+        table inet firewall {
+          set crowdsec-blacklists {
+            type ipv4_addr
+            flags timeout
           }
-        '';
+          set crowdsec6-blacklists {
+            type ipv6_addr
+            flags timeout
+          }
+        }
+      '';
 
-        networking.nftables.firewall.zones.crowdsec-ban = {
-          ingressExpression = [
-            "ip saddr @crowdsec-blacklists"
-            "ip6 saddr @crowdsec6-blacklists"
-          ];
-          egressExpression = [
-            "ip daddr @crowdsec-blacklists"
-            "ip6 daddr @crowdsec6-blacklists"
-          ];
-        };
-        networking.nftables.firewall.rules.crowdsec-ban = {
-          from = ["crowdsec-ban"];
-          to = "all";
-          ruleType = "ban";
-          extraLines = [
-            "counter drop"
-          ];
-        };
-        networking.nftables.chains.conntrack.cs-block.rules = [
-          "ip saddr @crowdsec-blacklists reject"
-          "ip6 saddr @crowdsec6-blacklists reject"
+      networking.nftables.firewall.zones.crowdsec-ban = {
+        ingressExpression = [
+          "ip saddr @crowdsec-blacklists"
+          "ip6 saddr @crowdsec6-blacklists"
         ];
+        egressExpression = [
+          "ip daddr @crowdsec-blacklists"
+          "ip6 daddr @crowdsec6-blacklists"
+        ];
+      };
+      networking.nftables.firewall.rules.crowdsec-ban = {
+        from = [ "crowdsec-ban" ];
+        to = "all";
+        ruleType = "ban";
+        extraLines = [
+          "counter drop"
+        ];
+      };
+      networking.nftables.chains.conntrack.cs-block.rules = [
+        "ip saddr @crowdsec-blacklists reject"
+        "ip6 saddr @crowdsec6-blacklists reject"
+      ];
 
-        systemd.services.cs-firewall-bouncer = let
+      systemd.services.cs-firewall-bouncer =
+        let
           configFile = yaml.generate "cs-firewall-bouncer.yaml" {
             mode = "nftables";
             log_mode = "stdout";
@@ -222,14 +232,15 @@ in
               };
             };
           };
-          confDir = pkgs.runCommandLocal "cs-firewall-bounder-config" {} ''
+          confDir = pkgs.runCommandLocal "cs-firewall-bounder-config" { } ''
             mkdir $out
             ln -s ${configFile} $out/config.yaml
             ln -s ${config.sops.secrets.${cfg.sopsBouncerCredentialsFile}.path} $out/config.yaml.local
           '';
-        in {
-          wantedBy = ["multi-user.target"];
-          after = ["nftables.service"];
+        in
+        {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "nftables.service" ];
 
           unitConfig = {
             PartOf = "nftables.service";
@@ -251,5 +262,5 @@ in
             DynamicUser = true;
           };
         };
-      };
-  }
+    };
+}

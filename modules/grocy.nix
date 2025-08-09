@@ -1,12 +1,15 @@
-{ mkTrivialModule
-, lib
-, pkgs
-, ...
-}: with lib;
+{
+  mkTrivialModule,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 let
   hostName = "grocy.0jb.de";
-in mkTrivialModule {
+in
+mkTrivialModule {
 
   services.grocy = {
     enable = true;
@@ -15,7 +18,7 @@ in mkTrivialModule {
     settings = {
       currency = "EUR";
       culture = "de";
-      calendar.firstDayOfWeek = 1;  # Monday
+      calendar.firstDayOfWeek = 1; # Monday
     };
   };
 

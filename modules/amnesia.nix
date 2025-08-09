@@ -1,5 +1,7 @@
-{ mkTrivialModule
-, ... }:
+{
+  mkTrivialModule,
+  ...
+}:
 
 mkTrivialModule {
 

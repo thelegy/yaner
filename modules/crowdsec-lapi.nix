@@ -6,18 +6,21 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   acmeHost = config.networking.fqdn;
   lapi_credentials_path = "/etc/crowdsec/local_api_credentials.yaml";
   port = 8080;
-  yaml = pkgs.formats.yaml {};
+  yaml = pkgs.formats.yaml { };
 in
-  mkModule {
-    options = liftToNamespace {};
+mkModule {
+  options = liftToNamespace { };
 
-    config = cfg: let
+  config =
+    cfg:
+    let
       domain = config.wat.thelegy.crowdsec.lapiDomain;
-      confDir = pkgs.runCommandLocal "crowdsec-lapi-config" {} ''
+      confDir = pkgs.runCommandLocal "crowdsec-lapi-config" { } ''
         mkdir $out
         ln -s ${pkgs.crowdsec}/share/crowdsec/config/patterns $out/
         ln -s ${pkgs.crowdsec}/share/crowdsec/config/simulation.yaml $out/
@@ -61,17 +64,20 @@ in
         #!/bin/sh
         STATE_DIRECTORY=/var/lib/crowdsec-lapi exec ${pkgs.crowdsec}/bin/cscli -c ${mainConfig} "$@"
       '';
-    in {
-      wat.thelegy.acme.extraDomainNames = [domain];
+    in
+    {
+      wat.thelegy.acme.extraDomainNames = [ domain ];
 
       wat.thelegy.crowdsec.enable = true;
-      environment.systemPackages = [cscli-lapi];
+      environment.systemPackages = [ cscli-lapi ];
 
-      sops.secrets.${config.wat.thelegy.crowdsec.sopsLapiCredentialsFile}.restartUnits = ["crowdsec-lapi.service"];
+      sops.secrets.${config.wat.thelegy.crowdsec.sopsLapiCredentialsFile}.restartUnits = [
+        "crowdsec-lapi.service"
+      ];
 
       systemd.services.crowdsec-lapi = {
         description = "Crowdsec local api server";
-        wantedBy = ["multi-user.target"];
+        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           Type = "notify";
@@ -95,4 +101,4 @@ in
         };
       };
     };
-  }
+}

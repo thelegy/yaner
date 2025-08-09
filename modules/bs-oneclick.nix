@@ -1,8 +1,10 @@
-{ mkTrivialModule
-, lib
-, pkgs
-, ...
-}: with lib;
+{
+  mkTrivialModule,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 let
   bs-install-dir = "/home/beinke/.local/share/Steam/steamapps/common/Beat Saber";
@@ -10,21 +12,23 @@ let
 in
 mkTrivialModule {
 
-  home-manager.users.beinke = { ... }: {
+  home-manager.users.beinke =
+    { ... }:
+    {
 
-    xdg.desktopEntries."bs-oneclick" = {
-      exec = "${bs-oneclick}/bin/bs-oneclick %u";
-      name = "Beat Saber OneClick Install";
-      type = "Application";
-      startupNotify = false;
-      mimeType = [
-        "x-scheme-handler/beatsaver"
-        "x-scheme-handler/modelsaber"
-        "x-scheme-handler/bsplaylist"
-      ];
-      noDisplay = true;
+      xdg.desktopEntries."bs-oneclick" = {
+        exec = "${bs-oneclick}/bin/bs-oneclick %u";
+        name = "Beat Saber OneClick Install";
+        type = "Application";
+        startupNotify = false;
+        mimeType = [
+          "x-scheme-handler/beatsaver"
+          "x-scheme-handler/modelsaber"
+          "x-scheme-handler/bsplaylist"
+        ];
+        noDisplay = true;
+      };
+
     };
-
-  };
 
 }

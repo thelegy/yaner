@@ -1,99 +1,110 @@
-{ mkModule
-, config
-, lib
-, liftToNamespace
-, ... }:
+{
+  mkModule,
+  config,
+  lib,
+  liftToNamespace,
+  ...
+}:
 with lib;
 
 mkModule {
-  options = cfg: liftToNamespace {
+  options =
+    cfg:
+    liftToNamespace {
 
-    sopsPasswordFile = mkOption {
-      type = types.str;
-      default = "syncthing-gui-password";
+      sopsPasswordFile = mkOption {
+        type = types.str;
+        default = "syncthing-gui-password";
+      };
+
+      passwordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
+
     };
+  config =
+    cfg:
+    let
+      inherit (config.services.syncthing)
+        user
+        group
+        configDir
+        dataDir
+        package
+        ;
+      usesSops = cfg.passwordFile == null;
+      passwordFile =
+        if usesSops then config.sops.secrets.${cfg.sopsPasswordFile}.path else cfg.passwordFile;
+      port = 8384;
+    in
+    {
 
-    passwordFile = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
+      sops.secrets.${cfg.sopsPasswordFile} = mkIf usesSops {
+        format = "yaml";
+        mode = "0600";
+        restartUnits = [ "syncthing.service" ];
+      };
 
-  };
-  config = cfg: let
-    inherit (config.services.syncthing) user group configDir dataDir package;
-    usesSops = cfg.passwordFile == null;
-    passwordFile =
-      if usesSops
-      then config.sops.secrets.${cfg.sopsPasswordFile}.path
-      else cfg.passwordFile;
-    port = 8384;
-  in {
+      systemd.tmpfiles.rules = [ "d ${dataDir} 0700 ${user} ${group}" ];
 
-    sops.secrets.${cfg.sopsPasswordFile} = mkIf usesSops {
-      format = "yaml";
-      mode = "0600";
-      restartUnits = [ "syncthing.service" ];
-    };
+      services.syncthing = {
+        enable = true;
+        openDefaultPorts = true;
+        guiAddress = mkForce "0.0.0.0:${toString port}";
 
-    systemd.tmpfiles.rules = [ "d ${dataDir} 0700 ${user} ${group}" ];
+        user = mkDefault "beinke";
+        group = mkDefault "users";
+        dataDir = mkDefault "/srv/sync";
 
-    services.syncthing = {
-      enable = true;
-      openDefaultPorts = true;
-      guiAddress = mkForce "0.0.0.0:${toString port}";
-
-      user = mkDefault "beinke";
-      group = mkDefault "users";
-      dataDir = mkDefault "/srv/sync";
-
-      overrideDevices = false;
-      overrideFolders = false;
-      settings = {
-        options = {
-          urAccepted = -1;
-          crashReportingEnabled = false;
-        };
-        defaults = {
-          folder = {
-            path = dataDir;
+        overrideDevices = false;
+        overrideFolders = false;
+        settings = {
+          options = {
+            urAccepted = -1;
+            crashReportingEnabled = false;
+          };
+          defaults = {
+            folder = {
+              path = dataDir;
+            };
           };
         };
       };
-    };
 
-    systemd.services.syncthing = {
-      confinement = {
-        enable = true;
+      systemd.services.syncthing = {
+        confinement = {
+          enable = true;
+        };
+        preStart = ''
+          ${package}/bin/syncthing generate \
+            --home=${configDir} \
+            --gui-user=${user} \
+            --gui-password=- \
+            --skip-port-probing \
+            --no-default-folder \
+            < $CREDENTIALS_DIRECTORY/gui-password
+        '';
+        serviceConfig = {
+          BindPaths = [ dataDir ];
+          BindReadOnlyPaths = [
+            "/etc/resolv.conf"
+            "/etc/ssl/certs/ca-certificates.crt"
+            "/etc/static/ssl/certs/ca-certificates.crt"
+          ];
+          LoadCredential = "gui-password:${passwordFile}";
+        };
       };
-      preStart = ''
-        ${package}/bin/syncthing generate \
-          --home=${configDir} \
-          --gui-user=${user} \
-          --gui-password=- \
-          --skip-port-probing \
-          --no-default-folder \
-          < $CREDENTIALS_DIRECTORY/gui-password
-      '';
-      serviceConfig = {
-        BindPaths = [ dataDir ];
-        BindReadOnlyPaths = [
-          "/etc/resolv.conf"
-          "/etc/ssl/certs/ca-certificates.crt"
-          "/etc/static/ssl/certs/ca-certificates.crt"
-        ];
-        LoadCredential = "gui-password:${passwordFile}";
+
+      environment.systemPackages = [ package ];
+
+      wat.thelegy.backup.extraExcludes = [ "/srv/sync/replica" ];
+
+      networking.nftables.firewall.rules.syncthing-gui = {
+        from = [ "tailscale" ];
+        to = [ "fw" ];
+        allowedTCPPorts = [ port ];
       };
+
     };
-
-    environment.systemPackages = [ package ];
-
-    wat.thelegy.backup.extraExcludes = ["/srv/sync/replica"];
-
-    networking.nftables.firewall.rules.syncthing-gui = {
-      from = ["tailscale"];
-      to = ["fw"];
-      allowedTCPPorts = [port];
-    };
-
-  };
 }

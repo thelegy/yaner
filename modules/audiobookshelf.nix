@@ -4,7 +4,8 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   acmeHost = config.networking.fqdn;
   dir = "/srv/audiobooks";
   domain = "audiobooks.beinke.cloud";
@@ -12,23 +13,23 @@
   port = 45425;
   user = config.services.audiobookshelf.user;
 in
-  mkTrivialModule {
-    wat.thelegy.acme.extraDomainNames = [domain];
+mkTrivialModule {
+  wat.thelegy.acme.extraDomainNames = [ domain ];
 
-    systemd.tmpfiles.rules = ["d ${dir} 0700 ${user} ${group}"];
+  systemd.tmpfiles.rules = [ "d ${dir} 0700 ${user} ${group}" ];
 
-    services.audiobookshelf = {
-      enable = true;
-      port = port;
+  services.audiobookshelf = {
+    enable = true;
+    port = port;
+  };
+
+  services.nginx.virtualHosts.${domain} = {
+    forceSSL = true;
+    useACMEHost = acmeHost;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${toString port}";
+      recommendedProxySettings = true;
+      proxyWebsockets = true;
     };
-
-    services.nginx.virtualHosts.${domain} = {
-      forceSSL = true;
-      useACMEHost = acmeHost;
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString port}";
-        recommendedProxySettings = true;
-        proxyWebsockets = true;
-      };
-    };
-  }
+  };
+}

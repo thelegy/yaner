@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,73 +12,75 @@ let
   cfg = config.services.he-dns;
   cfgs = attrValues cfg;
 
-  perDomainConfig = {name, ...}: {
-    options = {
-      domain = mkOption {
-        type = types.str;
-        default = "";
-        description = ''
-          The Domain to configure HE DDNS for.
-        '';
+  perDomainConfig =
+    { name, ... }:
+    {
+      options = {
+        domain = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            The Domain to configure HE DDNS for.
+          '';
+        };
+        keyfile = mkOption {
+          type = types.str;
+          description = ''
+            Path to a file containing the HE DDNS password.
+          '';
+        };
+        updateA = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            If to update the A record.
+          '';
+        };
+        updateAAAA = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            If to update the AAAA record.
+          '';
+        };
+        takeIPv6FromInterface = mkOption {
+          type = types.str;
+          default = "";
+          example = "eth0";
+          description = ''
+            Get the ipv6 address from this interface. All interfaces are considered, when this is empty.
+          '';
+        };
+        onCalendar = mkOption {
+          type = with types; nullOr str;
+          default = "*:00/10:00";
+          example = "*:00/5:00";
+          description = ''
+            OnCalendar value for the systemd-timer. See SYSTEMD.TIME(7).
+          '';
+        };
+        onBootSec = mkOption {
+          type = with types; nullOr str;
+          default = "1min";
+          example = "5min";
+          description = ''
+            OnBootSec value for the systemd-timer. See SYSTEMD.TIME(7).
+          '';
+        };
+        updateEndpoint = mkOption {
+          type = types.str;
+          default = "https://dyn.dns.he.net/nic/update";
+          description = ''
+            Update Url. Changes to this are very unlikely.
+          '';
+        };
       };
-      keyfile = mkOption {
-        type = types.str;
-        description = ''
-          Path to a file containing the HE DDNS password.
-        '';
-      };
-      updateA = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          If to update the A record.
-        '';
-      };
-      updateAAAA = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          If to update the AAAA record.
-        '';
-      };
-      takeIPv6FromInterface = mkOption {
-        type = types.str;
-        default = "";
-        example = "eth0";
-        description = ''
-          Get the ipv6 address from this interface. All interfaces are considered, when this is empty.
-        '';
-      };
-      onCalendar = mkOption {
-        type = with types; nullOr str;
-        default = "*:00/10:00";
-        example = "*:00/5:00";
-        description = ''
-          OnCalendar value for the systemd-timer. See SYSTEMD.TIME(7).
-        '';
-      };
-      onBootSec = mkOption {
-        type = with types; nullOr str;
-        default = "1min";
-        example = "5min";
-        description = ''
-          OnBootSec value for the systemd-timer. See SYSTEMD.TIME(7).
-        '';
-      };
-      updateEndpoint = mkOption {
-        type = types.str;
-        default = "https://dyn.dns.he.net/nic/update";
-        description = ''
-          Update Url. Changes to this are very unlikely.
-        '';
+      config = {
+        domain = mkDefault name;
       };
     };
-    config = {
-      domain = mkDefault name;
-    };
-  };
 
-  flattenList = l: builtins.foldl' (x: y: x//y) {} l;
+  flattenList = l: builtins.foldl' (x: y: x // y) { } l;
 
   ddnsV4Script = domainCfg: ''
     ${pkgs.curl}/bin/curl --silent -4 "${domainCfg.updateEndpoint}" -d "hostname=${domainCfg.domain}" -d "password=$(cat ${domainCfg.keyfile})"
@@ -94,41 +101,50 @@ let
     echo
   '';
 
-  ddnsScript = domainCfg:
+  ddnsScript =
+    domainCfg:
     # ipv6 does ip detection which might fail, so run ipv4 first
-    (optionalString domainCfg.updateA (ddnsV4Script domainCfg)) +
-    (optionalString domainCfg.updateAAAA (ddnsV6Script domainCfg));
+    (optionalString domainCfg.updateA (ddnsV4Script domainCfg))
+    + (optionalString domainCfg.updateAAAA (ddnsV6Script domainCfg));
 
-  ddnsService = domainCfg: optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
-    "he-ddns-${domainCfg.domain}" = {
-      description = "Hurricane Electric DDNS Update Service";
-      requires = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      script = ddnsScript domainCfg;
+  ddnsService =
+    domainCfg:
+    optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
+      "he-ddns-${domainCfg.domain}" = {
+        description = "Hurricane Electric DDNS Update Service";
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        script = ddnsScript domainCfg;
+      };
     };
-  };
 
-  ddnsTimer = domainCfg: optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
-    "he-ddns-${domainCfg.domain}" = {
-      description = "Hurricane Electric DDNS Update Timer";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      timerConfig = { Unit = "he-ddns-${domainCfg.domain}.service"; }
-        // (optionalAttrs (!isNull domainCfg.onBootSec) { OnBootSec = domainCfg.onBootSec; })
-        // (optionalAttrs (!isNull domainCfg.onCalendar) { OnCalendar = domainCfg.onCalendar; });
+  ddnsTimer =
+    domainCfg:
+    optionalAttrs (domainCfg.updateAAAA || domainCfg.updateA) {
+      "he-ddns-${domainCfg.domain}" = {
+        description = "Hurricane Electric DDNS Update Timer";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        timerConfig =
+          {
+            Unit = "he-ddns-${domainCfg.domain}.service";
+          }
+          // (optionalAttrs (!isNull domainCfg.onBootSec) { OnBootSec = domainCfg.onBootSec; })
+          // (optionalAttrs (!isNull domainCfg.onCalendar) { OnCalendar = domainCfg.onCalendar; });
+      };
     };
-  };
 
-in {
+in
+{
 
   options.services.he-dns = mkOption {
     type = with types; loaOf (submodule perDomainConfig);
-    default = {};
+    default = { };
     description = ''
-     Timer for updating HE DDNS Records.
-     Documentation: https://dns.he.net/docs.html
-     '';
+      Timer for updating HE DDNS Records.
+      Documentation: https://dns.he.net/docs.html
+    '';
   };
 
   config = {

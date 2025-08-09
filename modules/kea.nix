@@ -1,22 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-
 
 let
 
   cfg = config.services.kea;
 
-  writeConfig = cfg: let
-    localConfiguration = {
-      Dhcp4 = {
-        "interfaces-config" = {
-          interfaces = cfg.interfaces;
+  writeConfig =
+    cfg:
+    let
+      localConfiguration = {
+        Dhcp4 = {
+          "interfaces-config" = {
+            interfaces = cfg.interfaces;
+          };
         };
       };
-    };
-    configuration = lib.recursiveUpdate localConfiguration cfg.additionalConfig;
-  in
+      configuration = lib.recursiveUpdate localConfiguration cfg.additionalConfig;
+    in
     pkgs.writeText "kea.json" (builtins.toJSON configuration);
 
   keaService = {
@@ -30,20 +36,23 @@ let
         mkdir -m 700 -p /var/run/kea /var/lib/kea
       '';
       serviceConfig =
-      let
-        configFile = writeConfig cfg;
-        args = [
-          "@${cfg.package}/bin/kea-dhcp4" "kea-dhcp4"
-          "-c" "${configFile}"
-        ];
-      in {
-        ExecStart = concatMapStringsSep " " escapeShellArg args;
-      };
+        let
+          configFile = writeConfig cfg;
+          args = [
+            "@${cfg.package}/bin/kea-dhcp4"
+            "kea-dhcp4"
+            "-c"
+            "${configFile}"
+          ];
+        in
+        {
+          ExecStart = concatMapStringsSep " " escapeShellArg args;
+        };
     };
   };
 
-
-in {
+in
+{
 
   options.services.kea = {
     enable = mkEnableOption "Kea service";
@@ -57,7 +66,7 @@ in {
     };
     interfaces = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       defaultText = "[]";
       description = ''
         The interfaces Kea should listen on.
@@ -65,7 +74,7 @@ in {
     };
     additionalConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       defaultText = "{}";
       description = ''
         Additional configuration for Kea

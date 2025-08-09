@@ -1,7 +1,9 @@
-{ mkTrivialModule
-, lib
-, pkgs
-, ... }:
+{
+  mkTrivialModule,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 
 mkTrivialModule {
@@ -11,7 +13,7 @@ mkTrivialModule {
   # Undervolting the cpu for less energy consumation and more power
   services.undervolt = {
     enable = true;
-    coreOffset = -80;  # undervolt the CPU in mV
+    coreOffset = -80; # undervolt the CPU in mV
   };
 
   hardware.graphics = {

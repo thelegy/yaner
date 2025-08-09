@@ -7,51 +7,53 @@
   ...
 }:
 with lib;
-  mkModule {
-    options = cfg:
-      liftToNamespace {
-        baseDomain = mkOption {
-          type = types.str;
-          default = "beinke.cloud";
-        };
-
-        domain = mkOption {
-          type = types.str;
-          default = "pw.${cfg.baseDomain}";
-        };
-
-        useACMEHost = mkOption {
-          type = with types; nullOr str;
-          default = null;
-        };
-
-        secretsFile = mkOption {
-          type = with types; nullOr str;
-          default =
-            if isNull cfg.sopsSecretsFile
-            then null
-            else config.sops.secrets.${cfg.sopsSecretsFile}.path;
-        };
-
-        sopsSecretsFile = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-        };
+mkModule {
+  options =
+    cfg:
+    liftToNamespace {
+      baseDomain = mkOption {
+        type = types.str;
+        default = "beinke.cloud";
       };
 
-    config = cfg: let
-      sopsIsUsed = ! isNull cfg.sopsSecretsFile;
+      domain = mkOption {
+        type = types.str;
+        default = "pw.${cfg.baseDomain}";
+      };
+
+      useACMEHost = mkOption {
+        type = with types; nullOr str;
+        default = null;
+      };
+
+      secretsFile = mkOption {
+        type = with types; nullOr str;
+        default =
+          if isNull cfg.sopsSecretsFile then null else config.sops.secrets.${cfg.sopsSecretsFile}.path;
+      };
+
+      sopsSecretsFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
+    };
+
+  config =
+    cfg:
+    let
+      sopsIsUsed = !isNull cfg.sopsSecretsFile;
       user = config.users.users.vaultwarden.name;
       group = config.users.groups.vaultwarden.name;
       port = 8222;
       backupDir = "/var/lib/vaultwarden_backup";
-    in {
+    in
+    {
 
       systemd.tmpfiles.rules = [ "d ${backupDir} 0700 ${user} ${group}" ];
 
       systemd.services.vaultwarden = {
         preStart = "rm -f $STATE_DIRECTORY/config.json";
-        serviceConfig.SupplementaryGroups = mkIf sopsIsUsed ["keys"];
+        serviceConfig.SupplementaryGroups = mkIf sopsIsUsed [ "keys" ];
       };
 
       sops.secrets.${cfg.sopsSecretsFile} = mkIf sopsIsUsed {
@@ -78,9 +80,9 @@ with lib;
 
       wat.thelegy.crowdsec = {
         enable = true;
-        parsers = ["Dominic-Wagner/vaultwarden-logs"];
-        scenarios = ["Dominic-Wagner/vaultwarden-bf"];
-        journalctlFilters = ["SYSLOG_IDENTIFIER=vaultwarden"];
+        parsers = [ "Dominic-Wagner/vaultwarden-logs" ];
+        scenarios = [ "Dominic-Wagner/vaultwarden-bf" ];
+        journalctlFilters = [ "SYSLOG_IDENTIFIER=vaultwarden" ];
       };
 
       services.nginx.virtualHosts.${cfg.domain} = {
@@ -94,4 +96,4 @@ with lib;
       };
 
     };
-  }
+}

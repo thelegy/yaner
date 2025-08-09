@@ -1,7 +1,9 @@
-{ mkTrivialModule
-, lib
-, pkgs
-, ... }:
+{
+  mkTrivialModule,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 
 mkTrivialModule {

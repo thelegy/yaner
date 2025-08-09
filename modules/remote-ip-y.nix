@@ -5,21 +5,25 @@
   ...
 }:
 with lib;
-  mkModule {
-    options = cfg:
-      liftToNamespace {
-        role = mkOption {
-          type = types.enum ["proxy" "satelite"];
-        };
+mkModule {
+  options =
+    cfg:
+    liftToNamespace {
+      role = mkOption {
+        type = types.enum [
+          "proxy"
+          "satelite"
+        ];
       };
-    config = cfg: let
+    };
+  config =
+    cfg:
+    let
       isProxy = cfg.role == "proxy";
       name = "static-y";
-      bandwidth =
-        if isProxy
-        then ""
-        else "20M";
-    in {
+      bandwidth = if isProxy then "" else "20M";
+    in
+    {
       wat.thelegy.static-net.enable = true;
       wat.thelegy.remote-ip = {
         enable = true;
@@ -34,4 +38,4 @@ with lib;
       };
       systemd.network.networks.${name}.cakeConfig.Bandwidth = bandwidth;
     };
-  }
+}
