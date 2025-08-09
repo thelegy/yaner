@@ -20,17 +20,22 @@ mkTrivialModule {
       extraPkgs = pkgs: with pkgs; [
         cabextract
         glxinfo
+        keyutils
         libbsd
+        libkrb5
         openssl
+        phinger-cursors
       ];
     };
   };
 
   users.users.beinke = {
     packages = with pkgs; [
+      gamescope
+      protonup
+      protontricks
       steam
       steam.run
-      protonup
     ];
   };
 
