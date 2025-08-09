@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-CsF4lzLbsWTxj5LqrmYxe48C7fbREo6hAMpDdbQyRpk=";
 
   buildAndTestSubdir = if lsp then "lsp" else "cli";
-  buildFeatures = ["remote-server"];
+  buildFeatures = [ "remote-server" ];
 
-  nativeBuildInputs = [pkg-config];
-  buildInputs = [openssl];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 }

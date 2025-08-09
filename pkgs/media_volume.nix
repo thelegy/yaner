@@ -1,4 +1,10 @@
-{ lib, writeScript, zsh, playerctl, ponymix }:
+{
+  lib,
+  writeScript,
+  zsh,
+  playerctl,
+  ponymix,
+}:
 
 writeScript "media-volume" ''
   #!${zsh}/bin/zsh

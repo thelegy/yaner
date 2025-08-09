@@ -16,7 +16,11 @@ buildPythonPackage rec {
     hash = "sha256-LD5rLYOLIgqA3siMiaoysvCAxVJ+w+sxobWBlCN1MDc=";
   };
 
-  nativeBuildInputs = [poetry-core];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [pydantic pyhumps quart];
+  propagatedBuildInputs = [
+    pydantic
+    pyhumps
+    quart
+  ];
 }

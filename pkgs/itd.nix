@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitea
-, libGL
-, pkg-config
-, xorg
+{
+  buildGoModule,
+  fetchFromGitea,
+  libGL,
+  pkg-config,
+  xorg,
 }:
 
 buildGoModule rec {

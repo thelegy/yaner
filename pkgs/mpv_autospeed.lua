@@ -7,13 +7,13 @@ function main_loop(name, value)
   if value ~= nil then
     if value > target_buffer_max then
       -- buffer is too large
-      speed = 1 + ((value/target_buffer_max - 1) * overbuffer_factor)
+      speed = 1 + ((value / target_buffer_max - 1) * overbuffer_factor)
     elseif value < target_buffer_min then
       -- running out of buffer
-      speed = value/target_buffer_min
+      speed = value / target_buffer_min
     end
   end
   mp.set_property_number("speed", speed)
 end
 
-mp.observe_property("demuxer-cache-duration", "number", main_loop);
+mp.observe_property("demuxer-cache-duration", "number", main_loop)

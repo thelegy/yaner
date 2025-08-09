@@ -13,5 +13,8 @@ buildPythonPackage rec {
     hash = "sha256-bHhBN+h9Vx9Q4wZVKxMzkEEXzV7hKoQz8i+JpkSFsYA=";
   };
 
-  propagatedBuildInputs = [requests pydantic];
+  propagatedBuildInputs = [
+    requests
+    pydantic
+  ];
 }

@@ -12,5 +12,5 @@ buildPythonPackage rec {
     hash = "sha256-5RHDP5ZHTXVDM2FwCUQ7FkHCTnYU0FH4wNV0ZnDSJDo=";
   };
 
-  propagatedBuildInputs = [docopt];
+  propagatedBuildInputs = [ docopt ];
 }

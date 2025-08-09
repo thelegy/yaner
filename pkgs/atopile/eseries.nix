@@ -13,7 +13,10 @@ buildPythonPackage rec {
     hash = "sha256-BhIrGBQaKK53WLtCORsWO8QgOf17kdNjNjHAyPowDjY=";
   };
 
-  propagatedBuildInputs = [docopt_subcommands future];
+  propagatedBuildInputs = [
+    docopt_subcommands
+    future
+  ];
 
   doCheck = false;
 }
