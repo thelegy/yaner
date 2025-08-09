@@ -25,6 +25,10 @@ mkTrivialModule {
     pkgs.probe-rs-udev
   ];
 
+  virtualisation.containers.enable = true;
+
+  programs.nix-ld.enable = true;
+
   users.users.beinke = {
     packages = with pkgs; [
       anki-bin
@@ -34,21 +38,30 @@ mkTrivialModule {
       element-desktop
       entr
       file
+      fnm
       fzf
+      gitbutler
       git-filter-repo
       git-revise
       kicad-small
+      kubectl
       launch-cadquery
       ldns
+      lens
       libfaketime
       lua-language-server
+      mqttx
+      mqttx-cli
       mumble
       nil
       nixGL
       nixfmt-rfc-style
       nixpkgs-fmt
       obsidian
+      orca-slicer
       pass
+      podman
+      podman-desktop
       prusa-slicer
       pyright
       signal-desktop
@@ -60,8 +73,13 @@ mkTrivialModule {
       typst
       typst-languagetool
       typst-languagetool-lsp
+      virt-manager
       vscode
       zotero
     ];
   };
+
+  programs.zsh.shellInit = ''
+    eval "$(fnm env --use-on-cd)"
+  '';
 }
