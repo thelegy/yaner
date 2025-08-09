@@ -125,6 +125,11 @@ with final; {
 
   qbar = flakes.qbar.packages.${system}.qbar;
 
+  roc-toolkit-sox = roc-toolkit.overrideAttrs (orig: {
+    sconsFlags = lib.filter (x: x != "--disable-sox") orig.sconsFlags;
+    buildInputs = (orig.buildInputs or []) ++ [sox];
+  });
+
   typst-languagetool = callPackage ./typst-languagetool.nix {};
   typst-languagetool-lsp = callPackage ./typst-languagetool.nix {lsp = true;};
 
