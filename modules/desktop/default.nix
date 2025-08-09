@@ -20,17 +20,41 @@ mkTrivialModule {
     };
 
     # Enable sway to ensure pam is configured properly for swaylock
-    sway.enable = true;
+    sway = {
+      enable = true;
+      wrapperFeatures.gtk = true;
+    };
 
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
+      pinentryPackage = pkgs.pinentry-gnome3;
     };
   };
 
   networking.networkmanager = {
     enable = true;
   };
+
+  programs.sway.extraSessionCommands = ''
+    export GTK_THEME=Blackbird
+    export GTK_ICON_THEME=Tango
+    export MOZ_ENABLE_WAYLAND=1
+    export MOZ_USE_XINPUT2=1
+    export XDG_SESSION_TYPE=wayland
+    export XDG_CURRENT_DESKTOP=sway
+  '';
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
+    ];
+  };
+  # environment.sessionVariables.GTK_USE_PORTAL = "1";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
 
   users.users.beinke = {
     extraGroups = [ "networkmanager" "video" "audio" ];
@@ -78,9 +102,11 @@ mkTrivialModule {
   };
 
   environment.systemPackages = with pkgs; [
+    glxinfo
+    gsettings-desktop-schemas
+    phinger-cursors
     pinentry
     pinentry-gtk2
-    glxinfo
   ];
 
 }

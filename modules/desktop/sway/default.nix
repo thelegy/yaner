@@ -61,7 +61,23 @@ in {
   xdg.configFile."gtk-3.0/settings.ini".text = ''
     [Settings]
     gtk-application-prefer-dark-theme=1
+    gtk-cursor-theme-name=phinger-cursors-light
+    gtk-cursor-theme-size=32
   '';
+
+  xdg.configFile."gtk-4.0/settings.ini".text = ''
+    [Settings]
+    gtk-application-prefer-dark-theme=1
+    gtk-cursor-theme-name=phinger-cursors-light
+    gtk-cursor-theme-size=32
+  '';
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      cursor-size = 32;
+      cursor-theme = "phinger-cursors-light";
+    };
+  };
 
   wayland.windowManager.sway = {
     enable = true;
@@ -86,6 +102,10 @@ in {
 
       exec ${pkgs.gammastep}/bin/gammastep -t 5700:3400 -g 1 -l 52:9
       exec ${pkgs.mako}/bin/mako
+
+      for_window [app_id="^firefox$" title="^Extension: \(Bitwarden - Free Password Manager\) - Bitwarden — Mozilla Firefox$"] floating enable, exec ~/bin/foo
+      # for_window [app_id="^firefox$" title="^Extension: \(Bitwarden - Free Password Manager\) - Bitwarden — Mozilla Firefox$"] floating enable, focus, floating disable, focus, floating enable
+      # for_window [app_id="^firefox$" title="^Extension: \(Bitwarden - Free Password Manager\) - Bitwarden — Mozilla Firefox$"] move scratchpad, resize set width 435 px height 600 px, scratchpad show
     '';
 
     config = {
@@ -129,6 +149,9 @@ in {
         smartBorders = "no_gaps";
         inner = 5;
         outer = -5;
+      };
+      seat."*" = {
+        xcursor_theme = "phinger-cursors-light 32";
       };
       modes = lib.mkOptionDefault {
         "${modeExit}" = {
