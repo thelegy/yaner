@@ -94,6 +94,8 @@ with final; {
     then prev.opensshWithKerberos
     else prev.openssh;
 
+  pkgs-unstable = flakes.nixpkgs.legacyPackages.${system};
+
   preprocess-cancellation = python3Packages.preprocess-cancellation;
 
   probe-rs-udev =
