@@ -70,7 +70,13 @@ with lib;
         appendFailedSuffix = true;
         encryption = {
           mode = "repokey-blake2";
-          passCommand = "cat ${passphraseFile}";
+          passCommand = "${pkgs.writeShellScript "borg-offsite-passcommand" ''
+            if [[ "$UID" == "0" ]]; then
+              cat ${passphraseFile}
+            else
+              /run/wrappers/bin/sudo cat ${passphraseFile}
+            fi
+          ''}";
         };
         preHook = ''
           ${pkgs.callPackage ./snapshot.nix {}}
