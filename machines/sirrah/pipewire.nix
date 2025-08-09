@@ -1,22 +1,25 @@
-{ lib, pkgs, config, ... }:
-with lib;
-
 {
-
-  wat.thelegy.rtlan-net.enable = true;
-  wat.thelegy.roc-client = {
-    enable = true;
-    serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.y.address);
-    localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
-  };
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+with lib; {
+  # wat.thelegy.rtlan-net.enable = true;
+  # wat.thelegy.roc-client = {
+  #   enable = true;
+  #   serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.y.address);
+  #   localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
+  # };
 
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
+    pulse.enable = true;
     configPackages = [
-      (pkgs.writeTextDir "50-proxy-output-2_0.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/50-proxy-output-2_0.conf" ''
         context.modules = [
           {
             name = libpipewire-module-combine-stream
@@ -37,7 +40,9 @@ with lib;
                 }
               ]
             }
-      )
+          }
+        ]
+      '')
     ];
   };
 

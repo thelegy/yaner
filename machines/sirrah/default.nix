@@ -55,6 +55,7 @@ in
     #rocm-opencl-icd
     #rocm-opencl-runtime
     amdvlk
+    rocmPackages.clr.icd
   ];
 
   # To enable Vulkan support for 32-bit applications, also add:
@@ -63,30 +64,50 @@ in
   ];
   environment.variables.AMD_VULKAN_ICD = "RADV";  # as opposed to AMDVLK
 
-  fileSystems."/data" = {
-    device = "/dev/disk/by-label/data";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "x-systemd.automount"
-      "noauto"
-    ];
+  services.flatpak.enable = true;
+
+  hardware.bluetooth.enable = true;
+
+  services.languagetool = {
+    enable = true;
   };
 
 
   networking.firewall.allowedTCPPorts = [
+    4321
     8080
+    46898
+    46899
   ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" "armv7l-linux" ];
 
   users.groups.libvirt = {};
-  users.users.beinke.extraGroups = [ "vboxusers" "dialout" "libvirt" ];
+  programs.adb.enable = true;
+  users.users.beinke.extraGroups = [ "vboxusers" "dialout" "libvirt" "adbusers"];
 
   users.users.beinke.packages = with pkgs; [
     #BeatSaberModManager
     blender
     patchelf
   ];
+
+  environment.pathsToLink = [ "/libexec" ];
+  services.xserver = {
+    enable = true;
+    displayManager.startx.enable = true;
+    desktopManager.xterm.enable = false;
+    desktopManager.xfce.enable = true;
+    windowManager.i3.enable = true;
+  };
+  services.displayManager.defaultSession = "xfce";
+
+  hardware.amdgpu.opencl.enable = true;
+
+  nixpkgs.config.rocmSupport = true;
+
+  services.ollama = {
+    enable = true;
+  };
 
 })
