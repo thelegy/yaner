@@ -7,6 +7,11 @@
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBYOIVo2qzW3rCKRebqhlWT0gHdFk3bvQCVmQ2dlXb4K"
   },
 
+  "ender3s1pi": {
+    "ipv6Tailscale": "fd7a:115c:a1e0::ef01:155f",
+    "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgP0bUWQAF6bDHvqG6rMPX91krFBtDwYGKhaZXcd32B"
+  },
+
   "forever": {
     "ipv4Addresses": [ "195.201.216.243" ],
     "ipv6Addresses": [ "2a01:4f8:1c1e:8ee7::1" ],
@@ -32,6 +37,11 @@
   "sirrah": {
     "ipv6Tailscale": "fd7a:115c:a1e0:ab12:4843:cd96:6250:172d",
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJhA+GhouAa4QNJwGkrnC92zIHUN8y2M5Ux9/bNEJP5a"
+  },
+
+  "starblade": {
+    "ipv6Tailscale": "fd7a:115c:a1e0::9801:f17f",
+    "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMP+680zbFLr2qk2bYyWBUqzUTMyV7v7HrKtlMcVH67b"
   },
 
   "th1": {
