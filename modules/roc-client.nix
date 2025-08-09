@@ -1,4 +1,10 @@
-{ mkModule, liftToNamespace, lib, config, ... }:
+{
+  lib,
+  liftToNamespace,
+  mkModule,
+  pkgs,
+  ...
+}:
 with lib;
 
 mkModule {
@@ -37,7 +43,7 @@ mkModule {
 
   config = cfg: {
     services.pipewire.configPackages = [
-      (pkgs.writeTextDir "60-roc-sender-20.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/60-roc-sender-20.conf" ''
         context.modules = [
           {
             name = libpipewire-module-roc-sink
@@ -53,7 +59,7 @@ mkModule {
           }
         ]
       '')
-      (pkgs.writeTextDir "60-roc-receiver-20.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/60-roc-receiver-20.conf" ''
         context.modules = [
           {
             name = libpipewire-module-roc-source
