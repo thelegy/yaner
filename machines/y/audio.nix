@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 
 let
@@ -10,7 +15,8 @@ let
   clients = [ "sirrah" ];
   snapcast-stream-port = 1704;
   snapcast-control-port = 1705;
-in {
+in
+{
 
   hardware.bluetooth.enable = true;
 
@@ -154,19 +160,28 @@ in {
     rules.rtlan-audio-server = {
       from = [ "rtlan" ];
       to = [ "fw" ];
-      allowedUDPPorts = [ rocSourcePortOut rocRepairPortOut ];
+      allowedUDPPorts = [
+        rocSourcePortOut
+        rocRepairPortOut
+      ];
     };
 
     rules.snapcast = {
-      from = [ "home" "tailscale" ];
+      from = [
+        "home"
+        "tailscale"
+      ];
       to = [ "fw" ];
       allowedTCPPorts = [
-        1780  # snapcast-http
-        1704  # snapcast-stream
-        1705  # snapcast-control
+        1780 # snapcast-http
+        1704 # snapcast-stream
+        1705 # snapcast-control
       ];
       allowedTCPPortRanges = [
-        { from = 4953; to = 5153; }
+        {
+          from = 4953;
+          to = 5153;
+        }
       ];
     };
 
@@ -241,19 +256,21 @@ in {
   #  };
   #};
 
-  systemd.services.wdr2 = let
-    # streamUrl = "https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
-    streamUrl = "https://wdrhf.akamaized.net/hls/live/2027966/wdr2rheinland/master.m3u8";
-    # streamUrl = "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3?dist=veronica_web&ttag=talpa_consent:0&gdpr=0&gdpr_consent=";
-  in {
-    enable =  true;
-    serviceConfig = {
-      DynamicUser = true;
-      ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=alsa --no-terminal ${streamUrl}";
-      SupplementaryGroups = [ "pipewire" ];
-      Restart = "always";
-      RestartSec = "5s";
+  systemd.services.wdr2 =
+    let
+      # streamUrl = "https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
+      streamUrl = "https://wdrhf.akamaized.net/hls/live/2027966/wdr2rheinland/master.m3u8";
+      # streamUrl = "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3?dist=veronica_web&ttag=talpa_consent:0&gdpr=0&gdpr_consent=";
+    in
+    {
+      enable = true;
+      serviceConfig = {
+        DynamicUser = true;
+        ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=alsa --no-terminal ${streamUrl}";
+        SupplementaryGroups = [ "pipewire" ];
+        Restart = "always";
+        RestartSec = "5s";
+      };
+      wantedBy = [ "multi-user.target" ];
     };
-    wantedBy = [ "multi-user.target" ];
-  };
 }

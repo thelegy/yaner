@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 let
 
@@ -7,8 +13,7 @@ let
   root_uuid = "418207c3-4a35-4dab-97f1-465aecb3829a";
   swap_uuid = "4690e529-fb66-41d8-bfc3-42f604259e4b";
 
-  root_subvolume = subvolid:
-  {
+  root_subvolume = subvolid: {
     device = "/dev/disk/by-uuid/${root_uuid}";
     fsType = "btrfs";
     options = [
@@ -19,12 +24,18 @@ let
     ];
   };
 
-in {
+in
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "nvme"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
