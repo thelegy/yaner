@@ -10,7 +10,6 @@ mkTrivialModule {
 
   virtualisation.libvirtd = {
     enable = true;
-    qemu.package = mkDefault pkgs.qemu_kvm;
     qemu.runAsRoot = false;
     onShutdown = mkDefault "shutdown";
   };
