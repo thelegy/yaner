@@ -77,7 +77,9 @@ in {
     verdict = "accept";
   };
 
-  networking.firewall.allowedTCPPorts = [9999 6443 443];
+  networking.firewall.allowedTCPPorts = [9999 9443 6443 443];
+
+  virtualisation.podman.enable = true;
 
   #virtualisation.incus = {
   #  enable = true;
