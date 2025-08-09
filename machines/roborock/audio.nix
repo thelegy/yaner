@@ -14,26 +14,24 @@ in
     alsa.enable = true;
     pulse.enable = true;
     configPackages = [
-      (pkgs.writeTextDir "70-snapcast.conf" (
-        json.generate "pipewire-snapcast.conf" {
-          "context.modules" = [
-            {
-              name = "libpipewire-module-pipe-tunnel";
-              args = {
-                "tunnel.mode" = "sink";
-                "pipe.filename" = "/run/pipewire/snapfifo";
-                "audio.format" = "S16LE";
-                "audio.rate" = 48000;
-                "audio.channels" = 2;
-                "stream.props" = {
-                  "node.name" = "Snapcast";
-                  "audio.position" = "FL,FR";
-                };
-              };
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/70-snapcast.conf" ''
+        context.modules = [
+          {
+            name = libpipewire-module-pipe-tunnel
+            args = {
+              tunnel.mode = "sink"
+              pipe.filename = "/run/pipewire/snapfifo"
+              audio.format = S16LE
+              audio.rate = 48000
+              audio.channels = 2
+              stream.props = {
+                node.name = "Snapcast"
+                audio.position = "FL,FR"
+              }
             }
-          ];
-        }
-      ))
+          }
+        ]
+      '')
     ];
   };
   systemd.services.pipewire.wantedBy = [ "multi-user.target" ];
@@ -61,6 +59,24 @@ in
   #          };
   #        };
   #      }
+  #      #{
+  #      #  name = "libpipewire-module-loopback";
+  #      #  args = {
+  #      #    "node.description" = "Input proxy";
+  #      #    "capture.props" = {
+  #      #      "node.name" = "input-proxy-capture";
+  #      #      "node.description" = "Input proxy capture";
+  #      #      "audio.position" = "MONO";
+  #      #    };
+  #      #    "playback.props" = {
+  #      #      "node.name" = "input-proxy";
+  #      #      "media.class" = "Audio/Source";
+  #      #      "audio.position" = "MONO";
+  #      #    };
+  #      #  };
+  #      #}
+  #    ];
+  #  };
   #};
 
   #environment.etc."pipewire/pipewire.conf.d/80-network.conf" = {
@@ -91,6 +107,16 @@ in
     allowedUDPPorts = [ 10001 10002 10011 10012 ];
   };
 
+  networking.nftables.firewall.rules.snapcast = {
+    from = [ "home" "tailscale" ];
+    to = [ "fw" ];
+    allowedTCPPorts = [
+      1780  # snapcast-http
+      1704  # snapcast-stream
+      1705  # snapcast-control
+    ];
+  };
+
   users.users.beinke.extraGroups = [ "pipewire" ];
 
   services.snapserver = {
@@ -111,6 +137,7 @@ in
   systemd.services.snapserver.serviceConfig.SupplementaryGroups = [ "pipewire" ];
 
   services.spotifyd = {
+    enable = false;
     # enable = true;
     config = ''
       [global]
@@ -137,11 +164,15 @@ in
     };
   };
 
-  systemd.services.wdr2 = {
+  systemd.services.wdr2 = let
+    # streamUrl = "https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
+    streamUrl = "https://wdrhf.akamaized.net/hls/live/2027966/wdr2rheinland/master.m3u8";
+    # streamUrl = "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3?dist=veronica_web&ttag=talpa_consent:0&gdpr=0&gdpr_consent=";
+  in {
     enable =  true;
     serviceConfig = {
       DynamicUser = true;
-      ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=alsa --no-terminal https://www1.wdr.de/radio/player/radioplayer104~_layout-popupVersion.html";
+      ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=alsa --no-terminal ${streamUrl}";
       SupplementaryGroups = [ "pipewire" ];
       Restart = "always";
     };

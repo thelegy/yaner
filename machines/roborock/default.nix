@@ -78,32 +78,6 @@ with lib;
     networks.internal = {
       name = "internal";
       address = [ "10.0.16.1/22" ];
-      networkConfig.IPForward = true;
-      extraConfig = ''
-        [Network]
-        DHCPv6PrefixDelegation = yes
-        IPv6SendRA = yes
-
-        [IPv6SendRA]
-        RouterLifetimeSec = 300
-
-        [DHCPv6PrefixDelegation]
-        SubnetId = 2
-        Token = ::1
-
-        [CAKE]
-        Bandwidth =
-        '';
-    };
-    netdevs.internal2 = {
-      netdevConfig = {
-        Name = "internal2";
-        Kind = "vlan";
-      };
-      vlanConfig.Id = 43;
-    };
-    networks.internal2 = {
-      name = "internal2";
       networkConfig.IPv4Forwarding = true;
       networkConfig.IPv6Forwarding = true;
       extraConfig = ''
@@ -115,12 +89,38 @@ with lib;
         #RouterLifetimeSec = 300
 
         #[DHCPv6PrefixDelegation]
+        #SubnetId = 2
         #Token = ::1
 
         [CAKE]
         Bandwidth =
-      '';
+        '';
     };
+    # netdevs.internal2 = {
+    #   netdevConfig = {
+    #     Name = "internal2";
+    #     Kind = "vlan";
+    #   };
+    #   vlanConfig.Id = 43;
+    # };
+    # networks.internal2 = {
+    #   name = "internal2";
+    #   networkConfig.IPForward = true;
+    #   extraConfig = ''
+    #     [Network]
+    #     #DHCPv6PrefixDelegation = yes
+    #     #IPv6SendRA = yes
+    #
+    #     #[IPv6SendRA]
+    #     #RouterLifetimeSec = 300
+    #
+    #     #[DHCPv6PrefixDelegation]
+    #     #Token = ::1
+    #
+    #     [CAKE]
+    #     Bandwidth =
+    #   '';
+    # };
     netdevs.uplink = {
       netdevConfig = {
         Name = "uplink";
@@ -160,6 +160,7 @@ with lib;
         Bandwidth = 35M
 
         [DHCPv6]
+        #ForceDHCPv6PDOtherInformation = yes
       '';
     };
     #networks.uplink = {
@@ -189,8 +190,19 @@ with lib;
         "internal"
         "uplink"
         "pppoe"
-        "internal2"
+        # "internal2"
       ];
+      networkConfig = {
+        # Disable addressing as no untagged vlan is used
+        LinkLocalAddressing = "no";
+        LLDP = false;
+        EmitLLDP = false;
+        IPv6AcceptRA = false;
+        IPv6SendRA = false;
+      };
+      linkConfig = {
+        RequiredForOnline = false;
+      };
       extraConfig = ''
         [CAKE]
         Bandwidth =
@@ -236,7 +248,14 @@ with lib;
           1704  # snapcast-stream
           1705  # snapcast-control
           1883  # mqtt
+          9090
         ];
+      };
+
+      public = {
+        from = "all";
+        to = [ "fw" ];
+        allowedUDPPorts = [ 1347 ];
       };
 
       nixos-firewall.from = [ "insecure" "internal" "tailscale" ];
@@ -252,7 +271,7 @@ with lib;
           53  # dns
           1883  # mqtt
           4713  # pulseaudio-native
-          8083  # zigbee2mqtt-frontend
+          # 8083  # zigbee2mqtt-frontend
         ];
       };
 
@@ -263,6 +282,7 @@ with lib;
 
   services.pdns-recursor = {
     enable = true;
+    dnssecValidation = "log-fail";
     dns = {
       # Allow connections from everywhere and let the firewall do its buisness
       address = "0.0.0.0 ::";
@@ -303,19 +323,15 @@ with lib;
             { name = "routers"; data = "10.0.16.1"; }
             { name = "domain-name-servers"; data = "10.0.16.1"; }
           ];
+          reservations = [
+            { ip-address = "10.0.16.10"; hw-address = "f0:2f:74:23:03:0a"; }
+          ];
         }];
       };
     };
   };
 
   #systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-
-  users.users.jens-nix = {
-    isNormalUser = true;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILoGbf7pBykwDg0ODBT+1fb2ek3ojqnLG/tZeARAQhlt trusted-build-user@beini"
-    ];
-  };
 
   services.mosquitto = {
     enable = true;
@@ -342,11 +358,34 @@ with lib;
   services.he-dns = {
     "roborock.beinqo.de" = {
       keyfile = "/etc/secrets/he_passphrase";
-      takeIPv6FromInterface = "internal";
+      takeIPv6FromInterface = "uplink";
     };
   };
 
   security.acme.defaults.extraLegoFlags = [ "--dns.disable-cp" ];
+  # security.acme = {
+  #   acceptTerms = true;
+  #   #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+  #   defaults.email = "mail+letsencrypt@0jb.de";
+  #   preliminarySelfsigned = false;
+  #   certs = {
+  #     "roborock.0jb.de" = {
+  #       extraDomainNames = [
+  #         "home.0jb.de"
+  #         "grafana.0jb.de"
+  #         "grocy.0jb.de"
+  #       ];
+  #       dnsProvider = "hurricane";
+  #       credentialsFile = "/etc/secrets/acme";
+  #       group = "nginx";
+  #       postRun = ''
+  #         systemctl start --failed nginx.service
+  #         systemctl reload nginx.service
+  #       '';
+  #     };
+  #   };
+  # };
+
 
   users.users.nginx.extraGroups = [ "acme" ];
   services.nginx = {
@@ -407,7 +446,8 @@ with lib;
     pdns-recursor
   ];
 
-  nix.settings.trusted-users = [ "beinke" "jens-nix" ];
+  nix.settings.trusted-users = [ "beinke" ];
+  nix.settings.extra-platforms = [ "armv7l-linux" ];
 
   system.stateVersion = "19.03";
 
