@@ -165,7 +165,7 @@ D("thelegy.de", REG_NONE, DnsProvider("inwx"),
   []
 )
 
-D("die-cloud.org", REG_NONE, DnsProvider("hetzner"),
+D("die-cloud.org", REG_NONE, DnsProvider("inwx"),
   CAA_LETSENCRYPT(),
 
   INWX_PARKING("@"),
