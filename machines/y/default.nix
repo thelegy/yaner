@@ -28,6 +28,7 @@ in {
     enable = true;
     staging = false;
     extraDomainNames = [
+      "docs.sibylle.beinke.cloud"
       "ender3s1.0jb.de"
       "grafana.0jb.de"
       "ha.0jb.de"
@@ -61,6 +62,10 @@ in {
   wat.thelegy.remote-ip-y = {
     enable = true;
     role = "satelite";
+  };
+
+  boot.kernel.sysctl = {
+    "fs.inotify.max_user_watches" = 1048576;
   };
 
   networking.useDHCP = false;
@@ -156,8 +161,24 @@ in {
     allowedTCPPorts = [20108];
   };
 
+  services.openssh.settings.X11Forwarding = true;
+
   wat.thelegy.ender3s1 = {
     enable = true;
+  };
+
+  services.nginx.virtualHosts."docs.sibylle.beinke.cloud" = {
+    forceSSL = true;
+    useACMEHost = config.networking.fqdn;
+    listenAddresses = ["195.201.46.105"];
+    locations."/" = {
+      proxyPass = "http://192.168.1.2:28981";
+      recommendedProxySettings = true;
+      proxyWebsockets = true;
+      extraConfig = ''
+        client_max_body_size 100M;
+      '';
+    };
   };
 
 })

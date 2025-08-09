@@ -6,10 +6,13 @@ let
   rocRepairPortOut = 10002;
   rocSourcePortIn = 10011;
   rocRepairPortIn = 10012;
-  clients = [ "sirrah" "th1" ];
+  # clients = [ "sirrah" "th1" ];
+  clients = [ "sirrah" ];
   snapcast-stream-port = 1704;
   snapcast-control-port = 1705;
 in {
+
+  hardware.bluetooth.enable = true;
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -18,13 +21,13 @@ in {
     alsa.enable = true;
     pulse.enable = true;
     configPackages = [
-      (pkgs.writeTextDir "30-defaults.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/30-defaults.conf" ''
         context,properties = {
           default.clock.rate = 48000
           default.clock.allowed-rates = [ 48000, ]
         }
       '')
-      (pkgs.writeTextDir "50-proxy-output-2_0.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/50-proxy-output-2_0.conf" ''
         context.modules = [
           {
             name = libpipewire-module-combine-stream
@@ -48,7 +51,7 @@ in {
           }
         ]
       '')
-      (pkgs.writeTextDir "50-proxy-input-2_0.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/50-proxy-input-2_0.conf" ''
         context.modules = [
           {
             name = libpipewire-module-combine-stream
@@ -76,7 +79,7 @@ in {
           }
         ]
       '')
-      (pkgs.writeTextDir "60-roc-receiver-2_0.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/60-roc-receiver-2_0.conf" ''
         context.modules = [
           {
             name = libpipewire-module-roc-source
@@ -95,7 +98,7 @@ in {
           }
         ]
       '')
-      (pkgs.writeTextDir "60-roc-sender-2_0.conf" ''
+      (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/60-roc-sender-2_0.conf" ''
         context.modules = [
         ${concatMapStringsSep "\n" (client: ''
           {
@@ -161,6 +164,9 @@ in {
         1780  # snapcast-http
         1704  # snapcast-stream
         1705  # snapcast-control
+      ];
+      allowedTCPPortRanges = [
+        { from = 4953; to = 5153; }
       ];
     };
 
@@ -246,6 +252,7 @@ in {
       ExecStart = "${pkgs.mpv}/bin/mpv --script=${pkgs.mpv_autospeed} -af scaletempo --ao=alsa --no-terminal ${streamUrl}";
       SupplementaryGroups = [ "pipewire" ];
       Restart = "always";
+      RestartSec = "5s";
     };
     wantedBy = [ "multi-user.target" ];
   };
