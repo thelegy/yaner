@@ -27,10 +27,10 @@ let
       <features>
         <acpi/>
       </features>
-      <vcpu>4</vcpu>
+      <vcpu>6</vcpu>
       <cpu mode="host-model" />
-      <memory unit="G">4</memory>
-      <currentMemory unit="G">2</currentMemory>
+      <memory unit="G">6</memory>
+      <currentMemory unit="G">4</currentMemory>
       <devices>
         <emulator>/run/libvirt/nix-emulators/qemu-kvm</emulator>
         <console type="pty" />
@@ -101,6 +101,9 @@ in mkTrivialModule {
       recommendedProxySettings = true;
       proxyWebsockets = true;
       proxyPass = "http://${ip}:8123";
+      extraConfig = ''
+        client_max_body_size 100M;
+      '';
     };
   };
 
