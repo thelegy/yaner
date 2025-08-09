@@ -59,7 +59,6 @@ mkMachine { } (
     boot.supportedFilesystems = [ "ntfs" ];
 
     wat.thelegy.leg-net.enable = true;
-    wat.thelegy.wg-net.leg.nodes.roborock.endpoint = mkForce "localhost:2222";
     wat.thelegy.rtlan-net.enable = true;
 
     # Enable systemd-networkd in addition to NetworkManager
