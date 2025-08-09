@@ -18,6 +18,13 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
   systemd.services.ModemManager.path = [ pkgs.libqmi ];
 
   services.ratbagd.enable = true;
+  services.fwupd.enable = true;
+
+  boot.kernelParams = [
+    "nvme_core.default_ps_max_latency_us=0"
+    "pcie_aspm=off"
+    "pcie_port_pm=off"
+  ];
 
   wat.thelegy.hw-t470.enable = true;
   wat.thelegy.syncthing.enable = true;
@@ -26,9 +33,6 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
   wat.thelegy.backup = {
     enable = true;
     borgbaseRepo = "v0ggts06";
-    extraExcludes = [
-      "/home/.pre-repair-2020-11-19"
-    ];
     extraReadWritePaths = [
       "/.backup-snapshots"
       "/nix/.backup-snapshots"
@@ -41,7 +45,11 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
     localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
   };
 
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.supportedFilesystems = [ "ntfs" ];
+
   wat.thelegy.leg-net.enable = true;
+  wat.thelegy.wg-net.leg.nodes.roborock.endpoint = mkForce "localhost:2222";
   wat.thelegy.rtlan-net.enable = true;
 
   # Enable systemd-networkd in addition to NetworkManager
@@ -60,6 +68,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
       id = "1199:9079";
       path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
     }];
+    #networkmanager.wifi.backend = "iwd";
   };
   services.resolved.enable = true;
 
@@ -67,7 +76,13 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
 
   programs.adb.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 8000 ];
+  networking.firewall.allowedTCPPorts = [
+    8000
+    8080
+  ];
+  networking.firewall.allowedUDPPorts = [
+    2223  # tunnelbore
+  ];
 
   nix.settings.trusted-users = [ "beinke" ];
 
@@ -87,7 +102,7 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
       ];
       speedFactor = 5;
       supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      maxJobs = 24;
+      maxJobs = 48;
     }
   ];
   nix.distributedBuilds = true;
@@ -107,13 +122,21 @@ mkMachine {} ( { lib, pkgs, config, ... }: with lib; {
   };
   environment.sessionVariables.GTK_USE_PORTAL = "1";
 
+  programs.ssh.setXAuthLocation = true;
+
   hardware.bluetooth = {
     enable = true;
   };
 
+  # Enable udev rules for mtp and such
+  services.gvfs.enable = true;
 
   environment.systemPackages = with pkgs; [
+    entr
+    mendeley
     tcpdump
+    viddy
+
     itd
   ];
 

@@ -12,6 +12,8 @@ let
     device = "/dev/disk/by-uuid/${root_uuid}";
     fsType = "btrfs";
     options = [
+      "noatime"
+      #"discard=async"
       "compress=zstd"
       "subvolid=${toString subvolid}"
     ];
