@@ -96,6 +96,8 @@ mkModule {
       prometheus.scrape "unix" {
         targets = prometheus.exporter.unix.self.targets
         forward_to = [prometheus.remote_write.default.receiver]
+        scrape_interval = "5s"
+        scrape_timeout = "5s"
       }
     '';
   };
