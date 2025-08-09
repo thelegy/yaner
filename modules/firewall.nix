@@ -1,7 +1,9 @@
 { mkTrivialModule
+, config
+, lib
 , ... }: mkTrivialModule {
 
-  networking.nftables.stopRuleset = ''
+  networking.nftables.stopRuleset = lib.traceSeqN 10 config.networking.nftables.ruleset ''
     table inet filter {
       chain input {
         type filter hook input priority 0; policy drop
