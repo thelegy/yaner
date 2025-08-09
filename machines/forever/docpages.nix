@@ -6,7 +6,10 @@
     serverAliases = [
       "0jb.de"
     ];
-    root = "/srv/www/0jb.de";
+    locations."/".root = "/srv/www/0jb.de";
+    locations."~ ^/akhm(/|$)".extraConfig = ''
+      rewrite ^/akhm(.*)$ https://github.com/thelegy/analog-keyboard-handwiring-module$1 redirect;
+    '';
   };
 
   legy.docpages = {
