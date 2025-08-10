@@ -64,6 +64,17 @@ mkModule {
       };
       wat.thelegy.backup.repo = mkIf isBorgBase "ssh://${cfg.borgbaseRepo}@${cfg.borgbaseRepo}.repo.borgbase.com/./repo";
 
+      # Pre-backup target for services to hook into
+      systemd.targets.pre-backup = {
+        description = "Pre-backup preparation target";
+        requires = [ "multi-user.target" ];
+        before = [ "borgbackup-job-offsite.service" ];
+        unitConfig = {
+          StopWhenUnneeded = true;
+          PartOf = [ "borgbackup-job-offsite.service" ];
+        };
+      };
+
       services.borgbackup.jobs.offsite = {
         archiveBaseName = "${config.networking.hostName}";
         startAt = "hourly";
@@ -122,6 +133,8 @@ mkModule {
       };
 
       systemd.services.borgbackup-job-offsite = {
+        after = [ "pre-backup.target" ];
+        requires = [ "pre-backup.target" ];
         serviceConfig = {
           Type = "oneshot";
           Restart = "on-failure";
