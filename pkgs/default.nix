@@ -75,6 +75,8 @@ flakes: final: prev: with final; {
 
   media_volume = callPackage ./media_volume.nix { };
 
+  mkOnDemand = callPackage ./mkOnDemand.nix { };
+
   mpv_autospeed = ./mpv_autospeed.lua;
 
   neovim-thelegy = flakes.qed.packages.${system}.qed;
