@@ -37,6 +37,7 @@ mkTrivialModule {
       anki-bin
       #atopile
       cabal-install
+      (mkOnDemand { pkg = code-cursor; })
       direnv
       element-desktop
       entr
