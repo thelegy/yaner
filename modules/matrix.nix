@@ -121,6 +121,7 @@ mkModule {
           enable_registration = false;
           url_preview_enabled = true;
           expire_access_token = true;
+          delete_stale_devices_after = "180d";
         };
 
         extraConfigFiles = [
