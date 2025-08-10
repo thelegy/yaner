@@ -1,7 +1,12 @@
 { mkMachine, ... }:
 
 mkMachine { } (
-  { lib, config, ... }:
+  {
+    lib,
+    config,
+    pkgs,
+    ...
+  }:
   with lib;
   {
 
@@ -44,6 +49,7 @@ mkMachine { } (
       useACMEHost = "forever.0jb.de";
       sopsSecretsFile = "matrix-synapse-keys";
     };
+    wat.thelegy.postgresql.package = pkgs.postgresql_14;
     wat.thelegy.vaultwarden = {
       enable = true;
       useACMEHost = "forever.0jb.de";

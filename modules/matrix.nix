@@ -76,16 +76,12 @@ mkModule {
         config.services.matrix-synapse.package
       ];
 
-      services.postgresql = {
-        enable = true;
-        package = pkgs.postgresql_14;
-        settings.listen_addresses = mkForce "";
-        ensureUsers = [
-          {
-            name = "matrix-synapse";
-          }
-        ];
-      };
+      wat.thelegy.postgresql.enable = true;
+      services.postgresql.ensureUsers = [
+        {
+          name = "matrix-synapse";
+        }
+      ];
 
       # Matrix Server
       services.matrix-synapse = {
