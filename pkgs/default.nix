@@ -16,6 +16,12 @@ flakes: final: prev: with final; {
 
   cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix { };
 
+  element-desktop =
+    if lib.versionOlder (lib.getVersion prev.element-desktop) "1.11.109" then
+      flakes.nixpkgs-matrix.legacyPackages.${system}.element-desktop
+    else
+      prev.element-desktop;
+
   formats = prev.formats // {
     yaml =
       { }:
@@ -72,6 +78,12 @@ flakes: final: prev: with final; {
       flakes.nixpkgs.legacyPackages.${system}.lego
     else
       prev.lego;
+
+  matrix-synapse-unwrapped =
+    if lib.versionOlder (lib.getVersion prev.matrix-synapse-unwrapped) "1.135.2" then
+      flakes.nixpkgs-matrix.legacyPackages.${system}.matrix-synapse-unwrapped
+    else
+      prev.matrix-synapse-unwrapped;
 
   media_volume = callPackage ./media_volume.nix { };
 

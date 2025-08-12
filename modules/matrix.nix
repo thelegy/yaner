@@ -88,6 +88,12 @@ mkModule {
         enable = true;
         log.root.level = "WARNING";
 
+        extras = mkForce [
+          "systemd"
+          "postgres"
+          "url-preview"
+        ];
+
         settings = {
           server_name = cfg.baseDomain;
           database.name = "psycopg2";

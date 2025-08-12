@@ -6,6 +6,8 @@
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nixpkgs-matrix.url = "github:NixOS/nixpkgs/master";
+
     wat = {
       url = "github:thelegy/wat";
       inputs.nixpkgs.follows = "nixpkgs";

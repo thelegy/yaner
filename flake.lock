@@ -185,6 +185,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-matrix": {
+      "locked": {
+        "lastModified": 1754954321,
+        "narHash": "sha256-4/dtN47lJTcvop1iZp7ysuulkIJxfISDP52hf95eUag=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a75a062c39617f6d0632e02f93f3c3d76bf9f02c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "master",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1753345091,
@@ -300,6 +316,7 @@
         "nixGL": "nixGL",
         "nixos-nftables-firewall": "nixos-nftables-firewall",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-matrix": "nixpkgs-matrix",
         "nixpkgs-snm": [
           "snm",
           "nixpkgs-24_11"
