@@ -45,6 +45,7 @@ mkModule {
         serviceConfig = {
           Type = "oneshot";
           User = "postgres";
+          RemainAfterExit = true;
           ExecStart = pkgs.writeShellScript "postgresql-dump" ''
             set -euo pipefail
 
@@ -59,6 +60,7 @@ mkModule {
         };
         partOf = [ "pre-backup.target" ];
         requiredBy = [ "pre-backup.target" ];
+        unitConfig.StopWhenUnneeded = true;
       };
 
       # Ensure backup directory exists with proper permissions
