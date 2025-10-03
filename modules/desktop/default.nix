@@ -1,6 +1,7 @@
 {
   mkTrivialModule,
   config,
+  flakes,
   options,
   pkgs,
   ...
@@ -46,6 +47,8 @@ mkTrivialModule {
     export XDG_SESSION_TYPE=wayland
     export XDG_CURRENT_DESKTOP=sway
   '';
+
+  programs.niri.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -97,6 +100,7 @@ mkTrivialModule {
         ./foot.nix
         ./kitty.nix
         ./mako.nix
+        (import ./niri flakes)
         ./sway
       ];
     };
@@ -104,6 +108,7 @@ mkTrivialModule {
   fonts = {
     packages = with pkgs; [
       nerd-fonts.fira-code
+      material-symbols
     ];
     fontconfig.defaultFonts.monospace = [ "FiraCode Nerd Font" ];
   };
