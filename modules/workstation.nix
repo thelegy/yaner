@@ -44,10 +44,10 @@ mkTrivialModule {
       file
       fnm
       fzf
-      gitbutler
+      (mkOnDemand { pkg = gitbutler; })
       git-filter-repo
       git-revise
-      kicad-small
+      (mkOnDemand { pkg = kicad; })
       kubectl
       launch-cadquery
       ldns
