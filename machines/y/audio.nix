@@ -198,13 +198,9 @@ in
   services.snapserver = {
     enable = true;
     port = snapcast-stream-port;
-    streams.default = {
-      type = "pipe";
-      location = "/run/pipewire/snapfifo";
-      query = {
-        mode = "read";
-      };
-    };
+    settings.stream.source = [
+      "pipe:///run/pipewire/snapfifo?name=wdr2&mode=read"
+    ];
     tcp = {
       enable = true;
       port = snapcast-control-port;

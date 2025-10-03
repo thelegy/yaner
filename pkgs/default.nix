@@ -3,6 +3,11 @@ flakes: final: prev: with final; {
 
   bs-oneclick = callPackage ./bs-oneclick.nix { };
 
+  # Sops-nix needs this on agony
+  buildGo124Module =
+    prev.buildGo124Module
+      or flakes.nixpkgs.legacyPackages.${system}.buildGo124Module;
+
   crowdsec =
     (
       if lib.versionOlder prev.crowdsec.version "1.6.0" then

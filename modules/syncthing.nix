@@ -81,8 +81,7 @@ mkModule {
             --home=${configDir} \
             --gui-user=${user} \
             --gui-password=- \
-            --skip-port-probing \
-            --no-default-folder \
+            --no-port-probing \
             < $CREDENTIALS_DIRECTORY/gui-password
         '';
         serviceConfig = {
