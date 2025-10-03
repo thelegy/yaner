@@ -34,10 +34,12 @@ mkTrivialModule {
 
   users.users.beinke = {
     packages = with pkgs; [
+      aichat
       anki-bin
       #atopile
       cabal-install
       (mkOnDemand { pkg = code-cursor; })
+      crush
       direnv
       element-desktop
       entr
@@ -62,6 +64,7 @@ mkTrivialModule {
       nixfmt-rfc-style
       nixfmt-tree
       obsidian
+      opencode
       orca-slicer
       pass
       podman
