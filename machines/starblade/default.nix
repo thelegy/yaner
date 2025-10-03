@@ -11,7 +11,12 @@ mkMachine
       ...
     }:
     with lib;
+    let
 
+      networkInterface = "enp6s0";
+      macAddress = "60:cf:84:bf:a4:a0";
+
+    in
     {
 
       system.stateVersion = "24.11";
@@ -55,11 +60,43 @@ mkMachine
         netdevConfig = {
           Name = "br0";
           Kind = "bridge";
+          MACAddress = macAddress;
         };
+      };
+
+      systemd.network.networks.${networkInterface} = {
+        name = "${networkInterface}";
+        bridge = [ "br0" ];
+        networkConfig.VLAN = [ "dmz" ];
       };
       systemd.network.networks.br0 = {
         name = "br0";
         DHCP = "yes";
+        extraConfig = ''
+          [CAKE]
+          Bandwidth =
+        '';
+      };
+
+      systemd.network.netdevs."dmz" = {
+        netdevConfig = {
+          Name = "dmz";
+          Kind = "vlan";
+        };
+        vlanConfig = {
+          Id = 5;
+        };
+      };
+      systemd.network.networks."dmz" = {
+        matchConfig.Name = "dmz";
+        linkConfig.RequiredForOnline = "no";
+        networkConfig = {
+          DHCP = "no";
+          LinkLocalAddressing = "no";
+          IPv6AcceptRA = false;
+          LLMNR = "no";
+          MulticastDNS = false;
+        };
       };
 
       networking.hostId = "5e64b0b4";
@@ -151,6 +188,104 @@ mkMachine
               };
               PAPERLESS_URL = "https://docs.sibylle.beinke.cloud";
               PAPERLESS_TRUSTED_PROXIES = "192.168.1.3";
+            };
+          };
+        };
+      };
+
+      environment.etc."traefik/nixos.toml" = {
+        mode = "0644";
+        source = (pkgs.formats.toml { }).generate "nixos.toml" {
+          http.routers.audiobooks = {
+            rule = "Host(`audiobooks.beinke.cloud`)";
+            service = "audiobooks";
+          };
+          http.services.audiobooks.loadBalancer = {
+            servers = [ { url = "https://audiobooks.beinke.cloud"; } ];
+          };
+        };
+      };
+      sops.secrets.traefik-env = {
+        format = "yaml";
+        mode = "0600";
+        restartUnits = [ "container@ingress.service" ];
+      };
+      containers.ingress = {
+        autoStart = true;
+        privateNetwork = true;
+        macvlans = [ "dmz" ];
+        bindMounts."/etc/traefik" = {
+          hostPath = "/etc/traefik";
+          isReadOnly = true;
+        };
+        bindMounts.${config.sops.secrets.traefik-env.path} = {
+          hostPath = config.sops.secrets.traefik-env.path;
+          isReadOnly = true;
+        };
+        config = containerArgs: {
+          nixpkgs.pkgs = pkgs;
+          system.stateVersion = "24.11";
+          networking.interfaces.mv-dmz.useDHCP = true;
+          networking.useHostResolvConf = false;
+          services.resolved.enable = true;
+          networking.firewall.allowedTCPPorts = [
+            80
+            443
+          ];
+          networking.firewall.allowedUDPPorts = [
+            443
+          ];
+          users.users.acme = {
+            home = "/var/lib/acme";
+            homeMode = "755";
+            group = "acme";
+            isSystemUser = true;
+          };
+          users.groups.acme = { };
+          systemd.services.traefik = {
+            serviceConfig.EnvironmentFile = config.sops.secrets.traefik-env.path;
+          };
+          services.traefik = {
+            enable = true;
+            staticConfigOptions = {
+              providers.file.directory = "/etc/traefik";
+              entryPoints = {
+                web = {
+                  address = ":80";
+                  http.redirections.entryPoint = {
+                    to = "websecure";
+                    scheme = "https";
+                    permanent = true;
+                  };
+                  observability = {
+                    accessLogs = false;
+                    metrics = false;
+                    tracing = false;
+                  };
+                };
+                websecure = {
+                  address = ":443";
+                  asDefault = true;
+                  http = {
+                    tls = { };
+                  };
+                  http3 = true;
+                };
+              };
+              certificatesResolvers = rec {
+                letsencrypt.acme = {
+                  email = "mail+letsencrypt@0jb.de";
+                  storage = "acme.json";
+                  keyType = "ecdsa";
+                  caServer = "https://acme-v02.api.letsencrypt.org/directory";
+                  dnsChallenge = {
+                    provider = "hurricane";
+                  };
+                };
+                letsencrypt-staging = recursiveUpdate letsencrypt {
+                  acme.caServer = "https://acme-staging-v02.api.letsencrypt.org/directory";
+                };
+              };
             };
           };
         };
