@@ -54,7 +54,6 @@ mkModule {
       acceptTerms = true;
       defaults.server = mkIf (cfg.staging) "https://acme-staging-v02.api.letsencrypt.org/directory";
       defaults.email = "mail+letsencrypt@0jb.de";
-      preliminarySelfsigned = false;
       certs.${cfg.defaultCertName} = {
         inherit (cfg) extraDomainNames;
         dnsProvider = cfg.dnsProvider;
