@@ -9,6 +9,10 @@ mkTrivialModule {
   wat.thelegy.wg-net.static = {
     privateKeyFile = config.sops.secrets.wgPrivateKey.path;
     defaultPort = 1334;
+    nodes.ucg-pb = {
+      address = "192.168.242.4/24";
+      publicKey = "Dzd1Qa8Deo9HJy5WXNexmvErkTDDbnEuZ+VjUdFbZWc=";
+    };
   };
 
   systemd.services.systemd-networkd.serviceConfig.SupplementaryGroups = [ "keys" ];
