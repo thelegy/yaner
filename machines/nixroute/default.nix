@@ -20,66 +20,6 @@ mkMachine { } (
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    networking.vlans.internal = {
-      id = 63;
-      interface = "enp1s0";
-    };
-
-    networking.interfaces.internal = {
-      ipv4.addresses = [
-        {
-          address = "192.168.42.1";
-          prefixLength = 24;
-        }
-      ];
-    };
-
-    networking.dhcpcd.extraConfig = ''
-      duid
-      noipv6rs
-      waitip 6
-      # Uncomment this line if you are running dhcpcd for IPv6 only.
-      #ipv6only
-
-      # use the interface connected to WAN
-      interface enp1s0
-      ipv6rs
-      iaid 1
-      # use the interface connected to your LAN
-      #ia_pd 1 internal
-      ia_pd 1/::/64 internal/0/64
-    '';
-
-    networking.nat = {
-      enable = true;
-      externalInterface = "enp1s0";
-      internalInterfaces = [ "internal" ];
-    };
-
-    boot.kernel.sysctl = {
-      "net.ipv6.conf.all.forwarding" = true;
-    };
-
-    services.kea = {
-      enable = true;
-      interfaces = [ "internal" ];
-    };
-
-    services.radvd = {
-      enable = true;
-      config = ''
-        interface internal {
-          AdvSendAdvert on;
-          MinRtrAdvInterval 3;
-          MaxRtrAdvInterval 10;
-          prefix ::/64 {
-            AdvRouterAddr on;
-            AdvPreferredLifetime 30;
-            AdvValidLifetime 60;
-          };
-        };
-      '';
-    };
 
     services.printing = {
       enable = true;
