@@ -48,6 +48,11 @@
       inputs.nixpkgs.follows = "nixpkgs-snm";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -61,10 +66,12 @@
       rec {
         namespace = [ "thelegy" ];
         loadOverlays = [
+          flakes.nix-index-database.overlays.nix-index
           flakes.nixGL.overlays.default
         ];
         loadModules = [
           flakes.homemanager.nixosModules.home-manager
+          flakes.nix-index-database.nixosModules.nix-index
           flakes.nixos-nftables-firewall.nixosModules.default
           flakes.sops-nix.nixosModules.sops
         ];
