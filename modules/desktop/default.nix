@@ -14,6 +14,10 @@ mkTrivialModule {
 
   hardware.graphics.enable = true;
 
+  services.upower = {
+    enable = true;
+  };
+
   programs = {
     chromium = {
       enable = true;
