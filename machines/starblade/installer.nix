@@ -28,6 +28,7 @@ in
   ];
 
   boot.loader.systemd-boot.enable = mkDefault true;
+  boot.loader.systemd-boot.configurationLimit = 15;
 
   boot.initrd.systemd = {
     enable = true;
