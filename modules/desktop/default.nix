@@ -37,6 +37,8 @@ mkTrivialModule {
       enableSSHSupport = true;
       pinentryPackage = pkgs.pinentry-gnome3;
     };
+
+    foot.enable = true;
   };
 
   networking.networkmanager = {

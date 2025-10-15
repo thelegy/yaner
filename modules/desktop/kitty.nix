@@ -10,9 +10,8 @@
 
       term = "xterm-kitty";
 
-      foreground = "#d0d0d0";
-      background = "#202020";
-      background_opacity = ".95";
+      foreground = "#DCD7BA";
+      background = "#1F1F28";
 
       scrollback_lines = 10000;
 
