@@ -84,12 +84,6 @@ flakes: final: prev: with final; {
     else
       prev.lego;
 
-  matrix-synapse-unwrapped =
-    if lib.versionOlder (lib.getVersion prev.matrix-synapse-unwrapped) "1.135.2" then
-      flakes.nixpkgs-matrix.legacyPackages.${system}.matrix-synapse-unwrapped
-    else
-      prev.matrix-synapse-unwrapped;
-
   media_volume = callPackage ./media_volume.nix { };
 
   mkOnDemand = callPackage ./mkOnDemand.nix { };

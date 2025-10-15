@@ -20,7 +20,6 @@ mkMachine { } (
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-
     services.printing = {
       enable = true;
       browsing = true;
