@@ -27,7 +27,6 @@ function ACME(record_name, target, options) {
   record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
   if(target.substring(0,7) === "static-") target = target.substring(7);
   if(target == "agony") target = "agony.he.0jb.de.";
-  if(target == "roborock") target = "roborock.he.0jb.de.";
   if(target == "y") target = "y.he.0jb.de.";
   target = target[target.length-1] == "." ? target : target + ".desec.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
@@ -103,9 +102,7 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
   CNAME_ACME("element", "forever"),
   CNAME_ACME("ender3s1", "y"),
   CNAME_ACME("grafana", "y"),
-  CNAME_ACME("grocy", "roborock"),
   CNAME_ACME("ha", "static-y"),
-  CNAME_ACME("home", "roborock"),
   CNAME_ACME("klipper", "y"),
   CNAME_ACME("loki", "y"),
   CNAME_ACME("mailmetrics", "forever"),

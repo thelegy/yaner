@@ -29,11 +29,6 @@
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKR82/+m55icO5TcGP9K7v80uzhkLyM/uzxYpfmWzJp2"
   },
 
-  "roborock": {
-    "ipv6Tailscale": "fd7a:115c:a1e0:ab12:4843:cd96:6246:b546",
-    "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIoIEgXlZ3CoP9reTVsoYS/Txz9+GNfD+VkY4hxLYQkV"
-  },
-
   "sirrah": {
     "ipv6Tailscale": "fd7a:115c:a1e0:ab12:4843:cd96:6250:172d",
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJhA+GhouAa4QNJwGkrnC92zIHUN8y2M5Ux9/bNEJP5a"
