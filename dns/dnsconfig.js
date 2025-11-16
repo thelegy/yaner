@@ -27,6 +27,7 @@ function ACME(record_name, target, options) {
   record_name = "_acme-challenge" + (record_name == "@" ? "" : "." + record_name);
   if(target.substring(0,7) === "static-") target = target.substring(7);
   if(target == "agony") target = "agony.he.0jb.de.";
+  if(target == "ingress") target = "ingress.he.0jb.de.";
   if(target == "y") target = "y.he.0jb.de.";
   target = target[target.length-1] == "." ? target : target + ".desec.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
@@ -120,6 +121,7 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   CAA_LETSENCRYPT(),
 
   INWX_PARKING("@"),
+  ACME("@", "ingress"),
 
   MX("@", 10, "agony.0jb.de."),
   TXT("@", "v=spf1 mx -all"),
@@ -140,6 +142,7 @@ D("janbeinke.com", REG_NONE, DnsProvider("inwx"),
   CAA_LETSENCRYPT(),
 
   INWX_PARKING("@"),
+  ACME("@", "ingress"),
 
   MX("@", 10, "agony.0jb.de."),
   TXT("@", "v=spf1 mx -all"),
@@ -156,6 +159,7 @@ D("thelegy.de", REG_NONE, DnsProvider("inwx"),
   CAA_LETSENCRYPT(),
 
   INWX_PARKING("@"),
+  ACME("@", "ingress"),
 
   TXT("_keybase", "keybase-site-verification=EO_b3ub9rlX1xBO3KbEPfOh6PkrvTZXOOC0EzfIW0TI"),
 
@@ -166,6 +170,7 @@ D("die-cloud.org", REG_NONE, DnsProvider("inwx"),
   CAA_LETSENCRYPT(),
 
   INWX_PARKING("@"),
+  ACME("@", "ingress"),
 
   MX("@", 10, "agony.0jb.de."),
   TXT("@", "v=spf1 mx -all"),

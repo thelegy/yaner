@@ -19,6 +19,10 @@
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIErYhKa5txjGtmdUNcUWOF3tgto5OmHo+i+pZeF6P0+G"
   },
 
+  "ingress": {
+    "ipv4Addresses": [ "94.130.190.66" ]
+  },
+
   "lll": {
     "ipv6Tailscale": "fd7a:115c:a1e0::3f7e:aa28",
     "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAEcp72MalMNwlpcnTjZbC2mPJS5M49RWA1KL+rcc7An"
