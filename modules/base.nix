@@ -53,6 +53,12 @@ mkTrivialModule {
   };
   time.timeZone = "Europe/Berlin";
 
+  i18n = {
+    extraLocaleSettings = {
+      LC_TIME = "en_DK.UTF-8";
+    };
+  };
+
   boot.tmp.useTmpfs = true;
 
   services = {
