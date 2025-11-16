@@ -80,6 +80,7 @@ mkTrivialModule {
       typst
       typst-languagetool
       typst-languagetool-lsp
+      usbutils
       virt-manager
       vscode
       zotero
