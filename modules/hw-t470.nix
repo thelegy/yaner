@@ -25,6 +25,8 @@ mkTrivialModule {
   # https://askubuntu.com/questions/1275749/acpi-event-69-made-my-system-unusable
   boot.kernelParams = [ "acpi_mask_gpe=0x69" ];
 
+  services.power-profiles-daemon.enable = true;
+
   # Enable brightness switches
   services.illum.enable = true;
 }
