@@ -52,7 +52,6 @@ mkMachine
       '';
 
       networking.useDHCP = false;
-      networking.interfaces.enp6s0.useDHCP = true;
 
       systemd.network.enable = true;
       systemd.network.wait-online.enable = false;
@@ -98,6 +97,8 @@ mkMachine
           MulticastDNS = false;
         };
       };
+
+      networking.firewall.allowedTCPPorts = [ 28981 ];
 
       networking.hostId = "5e64b0b4";
       fileSystems."/storage" = {
@@ -175,7 +176,7 @@ mkMachine
           services.paperless = {
             enable = true;
             user = "paperless-sibylle";
-            address = "192.168.1.2";
+            address = "192.168.9.105";
             settings = {
               PAPERLESS_CONSUMER_IGNORE_PATTERN = [
                 ".DS_STORE/*"
@@ -202,6 +203,28 @@ mkMachine
           };
           http.services.audiobooks.loadBalancer = {
             servers = [ { url = "https://audiobooks.beinke.cloud"; } ];
+          };
+          http.routers.paperless-sibylle = {
+            rule = "Host(`docs.sibylle.beinke.cloud`)";
+            service = "paperless-sibylle";
+          };
+          http.services.paperless-sibylle.loadBalancer.servers = [ { url = "http://192.168.9.105:28981"; } ];
+          tls.stores.default.defaultGeneratedCert = {
+            resolver = "letsencrypt";
+            domain = rec {
+              main = "ingress.0jb.de";
+              sans = [
+                main
+                "beinke.cloud"
+                "*.beinke.cloud"
+                "die-cloud.org"
+                "*.die-cloud.org"
+                "janbeinke.com"
+                "*.janbeinke.com"
+                "thelegy.de"
+                "*.thelegy.de"
+              ];
+            };
           };
         };
       };
@@ -275,14 +298,15 @@ mkMachine
               certificatesResolvers = rec {
                 letsencrypt.acme = {
                   email = "mail+letsencrypt@0jb.de";
-                  storage = "acme.json";
-                  keyType = "ecdsa";
+                  storage = "/var/lib/traefik/acme.json";
+                  keyType = "EC256";
                   caServer = "https://acme-v02.api.letsencrypt.org/directory";
                   dnsChallenge = {
                     provider = "hurricane";
                   };
                 };
                 letsencrypt-staging = recursiveUpdate letsencrypt {
+                  acme.storage = "/var/lib/traefik/acme-staging.json";
                   acme.caServer = "https://acme-staging-v02.api.letsencrypt.org/directory";
                 };
               };

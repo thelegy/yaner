@@ -189,7 +189,7 @@ mkMachine { } (
       useACMEHost = config.networking.fqdn;
       listenAddresses = [ "195.201.46.105" ];
       locations."/" = {
-        proxyPass = "http://192.168.1.2:28981";
+        proxyPass = "http://192.168.9.105:28981";
         recommendedProxySettings = true;
         proxyWebsockets = true;
         extraConfig = ''
