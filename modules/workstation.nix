@@ -41,6 +41,7 @@ mkTrivialModule {
       (mkOnDemand { pkg = code-cursor; })
       crush
       direnv
+      discord
       element-desktop
       entr
       file
