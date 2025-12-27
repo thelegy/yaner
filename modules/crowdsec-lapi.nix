@@ -8,7 +8,6 @@
 }:
 with lib;
 let
-  acmeHost = config.networking.fqdn;
   lapi_credentials_path = "/etc/crowdsec/local_api_credentials.yaml";
   port = 8080;
   yaml = pkgs.formats.yaml { };
@@ -91,13 +90,14 @@ mkModule {
         };
       };
 
-      services.nginx.virtualHosts.${domain} = {
-        forceSSL = true;
-        useACMEHost = acmeHost;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString port}";
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
+      wat.thelegy.traefik.dynamicConfigs.crowdsec-lapi = {
+        http.services.crowdsec-lapi = {
+          loadBalancer.servers = [ { url = "http://127.0.0.1:${toString port}"; } ];
+        };
+        http.routers.crowdsec-lapi = {
+          rule = "Host(`${domain}`)";
+          tls.certResolver = "letsencrypt";
+          service = "crowdsec-lapi";
         };
       };
     };
