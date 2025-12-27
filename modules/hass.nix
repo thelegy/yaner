@@ -47,6 +47,11 @@ let
           <mac address="52:54:00:8b:02:8b" />
           <model type="virtio" />
         </interface>
+        <interface type="bridge">
+          <source bridge="iot" />
+          <mac address="52:54:00:fb:c9:b6" />
+          <model type="virtio" />
+        </interface>
       </devices>
     </domain>
   '';
