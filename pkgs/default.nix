@@ -21,12 +21,6 @@ flakes: final: prev: with final; {
 
   cs-firewall-bouncer = callPackage ./cs-firewall-bouncer.nix { };
 
-  element-desktop =
-    if lib.versionOlder (lib.getVersion prev.element-desktop) "1.11.109" then
-      flakes.nixpkgs-matrix.legacyPackages.${system}.element-desktop
-    else
-      prev.element-desktop;
-
   formats = prev.formats // {
     yaml =
       { }:

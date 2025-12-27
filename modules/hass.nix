@@ -25,7 +25,7 @@ let
       <uuid>${machineUuid}</uuid>
       <os>
         <type arch="x86_64">hvm</type>
-        <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
+        <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/edk2-x86_64-code.fd</loader>
       </os>
       <features>
         <acpi/>

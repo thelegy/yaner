@@ -120,10 +120,10 @@ mkTrivialModule {
   };
 
   environment.systemPackages = with pkgs; [
-    glxinfo
     gsettings-desktop-schemas
+    mesa-demos
     phinger-cursors
-    pinentry
+    pinentry-gnome3
     pinentry-gtk2
   ];
 

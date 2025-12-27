@@ -7,7 +7,7 @@ flakes:
 {
 
   imports = [
-    flakes.dankMaterialShell.homeModules.dankMaterialShell.default
+    flakes.dankMaterialShell.homeModules.dank-material-shell
   ];
 
   programs.dankMaterialShell.enable = true;

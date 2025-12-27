@@ -75,7 +75,7 @@ mkTrivialModule {
       signal-desktop
       sops
       stylua
-      tdesktop
+      telegram-desktop
       thunderbird
       tinymist
       typst

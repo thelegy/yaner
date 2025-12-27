@@ -2,7 +2,7 @@
   writeScript,
   btrfs-progs,
   coreutils,
-  utillinux,
+  util-linux,
   zsh,
 }:
 
@@ -11,7 +11,7 @@ writeScript "backup_snapshot" ''
 
   path+=${btrfs-progs}/bin
   path+=${coreutils}/bin
-  path+=${utillinux}/bin
+  path+=${util-linux}/bin
 
   ${builtins.readFile ./snapshot.zsh}
 ''

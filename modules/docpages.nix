@@ -43,7 +43,7 @@ let
         git
         nix
       ];
-      environment."NIX_PATH" = "nixpkgs=${pkgs.src}";
+      environment."NIX_PATH" = "nixpkgs=${pkgs.path}";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
