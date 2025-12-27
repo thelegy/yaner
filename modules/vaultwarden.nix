@@ -21,11 +21,6 @@ mkModule {
         default = "pw.${cfg.baseDomain}";
       };
 
-      useACMEHost = mkOption {
-        type = with types; nullOr str;
-        default = null;
-      };
-
       secretsFile = mkOption {
         type = with types; nullOr str;
         default =
@@ -85,13 +80,14 @@ mkModule {
         journalctlFilters = [ "SYSLOG_IDENTIFIER=vaultwarden" ];
       };
 
-      services.nginx.virtualHosts.${cfg.domain} = {
-        forceSSL = true;
-        useACMEHost = cfg.useACMEHost;
-        locations."/" = {
-          proxyPass = "http://[::1]:${toString port}";
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
+      wat.thelegy.traefik.dynamicConfigs.vaultwarden = {
+        http.services.vaultwarden = {
+          loadBalancer.servers = [ { url = "http://[::1]:${toString port}"; } ];
+        };
+        http.routers.vaultwarden = {
+          rule = "Host(`${cfg.domain}`)";
+          tls.certResolver = "letsencrypt";
+          service = "vaultwarden";
         };
       };
 
