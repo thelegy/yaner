@@ -28,9 +28,6 @@ mkMachine { } (
       staging = false;
       extraDomainNames = [
         "0jb.de"
-        "element.0jb.de"
-        "matrix.0jb.de"
-        "pw.beinke.cloud"
       ];
       dnsProvider = "desec";
     };
@@ -42,16 +39,39 @@ mkMachine { } (
     wat.thelegy.crowdsec.enable = true;
     wat.thelegy.crowdsec-lapi.enable = true;
     wat.thelegy.dfhq-mc.enable = true;
-    wat.thelegy.nginx.enable = true;
     wat.thelegy.matrix = {
       enable = true;
-      useACMEHost = "forever.0jb.de";
       sopsSecretsFile = "matrix-synapse-keys";
     };
     wat.thelegy.postgresql.package = pkgs.postgresql_14;
+    wat.thelegy.traefik.enable = true;
+    wat.thelegy.traefik.dnsProvider = "desec";
+    wat.thelegy.traefik.dynamicConfigs.nginx = {
+      http.services.nginx = {
+        loadBalancer.servers = [ { url = "http://[::1]:5128"; } ];
+      };
+    };
+    services.nginx = {
+      enable = true;
+      virtualHosts.default = {
+        default = true;
+        locations."/".return = "404";
+      };
+      defaultListen = [
+        {
+          addr = "127.0.0.1";
+          port = 5128;
+          ssl = false;
+        }
+        {
+          addr = "[::1]";
+          port = 5128;
+          ssl = false;
+        }
+      ];
+    };
     wat.thelegy.vaultwarden = {
       enable = true;
-      useACMEHost = "forever.0jb.de";
       sopsSecretsFile = "vaultwarden";
     };
 
