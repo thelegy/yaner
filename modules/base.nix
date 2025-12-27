@@ -124,7 +124,7 @@ mkTrivialModule {
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
-  nix.package = pkgs.lix;
+  nix.package = pkgs.lixPackageSets.stable.lix;
 
   programs.nix-index-database.comma.enable = true;
 
