@@ -30,16 +30,6 @@ mkModule {
         default = "element.${cfg.baseDomain}";
       };
 
-      nginxBaseVirtualhost = mkOption {
-        type = types.str;
-        default = "main";
-      };
-
-      useACMEHost = mkOption {
-        type = with types; nullOr str;
-        default = null;
-      };
-
       secretsFile = mkOption {
         type = types.str;
         default =
@@ -135,12 +125,36 @@ mkModule {
         ];
       };
 
-      # Matrix availability
-      services.nginx.virtualHosts.${cfg.matrixDomain} = {
-        forceSSL = true;
-        useACMEHost = cfg.useACMEHost;
-        locations."/".extraConfig = "return 302 'https://${cfg.elementDomain}/';";
-        locations."/_matrix".proxyPass = "http://[::1]:8008";
+      wat.thelegy.traefik.dynamicConfigs.matrix = {
+        http.services.matrix = {
+          loadBalancer.servers = [ { url = "http://[::1]:8008"; } ];
+        };
+        http.services.matrix-wellknown = {
+          loadBalancer.servers = [ { url = "http://matrix-wellknown.localhost:5128"; } ];
+          loadBalancer.passHostHeader = false;
+        };
+        http.middlewares = {
+          redirect-to-element.redirectRegex = {
+            regex = "^https?://([^/]*)/$";
+            replacement = "https://${cfg.elementDomain}";
+          };
+        };
+        http.routers.matrix = {
+          rule = "Host(`${cfg.matrixDomain}`)";
+          tls.certResolver = "letsencrypt";
+          middlewares = [ "redirect-to-element" ];
+          service = "matrix";
+        };
+        http.routers.element = {
+          rule = "Host(`${cfg.elementDomain}`)";
+          tls.certResolver = "letsencrypt";
+          service = "nginx";
+        };
+        http.routers.matrix-wellknown = {
+          rule = "Host(`${cfg.baseDomain}`) && PathPrefix(`/.well-known/matrix`)";
+          tls.certResolver = "letsencrypt";
+          service = "matrix-wellknown";
+        };
       };
 
       # Element Web
@@ -160,8 +174,6 @@ mkModule {
           };
         in
         {
-          forceSSL = true;
-          useACMEHost = cfg.useACMEHost;
           root = pkgs.element-web;
           locations."/config.json".extraConfig = ''
             default_type application/json;
@@ -170,32 +182,34 @@ mkModule {
         };
 
       # Well known connectivity
-      services.nginx.virtualHosts.${cfg.nginxBaseVirtualhost}.locations =
-        let
-          wellKnownClient = {
-            "m.homeserver".base_url = "https://${cfg.matrixDomain}";
-            "m.identity_server".base_url = "";
+      services.nginx.virtualHosts."matrix-wellknown.localhost" = {
+        locations =
+          let
+            wellKnownClient = {
+              "m.homeserver".base_url = "https://${cfg.matrixDomain}";
+              "m.identity_server".base_url = "";
+            };
+            wellKnownServer = {
+              "m.server" = "${cfg.matrixDomain}:443";
+            };
+            headers = ''
+              default_type application/json;
+              add_header 'Access-Control-Allow-Origin' '*';
+              add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+              add_header 'Access-Control-Allow-Headers' 'X-Requested-With, Content-Type, Authorization';
+            '';
+          in
+          {
+            "/.well-known/matrix/client".extraConfig = ''
+              ${headers}
+              return 200 '${builtins.toJSON wellKnownClient}';
+            '';
+            "/.well-known/matrix/server".extraConfig = ''
+              ${headers}
+              return 200 '${builtins.toJSON wellKnownServer}';
+            '';
           };
-          wellKnownServer = {
-            "m.server" = "${cfg.matrixDomain}:443";
-          };
-          headers = ''
-            default_type application/json;
-            add_header 'Access-Control-Allow-Origin' '*';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'X-Requested-With, Content-Type, Authorization';
-          '';
-        in
-        {
-          "/.well-known/matrix/client".extraConfig = ''
-            ${headers}
-            return 200 '${builtins.toJSON wellKnownClient}';
-          '';
-          "/.well-known/matrix/server".extraConfig = ''
-            ${headers}
-            return 200 '${builtins.toJSON wellKnownServer}';
-          '';
-        };
+      };
 
       environment.etc."alloy/synapse-exporter.alloy".text = ''
         prometheus.scrape "synapse" {
