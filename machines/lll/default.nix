@@ -116,7 +116,6 @@ mkMachine { } (
         fzf
         git-filter-repo
         git-revise
-        itd
         mendeley
         mpv
         mumble

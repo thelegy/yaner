@@ -54,8 +54,6 @@ flakes: final: prev: with final; {
 
   inxi-full = inxi.override { withRecommends = true; };
 
-  itd = callPackage ./itd.nix { };
-
   kicad-small = prev.kicad-small.override { python3 = python311; };
 
   launch-cadquery =

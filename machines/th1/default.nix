@@ -160,8 +160,6 @@ mkMachine { } (
       mendeley
       tcpdump
       viddy
-
-      itd
     ];
 
   }
