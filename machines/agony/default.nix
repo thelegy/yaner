@@ -2,7 +2,7 @@
 
 mkMachine
   {
-    nixpkgs = flakes.nixpkgs-snm;
+    nixpkgs = flakes.snm.inputs.nixpkgs;
   }
   (
     {
@@ -15,6 +15,7 @@ mkMachine
     {
 
       system.stateVersion = "22.11";
+      mailserver.stateVersion = 3;
 
       imports = [
         flakes.snm.nixosModule

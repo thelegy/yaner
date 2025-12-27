@@ -110,7 +110,7 @@ mkModule {
     {
 
       wat.thelegy.acme.reloadUnits = [
-        "dovecot2.service"
+        "dovecot.service"
         "postfix.service"
       ];
 
@@ -137,12 +137,6 @@ mkModule {
       mailserver = {
         enable = true;
 
-        # Disable starttls (the ssl endpoint defaults to enabled as well)
-        enableImap = false;
-
-        # Disable starttls (the ssl endpoint defaults to enabled as well)
-        enableSubmission = false;
-
         # Give the users a tool to manage their sive scripts
         enableManageSieve = true;
 
@@ -156,13 +150,14 @@ mkModule {
         # How expensive is "_very_ expensive"?
         virusScanning = false;
 
+        #useACMEHost = config.networking.fqdn;  # TODO: use this from 26.05
         # Manual certificate setup
         certificateScheme = "manual";
         keyFile = "${acmePath}/key.pem";
         certificateFile = "${acmePath}/cert.pem";
       };
 
-      systemd.services.dovecot2.serviceConfig = {
+      systemd.services.dovecot.serviceConfig = {
         SupplementaryGroups = [ "acme" ];
       };
       systemd.services.postfix.serviceConfig = {

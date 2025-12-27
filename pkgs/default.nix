@@ -3,11 +3,6 @@ flakes: final: prev: with final; {
 
   bs-oneclick = callPackage ./bs-oneclick.nix { };
 
-  # Sops-nix needs this on agony
-  buildGo124Module =
-    prev.buildGo124Module
-      or flakes.nixpkgs.legacyPackages.${system}.buildGo124Module;
-
   crowdsec =
     (
       if lib.versionOlder prev.crowdsec.version "1.6.0" then
@@ -46,12 +41,6 @@ flakes: final: prev: with final; {
       };
   };
 
-  grafana-agent =
-    if lib.versionOlder prev.grafana-agent.version "0.36.0" then
-      flakes.nixpkgs.legacyPackages.${system}.grafana-agent
-    else
-      prev.grafana-agent;
-
   inxi-full = inxi.override { withRecommends = true; };
 
   kicad-small = prev.kicad-small.override { python3 = python311; };
@@ -69,12 +58,6 @@ flakes: final: prev: with final; {
       name = "cadquery";
       installable = "path://${cq-flake}";
     };
-
-  lego =
-    if lib.versionOlder prev.lego.version "4.13.2" then
-      flakes.nixpkgs.legacyPackages.${system}.lego
-    else
-      prev.lego;
 
   media_volume = callPackage ./media_volume.nix { };
 
