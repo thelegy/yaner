@@ -98,7 +98,7 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
 
   CNAME_ACME("anki", "forever"),
   CNAME_ACME("autoconfig", "agony"),
-  CNAME_ACME("bruchstr", "forever"),
+  CNAME_ACME("bruchstr", "rqwx2qyix9huowcrs3nuslek89tr3ogu.ui.nabu.casa."),
   CNAME_ACME("crowdsec", "forever"),
   CNAME_ACME("element", "forever"),
   CNAME_ACME("ender3s1", "y"),

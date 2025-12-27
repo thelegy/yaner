@@ -28,7 +28,6 @@ mkMachine { } (
       staging = false;
       extraDomainNames = [
         "0jb.de"
-        "bruchstr.0jb.de"
         "element.0jb.de"
         "matrix.0jb.de"
         "pw.beinke.cloud"
@@ -129,45 +128,6 @@ mkMachine { } (
       allowedUDPPorts = [
         443
       ];
-    };
-
-    systemd.network.netdevs.bruchstr = {
-      netdevConfig.Name = "bruchstr";
-      netdevConfig.Kind = "wireguard";
-      wireguardConfig.PrivateKeyFile = config.sops.secrets.wgPrivateKey.path;
-      wireguardConfig.ListenPort = 51820;
-      wireguardPeers = [
-        {
-          PublicKey = "I/2RY0P3bSNjeUZ/R/o6UE8JiRQIn6D7bMR0DyoEOGE=";
-          AllowedIPs = "192.168.241.57/32";
-        }
-      ];
-    };
-
-    systemd.network.networks.bruchstr = {
-      name = "bruchstr";
-      address = [ "192.168.241.58/30" ];
-    };
-
-    networking.nftables.firewall.rules.bruchstr = {
-      from = "all";
-      to = [ "fw" ];
-      allowedUDPPorts = [
-        config.systemd.network.netdevs.bruchstr.wireguardConfig.ListenPort
-      ];
-    };
-
-    services.nginx.virtualHosts."bruchstr.0jb.de" = {
-      useACMEHost = config.networking.fqdn;
-      forceSSL = true;
-      locations."/" = {
-        recommendedProxySettings = true;
-        proxyWebsockets = true;
-        proxyPass = "http://192.168.241.57:8123";
-        extraConfig = ''
-          client_max_body_size 100M;
-        '';
-      };
     };
 
   }
