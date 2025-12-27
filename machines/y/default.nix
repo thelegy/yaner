@@ -82,9 +82,23 @@ mkMachine { } (
           MACAddress = macAddress;
         };
       };
+      netdevs."${networkInterface}.3" = {
+        netdevConfig = {
+          Name = "${networkInterface}.3";
+          Kind = "vlan";
+        };
+        vlanConfig = {
+          Id = 3;
+        };
+      };
+      netdevs.iot.netdevConfig = {
+        Name = "iot";
+        Kind = "bridge";
+      };
       networks.${networkInterface} = {
         name = "${networkInterface}";
         bridge = [ "br0" ];
+        networkConfig.VLAN = [ "${networkInterface}.3" ];
       };
       networks.br0 = {
         name = "br0";
@@ -93,6 +107,19 @@ mkMachine { } (
           [CAKE]
           Bandwidth =
         '';
+      };
+      networks."${networkInterface}.3" = {
+        name = "${networkInterface}.3";
+        bridge = [ "iot" ];
+      };
+      networks.iot = {
+        name = "iot";
+        DHCP = "no";
+        networkConfig = {
+          ConfigureWithoutCarrier = "yes";
+          IPv6AcceptRA = "no";
+          LinkLocalAddressing = "no";
+        };
       };
     };
 
