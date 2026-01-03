@@ -130,7 +130,9 @@ mkModule {
           loadBalancer.servers = [ { url = "http://[::1]:8008"; } ];
         };
         http.services.matrix-wellknown = {
-          loadBalancer.servers = [ { url = "http://matrix-wellknown.localhost:5128"; } ];
+          loadBalancer.servers = [
+            { url = "http://matrix-wellknown.localhost:${toString config.wat.thelegy.nginx.port}"; }
+          ];
           loadBalancer.passHostHeader = false;
         };
         http.middlewares = {
@@ -141,21 +143,20 @@ mkModule {
         };
         http.routers.matrix = {
           rule = "Host(`${cfg.matrixDomain}`)";
-          tls.certResolver = "letsencrypt";
           middlewares = [ "redirect-to-element" ];
           service = "matrix";
         };
         http.routers.element = {
           rule = "Host(`${cfg.elementDomain}`)";
-          tls.certResolver = "letsencrypt";
           service = "nginx";
         };
         http.routers.matrix-wellknown = {
           rule = "Host(`${cfg.baseDomain}`) && PathPrefix(`/.well-known/matrix`)";
-          tls.certResolver = "letsencrypt";
           service = "matrix-wellknown";
         };
       };
+
+      wat.thelegy.nginx.enable = true;
 
       # Element Web
       services.nginx.virtualHosts.${cfg.elementDomain} =

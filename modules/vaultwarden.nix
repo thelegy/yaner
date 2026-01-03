@@ -81,12 +81,11 @@ mkModule {
       };
 
       wat.thelegy.traefik.dynamicConfigs.vaultwarden = {
-        http.services.vaultwarden = {
-          loadBalancer.servers = [ { url = "http://[::1]:${toString port}"; } ];
+        http.services.vaultwarden.loadBalancer = {
+          servers = [ { url = "http://[::1]:${toString port}"; } ];
         };
         http.routers.vaultwarden = {
           rule = "Host(`${cfg.domain}`)";
-          tls.certResolver = "letsencrypt";
           service = "vaultwarden";
         };
       };

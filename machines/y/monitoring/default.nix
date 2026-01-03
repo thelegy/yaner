@@ -47,13 +47,13 @@ in
     }
   '';
 
-  services.nginx.virtualHosts.${domain} = {
-    forceSSL = true;
-    useACMEHost = config.networking.fqdn;
-    locations."/" = {
-      proxyPass = "http://${local_ip}:${toString local_port}/";
-      recommendedProxySettings = true;
-      proxyWebsockets = true;
+  wat.thelegy.traefik.dynamicConfigs.monitoring = {
+    http.services.grafana.loadBalancer = {
+      servers = [ { url = "http://${local_ip}:${toString local_port}"; } ];
+    };
+    http.routers.grafana = {
+      rule = "Host(`${domain}`)";
+      service = "grafana";
     };
   };
 }

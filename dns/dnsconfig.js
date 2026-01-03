@@ -28,6 +28,7 @@ function ACME(record_name, target, options) {
   if(target.substring(0,7) === "static-") target = target.substring(7);
   if(target == "agony") target = "agony.he.0jb.de.";
   if(target == "ingress") target = "ingress.he.0jb.de.";
+  if(target == "starblade") target = "starblade.he.0jb.de.";
   if(target == "y") target = "y.he.0jb.de.";
   target = target[target.length-1] == "." ? target : target + ".desec.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
@@ -38,6 +39,13 @@ function CNAME_ACME(record_name, target, options) {
   return [
     CNAME(record_name, target_cname, options || []),
     ACME(record_name, target)
+  ];
+}
+
+function INGRESS(record_name, target, options) {
+  return [
+  CNAME(record_name, "ingress.0jb.de.", options || []),
+  ACME(record_name, target)
   ];
 }
 
@@ -91,8 +99,6 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
 
   HOST("@", "forever"),
 
-  A("static-y", "195.201.46.105"),
-
   CNAME("backup", "forever"),
   CNAME("mc", "forever"),
 
@@ -103,7 +109,9 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
   CNAME_ACME("element", "forever"),
   CNAME_ACME("ender3s1", "y"),
   CNAME_ACME("grafana", "y"),
-  CNAME_ACME("ha", "static-y"),
+  INGRESS("ha", "hass"),
+  A("local.ha", "192.168.1.30"),
+  ACME("local.ha", "hass"),
   CNAME_ACME("klipper", "y"),
   CNAME_ACME("loki", "y"),
   CNAME_ACME("mailmetrics", "forever"),
@@ -128,9 +136,9 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de;"),
   TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdd8tHEdS2GXue5+o131MbV4I8uXYqOxq5qK0oFaChxvUC1sYdXwE+YUsWArT6SFZSADWQIJfvXDtc6JL+dvzQZGsnh9M8CqbIfTo1FHLOWpeKv/wPEbB7fJwqP0mKW9l72DRX7Gyic8VY6ZgTaCA1UjSKlC39FX/AEoyDFpMEwwIDAQAB"),
 
-  CNAME_ACME("audiobooks", "static-y"),
+  INGRESS("audiobooks", "y"),
   CNAME_ACME("autoconfig", "agony"),
-  CNAME_ACME("docs.sibylle", "static-y"),
+  INGRESS("docs.sibylle", "starblade"),
   CNAME_ACME("imap", "agony"),
   CNAME_ACME("pw", "forever"),
   CNAME_ACME("smtp", "agony"),

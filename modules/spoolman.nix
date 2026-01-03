@@ -1,13 +1,11 @@
 {
   mkTrivialModule,
-  config,
   pkgs,
   ...
 }:
 
 let
   hostName = "spoolman.0jb.de";
-  acmeHost = config.networking.fqdn;
   port = 7020;
   bin = pkgs.spoolman;
 in
@@ -28,13 +26,13 @@ mkTrivialModule {
     };
   };
 
-  services.nginx.virtualHosts.${hostName} = {
-    forceSSL = true;
-    useACMEHost = acmeHost;
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:${toString port}";
-      recommendedProxySettings = true;
-      proxyWebsockets = true;
+  wat.thelegy.traefik.dynamicConfigs.spoolman = {
+    http.services.spoolman.loadBalancer = {
+      servers = [ { url = "http://127.0.0.1:${toString port}"; } ];
+    };
+    http.routers.spoolman = {
+      rule = "Host(`${hostName}`)";
+      service = "spoolman";
     };
   };
 

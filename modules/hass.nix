@@ -103,17 +103,4 @@ mkTrivialModule {
     wantedBy = [ "multi-user.target" ];
   };
 
-  services.nginx.virtualHosts.${domain} = {
-    useACMEHost = config.networking.fqdn;
-    forceSSL = true;
-    locations."/" = {
-      recommendedProxySettings = true;
-      proxyWebsockets = true;
-      proxyPass = "http://${ip}:8123";
-      extraConfig = ''
-        client_max_body_size 100M;
-      '';
-    };
-  };
-
 }

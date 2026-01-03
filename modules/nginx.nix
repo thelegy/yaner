@@ -12,44 +12,44 @@ mkModule {
     cfg:
     liftToNamespace {
 
-      useACMEHost = mkOption {
-        type = types.str;
-        default = config.networking.fqdn;
+      port = mkOption {
+        type = types.port;
+        default = 17382;
       };
 
     };
-  config = cfg: {
+  config =
+    cfg:
+    let
+      port = config.wat.thelegy.nginx.port;
+    in
+    {
 
-    wat.thelegy.acme.reloadUnits = [
-      "nginx.service"
-    ];
-
-    services.nginx = {
-      enable = true;
-      virtualHosts.default = {
-        default = true;
-        addSSL = true;
-        useACMEHost = cfg.useACMEHost;
-        locations."/".return = "404";
+      services.nginx = {
+        enable = true;
+        virtualHosts.default = {
+          default = true;
+          locations."/".return = "404";
+        };
+        defaultListen = [
+          {
+            addr = "127.0.0.1";
+            inherit port;
+            ssl = false;
+          }
+          {
+            addr = "[::1]";
+            inherit port;
+            ssl = false;
+          }
+        ];
       };
-      virtualHosts.main = {
-        serverName = config.networking.fqdn;
-        forceSSL = true;
-        useACMEHost = cfg.useACMEHost;
-        locations."/" = mkDefault { return = "404"; };
+
+      wat.thelegy.traefik.dynamicConfigs.nginx = {
+        http.services.nginx = {
+          loadBalancer.servers = [ { url = "http://localhost:${toString port}"; } ];
+        };
       };
+
     };
-
-    users.users.nginx.extraGroups = [ "acme" ];
-
-    networking.nftables.firewall.rules.nginx = {
-      from = mkDefault "all";
-      to = [ "fw" ];
-      allowedTCPPorts = mkDefault [
-        80
-        443
-      ];
-    };
-
-  };
 }

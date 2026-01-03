@@ -32,8 +32,6 @@ mkMachine
         enable = true;
         staging = false;
         extraDomainNames = [
-          "autoconfig.0jb.de"
-          "autoconfig.beinke.cloud"
           "imap.beinke.cloud"
           "smtp.beinke.cloud"
         ];
@@ -49,7 +47,10 @@ mkMachine
       };
       wat.thelegy.base.enable = true;
       wat.thelegy.crowdsec.enable = true;
-      wat.thelegy.nginx.enable = true;
+      wat.thelegy.traefik = {
+        enable = true;
+        dnsProvider = "hurricane";
+      };
 
       wat.thelegy.mailserver = {
         enable = true;

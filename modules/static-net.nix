@@ -11,6 +11,10 @@ mkTrivialModule {
     defaultPort = 1334;
     nodes.ucg-pb = {
       address = "192.168.242.4/24";
+      allowedIPs = [
+        "192.168.242.4/32"
+        "192.168.5.0/24"
+      ];
       publicKey = "Dzd1Qa8Deo9HJy5WXNexmvErkTDDbnEuZ+VjUdFbZWc=";
     };
   };

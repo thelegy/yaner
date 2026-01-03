@@ -32,6 +32,14 @@ mkModule {
         }
       }
 
+      prometheus.relabel "default" {
+        rule {
+          target_label = "instance"
+          replacement  = constants.hostname
+        }
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+
       loki.write "default" {
         endpoint {
           url = "${cfg.lokiUrl}"

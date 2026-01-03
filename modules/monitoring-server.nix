@@ -5,13 +5,10 @@
 }:
 let
   domain = "prometheus.0jb.de";
-  acmeHost = config.networking.fqdn;
   ip = "[::1]";
   localPort = 9089;
 in
 mkTrivialModule {
-  wat.thelegy.acme.extraDomainNames = [ domain ];
-
   environment.etc."alloy/prometheus-exporter.alloy".text = ''
     prometheus.scrape "prometheus" {
       targets = [{"__address__" = "127.0.0.1:${toString localPort}"}]
@@ -31,13 +28,13 @@ mkTrivialModule {
     ];
   };
 
-  services.nginx.virtualHosts.${domain} = {
-    forceSSL = true;
-    useACMEHost = acmeHost;
-    locations."/" = {
-      proxyPass = "http://${ip}:${toString localPort}";
-      recommendedProxySettings = true;
-      proxyWebsockets = true;
+  wat.thelegy.traefik.dynamicConfigs.monitoring = {
+    http.services.prometheus.loadBalancer = {
+      servers = [ { url = "http://${ip}:${toString localPort}"; } ];
+    };
+    http.routers.prometheus = {
+      rule = "Host(`${domain}`)";
+      service = "prometheus";
     };
   };
 }

@@ -65,8 +65,6 @@ mkModule {
       '';
     in
     {
-      wat.thelegy.acme.extraDomainNames = [ domain ];
-
       wat.thelegy.crowdsec.enable = true;
       environment.systemPackages = [ cscli-lapi ];
 
@@ -96,7 +94,6 @@ mkModule {
         };
         http.routers.crowdsec-lapi = {
           rule = "Host(`${domain}`)";
-          tls.certResolver = "letsencrypt";
           service = "crowdsec-lapi";
         };
       };

@@ -121,16 +121,30 @@ mkModule {
         (flip genAttrs (sopsKey: { }))
       ];
 
-      services.nginx.virtualHosts.autoconfig = {
-        useACMEHost = config.networking.fqdn;
-        forceSSL = true;
-        serverAliases = map (x: "autoconfig.${x}") cfg.autoconfigDomains;
-        locations."/".return = "404";
+      wat.thelegy.nginx.enable = true;
+      services.nginx.virtualHosts."mail-autoconfig.localhost" = {
         locations."/mail/config-v1.1.xml".extraConfig = ''
           default_type application/xml;
           charset utf8;
           return 200 '${replaceStrings [ "\n" ] [ "\\n" ] autoconfigXml}';
         '';
+      };
+
+      wat.thelegy.traefik.dynamicConfigs.mail = {
+        http.services.mail-autoconfig = {
+          loadBalancer.servers = [
+            { url = "http://mail-autoconfig.localhost:${toString config.wat.thelegy.nginx.port}"; }
+          ];
+          loadBalancer.passHostHeader = false;
+        };
+        http.routers.snapcast = {
+          rule =
+            let
+              hosts_rule = concatMapStringsSep " || " (x: "Host(`autoconfig.${x}`)") cfg.autoconfigDomains;
+            in
+            "( ${hosts_rule} ) && Path(`/mail/config-v1.1.xml`)";
+          service = "mail-autoconfig";
+        };
       };
 
       # Use optionalattrs because mkIf pushes the test down into undefined options

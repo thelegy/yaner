@@ -38,6 +38,15 @@ mkMachine
           "storage/ollama"
         ];
       };
+      wat.thelegy.traefik = {
+        enable = true;
+        dnsProvider = "hurricane";
+      };
+      services.traefik.staticConfigOptions.entryPoints = {
+        websecure.proxyProtocol.trustedIPs = [
+          "192.168.5.0/24"
+        ];
+      };
 
       boot.kernelPackages = pkgs.linuxPackages;
       boot.initrd.availableKernelModules = [ "igc" ];
@@ -188,47 +197,82 @@ mkMachine
                 pdfa_image_compression = "lossless";
               };
               PAPERLESS_URL = "https://docs.sibylle.beinke.cloud";
-              PAPERLESS_TRUSTED_PROXIES = "192.168.1.3";
+              PAPERLESS_TRUSTED_PROXIES = "192.168.9.105";
             };
           };
         };
       };
 
-      environment.etc."traefik/nixos.toml" = {
+      wat.thelegy.traefik.dynamicConfigs.paperless-sibylle = {
+        http.services.paperless-sibylle.loadBalancer = {
+          servers = [ { url = "http://192.168.9.105:28981"; } ];
+        };
+        http.routers.paperless-sibylle = {
+          rule = "Host(`docs.sibylle.beinke.cloud`)";
+          service = "paperless-sibylle";
+        };
+      };
+
+      environment.etc."traefik-ingress/nixos.toml" = {
         mode = "0644";
         source = (pkgs.formats.toml { }).generate "nixos.toml" {
-          http.routers.audiobooks = {
-            rule = "Host(`audiobooks.beinke.cloud`)";
-            service = "audiobooks";
+          tcp.services.forever.loadBalancer = {
+            servers = [ { address = "192.168.242.1:33030"; } ];
+            proxyProtocol.version = 2;
           };
-          http.services.audiobooks.loadBalancer = {
-            servers = [ { url = "https://audiobooks.beinke.cloud"; } ];
+          tcp.routers.forever = {
+            rule = "HostSNI(`*`)";
+            tls.passthrough = true;
+            entryPoints = [ "websecure" ];
+            service = "forever";
           };
-          http.routers.paperless-sibylle = {
-            rule = "Host(`docs.sibylle.beinke.cloud`)";
-            service = "paperless-sibylle";
+          # tcp.services.local.loadBalancer = {
+          #   servers = [ { address = "127.0.0.1:33030"; } ];
+          #   proxyProtocol.version = 2;
+          # };
+          # tcp.routers.local = {
+          #   rule = "HostSNI(`*`)";
+          #   # rule = lib.concatMapStringsSep " && " (x: "HostSNI(`${x}`)") [
+          #   #   "audiobooks.beinke.cloud"
+          #   # ];
+          #   tls.passthrough = true;
+          #   entryPoints = [ "websecure" ];
+          #   service = "local";
+          # };
+          tcp.services.starblade.loadBalancer = {
+            servers = [ { address = "192.168.9.105:443"; } ];
+            proxyProtocol.version = 2;
           };
-          http.services.paperless-sibylle.loadBalancer.servers = [ { url = "http://192.168.9.105:28981"; } ];
-          tls.stores.default.defaultGeneratedCert = {
-            resolver = "letsencrypt";
-            domain = rec {
-              main = "ingress.0jb.de";
-              sans = [
-                main
-                "beinke.cloud"
-                "*.beinke.cloud"
-                "die-cloud.org"
-                "*.die-cloud.org"
-                "janbeinke.com"
-                "*.janbeinke.com"
-                "thelegy.de"
-                "*.thelegy.de"
-              ];
-            };
+          tcp.routers.starblade = {
+            rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
+              "docs.sibylle.beinke.cloud"
+            ];
+            tls.passthrough = true;
+            service = "starblade";
+          };
+          tcp.services.y.loadBalancer = {
+            servers = [ { address = "192.168.1.3:443"; } ];
+            proxyProtocol.version = 2;
+          };
+          tcp.routers.y = {
+            rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
+              "audiobooks.beinke.cloud"
+            ];
+            tls.passthrough = true;
+            service = "y";
+          };
+          tcp.services.hass.loadBalancer = {
+            servers = [ { address = "192.168.1.30:443"; } ];
+            proxyProtocol.version = 2;
+          };
+          tcp.routers.hass = {
+            rule = "HostSNI(`ha.0jb.de`)";
+            tls.passthrough = true;
+            service = "hass";
           };
         };
       };
-      sops.secrets.traefik-env = {
+      sops.secrets.ingress-traefik-env = {
         format = "yaml";
         mode = "0600";
         restartUnits = [ "container@ingress.service" ];
@@ -238,77 +282,50 @@ mkMachine
         privateNetwork = true;
         macvlans = [ "dmz" ];
         bindMounts."/etc/traefik" = {
-          hostPath = "/etc/traefik";
+          hostPath = "/etc/traefik-ingress";
           isReadOnly = true;
         };
-        bindMounts.${config.sops.secrets.traefik-env.path} = {
-          hostPath = config.sops.secrets.traefik-env.path;
+        bindMounts.${config.sops.secrets.ingress-traefik-env.path} = {
+          hostPath = config.sops.secrets.ingress-traefik-env.path;
           isReadOnly = true;
         };
         config = containerArgs: {
+          imports = attrValues flakes.self.nixosModules ++ [
+            flakes.homemanager.nixosModules.home-manager
+            flakes.nix-index-database.nixosModules.nix-index
+            flakes.nixos-nftables-firewall.nixosModules.default
+            flakes.sops-nix.nixosModules.sops
+          ];
           nixpkgs.pkgs = pkgs;
           system.stateVersion = "24.11";
           networking.interfaces.mv-dmz.useDHCP = true;
           networking.useHostResolvConf = false;
           services.resolved.enable = true;
-          networking.firewall.allowedTCPPorts = [
-            80
-            443
-          ];
-          networking.firewall.allowedUDPPorts = [
-            443
-          ];
-          users.users.acme = {
-            home = "/var/lib/acme";
-            homeMode = "755";
-            group = "acme";
-            isSystemUser = true;
-          };
-          users.groups.acme = { };
-          systemd.services.traefik = {
-            serviceConfig.EnvironmentFile = config.sops.secrets.traefik-env.path;
-          };
-          services.traefik = {
+          wat.thelegy.monitoring.enable = true;
+          wat.thelegy.traefik = {
             enable = true;
-            staticConfigOptions = {
-              providers.file.directory = "/etc/traefik";
-              entryPoints = {
-                web = {
-                  address = ":80";
-                  http.redirections.entryPoint = {
-                    to = "websecure";
-                    scheme = "https";
-                    permanent = true;
-                  };
-                  observability = {
-                    accessLogs = false;
-                    metrics = false;
-                    tracing = false;
-                  };
-                };
-                websecure = {
-                  address = ":443";
-                  asDefault = true;
-                  http = {
-                    tls = { };
-                  };
-                  http3 = true;
-                };
-              };
-              certificatesResolvers = rec {
-                letsencrypt.acme = {
-                  email = "mail+letsencrypt@0jb.de";
-                  storage = "/var/lib/traefik/acme.json";
-                  keyType = "EC256";
-                  caServer = "https://acme-v02.api.letsencrypt.org/directory";
-                  dnsChallenge = {
-                    provider = "hurricane";
-                  };
-                };
-                letsencrypt-staging = recursiveUpdate letsencrypt {
-                  acme.storage = "/var/lib/traefik/acme-staging.json";
-                  acme.caServer = "https://acme-staging-v02.api.letsencrypt.org/directory";
-                };
+            sopsCredentialsFile = null;
+            dnsProvider = "hurricane";
+          };
+          networking.hosts."192.168.1.3" = [
+            "loki.0jb.de"
+            "prometheus.0jb.de"
+          ];
+          networking.firewall.allowedTCPPorts = [ 33030 ];
+          systemd.services.traefik = {
+            serviceConfig.EnvironmentFile = config.sops.secrets.ingress-traefik-env.path;
+          };
+          services.traefik.staticConfigOptions = {
+            providers.file.directory = "/etc/traefik";
+            entryPoints = {
+              websecure_pp = {
+                address = ":33030";
+                asDefault = true;
+                http.tls.certResolver = "letsencrypt";
+                proxyProtocol.trustedIPs = [
+                  "127.0.0.1/32"
+                  "192.168.242.1/32"
+                ];
               };
             };
           };

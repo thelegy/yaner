@@ -4,6 +4,7 @@ mkMachine { } (
   {
     lib,
     config,
+    options,
     pkgs,
     ...
   }:
@@ -46,40 +47,35 @@ mkMachine { } (
     wat.thelegy.postgresql.package = pkgs.postgresql_14;
     wat.thelegy.traefik.enable = true;
     wat.thelegy.traefik.dnsProvider = "desec";
-    wat.thelegy.traefik.dynamicConfigs.nginx = {
-      http.services.nginx = {
-        loadBalancer.servers = [ { url = "http://[::1]:5128"; } ];
+    wat.thelegy.traefik.dynamicConfigs.ingress = {
+      tcp.services.ingress.loadBalancer = {
+        servers = [ { address = "192.168.5.37:33030"; } ];
+        proxyProtocol.version = 2;
+      };
+      tcp.routers.ingress = {
+        rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
+          "audiobooks.beinke.cloud"
+          "docs.sibylle.beinke.cloud"
+          "ha.0jb.de"
+        ];
+        tls.passthrough = true;
+        entryPoints = [ "websecure" ];
+        service = "ingress";
       };
     };
-    services.nginx = {
-      enable = true;
-      virtualHosts.default = {
-        default = true;
-        locations."/".return = "404";
-      };
-      defaultListen = [
-        {
-          addr = "127.0.0.1";
-          port = 5128;
-          ssl = false;
-        }
-        {
-          addr = "[::1]";
-          port = 5128;
-          ssl = false;
-        }
-      ];
-    };
+
     wat.thelegy.vaultwarden = {
       enable = true;
       sopsSecretsFile = "vaultwarden";
     };
 
     wat.thelegy.static-net.enable = true;
-    wat.thelegy.remote-ip-y = {
-      enable = true;
-      role = "proxy";
-    };
+    systemd.network.networks.static.routes = [
+      {
+        Destination = "192.168.5.0/24";
+        Gateway = "192.168.242.4";
+      }
+    ];
 
     networking.nftables.firewall.rules.nixos-firewall.enable = false;
     networking.nftables.firewall.rules.public-services = {
@@ -91,64 +87,24 @@ mkMachine { } (
       ];
     };
 
-    systemd.network.networks.default.addresses = [
-      {
-        Address = "94.130.190.66/32";
-        Peer = "172.31.1.1";
-      }
-    ];
+    services.traefik.staticConfigOptions = {
+      entryPoints.websecure_pp = {
+        address = "192.168.242.1:33030";
+        asDefault = true;
+        http.tls.certResolver = "letsencrypt";
+        proxyProtocol.trustedIPs = [ "192.168.5.0/24" ];
+      };
+    };
+    networking.nftables.firewall.rules."traefik_pp" = {
+      from = [ "static" ];
+      to = [ "fw" ];
+      allowedTCPPorts = [ 33030 ];
+    };
 
-    boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
-    networking.nftables.requiredChains = [
-      "nat_input"
-      "nat_output"
-      "nat_prerouting"
-      "nat_postrouting"
-    ];
     networking.nftables.firewall.zones.static-interface.interfaces = [ "static" ];
     networking.nftables.firewall.zones.ingress-home = {
       parent = "static-interface";
       ipv4Addresses = [ "192.168.242.4" ];
     };
-    networking.nftables.chains =
-      let
-        hookRule = hook: {
-          after = mkForce [ "start" ];
-          before = mkForce [ "veryEarly" ];
-          rules = singleton hook;
-        };
-      in
-      {
-        nat_prerouting = {
-          hook = hookRule "type nat hook prerouting priority dstnat;";
-          ingress-home.rules = [
-            "ip daddr 94.130.190.66 dnat to 192.168.242.4"
-          ];
-        };
-        nat_output = {
-          hook = hookRule "type nat hook output priority dstnat";
-          ingress-home-hairpin.rules = [
-            "ip daddr 94.130.190.66 ct mark set 0x00000001 dnat ip to 192.168.242.4"
-          ];
-        };
-        nat_postrouting = {
-          hook = hookRule "type nat hook postrouting priority srcnat";
-          ingress-home-hairpin.rules = [
-            "ct mark 0x00000001 snat ip to 94.130.190.66"
-          ];
-        };
-      };
-    networking.nftables.firewall.rules."ingress-home" = {
-      from = "all";
-      to = [ "ingress-home" ];
-      allowedTCPPorts = [
-        80
-        443
-      ];
-      allowedUDPPorts = [
-        443
-      ];
-    };
-
   }
 )

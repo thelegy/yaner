@@ -205,52 +205,26 @@ in
       enable = true;
       port = snapcast-control-port;
     };
+    http.enable = true;
   };
   systemd.services.snapserver.serviceConfig.SupplementaryGroups = [ "pipewire" ];
 
-  services.nginx.virtualHosts."snapcast.0jb.de" = {
-    forceSSL = true;
-    useACMEHost = config.networking.fqdn;
-    listenAddresses = [ "192.168.1.3" ];
-    locations."/" = {
-      alias = "${pkgs.snapweb}/";
+  wat.thelegy.nginx.enable = true;
+  services.nginx.virtualHosts."snapcast.0jb.de".locations."/".alias = "${pkgs.snapweb}/";
+
+  wat.thelegy.traefik.dynamicConfigs.snapcast = {
+    http.routers.snapcast-web = {
+      rule = "Host(`snapcast.0jb.de`)";
+      service = "nginx";
     };
-    locations."/jsonrpc" = {
-      proxyPass = "http://localhost:1780/jsonrpc";
-      proxyWebsockets = true;
+    http.services.snapcast.loadBalancer = {
+      servers = [ { url = "http://localhost:1780"; } ];
     };
-    locations."/stream" = {
-      proxyPass = "http://localhost:1780/stream";
-      proxyWebsockets = true;
+    http.routers.snapcast = {
+      rule = "Host(`snapcast.0jb.de`) && ( Path(`/jsonrpc`) || Path(`/stream`) )";
+      service = "snapcast";
     };
   };
-
-  #services.spotifyd = {
-  #  enable = true;
-  #  config = ''
-  #    [global]
-  #    username_cmd = "cat $CREDENTIALS_DIRECTORY/user"
-  #    password_cmd = "cat $CREDENTIALS_DIRECTORY/password"
-  #    backend = "alsa"
-  #    use_mpris = false
-  #    device_name = "${config.networking.hostName}"
-  #    device_type = "speaker"
-  #  '';
-  #};
-
-  #systemd.services.spotifyd = {
-  #  serviceConfig = {
-  #    SupplementaryGroups = [ "pipewire" ];
-  #    LoadCredential = [
-  #      "user:/etc/secrets/spotify_user"
-  #      "password:/etc/secrets/spotify_password"
-  #    ];
-  #  };
-  #  environment = {
-  #    SHELL = "/bin/sh";
-  #    #PULSE_LOG = "4";
-  #  };
-  #};
 
   systemd.services.wdr2 =
     let

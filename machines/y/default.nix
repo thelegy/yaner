@@ -1,7 +1,12 @@
 { mkMachine, ... }:
 
 mkMachine { } (
-  { pkgs, config, ... }:
+  {
+    pkgs,
+    config,
+    lib,
+    ...
+  }:
   let
 
     networkInterface = "enp2s0";
@@ -31,13 +36,8 @@ mkMachine { } (
       enable = true;
       staging = false;
       extraDomainNames = [
-        "docs.sibylle.beinke.cloud"
         "ender3s1.0jb.de"
-        "grafana.0jb.de"
-        "ha.0jb.de"
         "klipper.0jb.de"
-        "snapcast.0jb.de"
-        "spoolman.0jb.de"
       ];
       dnsProvider = "hurricane";
     };
@@ -61,10 +61,14 @@ mkMachine { } (
     wat.thelegy.spoolman.enable = true;
     wat.thelegy.static-net.enable = true;
     wat.thelegy.syncthing.enable = true;
-
-    wat.thelegy.remote-ip-y = {
+    wat.thelegy.traefik = {
       enable = true;
-      role = "satelite";
+      dnsProvider = "hurricane";
+    };
+    services.traefik.staticConfigOptions.entryPoints = {
+      websecure.proxyProtocol.trustedIPs = [
+        "192.168.5.0/24"
+      ];
     };
 
     boot.kernel.sysctl = {
@@ -150,31 +154,6 @@ mkMachine { } (
       };
     };
 
-    services.nginx.virtualHosts.default = {
-      listenAddresses = [ "195.201.46.105" ];
-      default = true;
-      addSSL = true;
-      useACMEHost = config.networking.fqdn;
-      locations."/".return = "404";
-    };
-
-    services.nginx.virtualHosts.default2 = {
-      default = true;
-      addSSL = true;
-      useACMEHost = config.networking.fqdn;
-      locations."/".return = "404";
-    };
-
-    services.nginx.defaultListenAddresses = [
-      "[fd7a:115c:a1e0::fd1a:221e]"
-      "[::1]"
-      "127.0.0.1"
-      "127.0.0.2"
-      "192.168.1.3"
-    ];
-    services.nginx.virtualHosts."audiobooks.beinke.cloud".listenAddresses = [ "195.201.46.105" ];
-    services.nginx.virtualHosts."ha.0jb.de".listenAddresses = [ "195.201.46.105" ];
-
     services.udev.extraRules = ''
       SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ENV{ID_PATH}=="pci-0000:05:00.3-usb-0:2:1.0", SYMLINK+="zigstar", GROUP="zigbee", ENV{SYSTEMD_WANTS}="ser2net-zigstar.service"
     '';
@@ -206,24 +185,6 @@ mkMachine { } (
     };
 
     services.openssh.settings.X11Forwarding = true;
-
-    wat.thelegy.ender3s1 = {
-      enable = true;
-    };
-
-    services.nginx.virtualHosts."docs.sibylle.beinke.cloud" = {
-      forceSSL = true;
-      useACMEHost = config.networking.fqdn;
-      listenAddresses = [ "195.201.46.105" ];
-      locations."/" = {
-        proxyPass = "http://192.168.9.105:28981";
-        recommendedProxySettings = true;
-        proxyWebsockets = true;
-        extraConfig = ''
-          client_max_body_size 100M;
-        '';
-      };
-    };
 
   }
 )

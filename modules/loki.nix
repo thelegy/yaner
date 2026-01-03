@@ -1,17 +1,13 @@
 {
-  config,
   mkTrivialModule,
   ...
 }:
 let
   domain = "loki.0jb.de";
-  acmeHost = config.networking.fqdn;
   ip = "127.0.0.1";
   localPort = 3099;
 in
 mkTrivialModule {
-  wat.thelegy.acme.extraDomainNames = [ domain ];
-
   services.loki = {
     enable = true;
     extraFlags = [
@@ -76,13 +72,13 @@ mkTrivialModule {
     };
   };
 
-  services.nginx.virtualHosts.${domain} = {
-    forceSSL = true;
-    useACMEHost = acmeHost;
-    locations."/" = {
-      proxyPass = "http://${ip}:${toString localPort}";
-      recommendedProxySettings = true;
-      proxyWebsockets = true;
+  wat.thelegy.traefik.dynamicConfigs.monitoring = {
+    http.services.loki.loadBalancer = {
+      servers = [ { url = "http://${ip}:${toString localPort}"; } ];
+    };
+    http.routers.loki = {
+      rule = "Host(`${domain}`)";
+      service = "loki";
     };
   };
 }
