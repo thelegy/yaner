@@ -28,7 +28,6 @@ function ACME(record_name, target, options) {
   if(target.substring(0,7) === "static-") target = target.substring(7);
   if(target == "agony") target = "agony.he.0jb.de.";
   if(target == "ingress") target = "ingress.he.0jb.de.";
-  if(target == "starblade") target = "starblade.he.0jb.de.";
   if(target == "y") target = "y.he.0jb.de.";
   target = target[target.length-1] == "." ? target : target + ".desec.0jb.de.";
   return [ CNAME(record_name, "_acme-challenge."+target, options || []) ];
@@ -137,6 +136,7 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdd8tHEdS2GXue5+o131MbV4I8uXYqOxq5qK0oFaChxvUC1sYdXwE+YUsWArT6SFZSADWQIJfvXDtc6JL+dvzQZGsnh9M8CqbIfTo1FHLOWpeKv/wPEbB7fJwqP0mKW9l72DRX7Gyic8VY6ZgTaCA1UjSKlC39FX/AEoyDFpMEwwIDAQAB"),
 
   INGRESS("audiobooks", "y"),
+  INGRESS("auth", "starblade"),
   CNAME_ACME("autoconfig", "agony"),
   INGRESS("docs.sibylle", "starblade"),
   CNAME_ACME("imap", "agony"),

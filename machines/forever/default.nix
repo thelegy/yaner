@@ -55,6 +55,7 @@ mkMachine { } (
       tcp.routers.ingress = {
         rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
           "audiobooks.beinke.cloud"
+          "auth.beinke.cloud"
           "docs.sibylle.beinke.cloud"
           "ha.0jb.de"
         ];

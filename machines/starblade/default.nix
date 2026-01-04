@@ -38,9 +38,10 @@ mkMachine
           "storage/ollama"
         ];
       };
+      wat.thelegy.pocket-id.enable = true;
       wat.thelegy.traefik = {
         enable = true;
-        dnsProvider = "hurricane";
+        dnsProvider = "desec";
       };
       services.traefik.staticConfigOptions.entryPoints = {
         websecure.proxyProtocol.trustedIPs = [
@@ -245,6 +246,7 @@ mkMachine
           };
           tcp.routers.starblade = {
             rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
+              "auth.beinke.cloud"
               "docs.sibylle.beinke.cloud"
             ];
             tls.passthrough = true;
