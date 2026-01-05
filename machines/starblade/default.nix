@@ -259,6 +259,7 @@ mkMachine
           tcp.routers.y = {
             rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
               "audiobooks.beinke.cloud"
+              "grafana.0jb.de"
             ];
             tls.passthrough = true;
             service = "y";

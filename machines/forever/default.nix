@@ -57,6 +57,7 @@ mkMachine { } (
           "audiobooks.beinke.cloud"
           "auth.beinke.cloud"
           "docs.sibylle.beinke.cloud"
+          "grafana.0jb.de"
           "ha.0jb.de"
         ];
         tls.passthrough = true;
