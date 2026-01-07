@@ -116,6 +116,25 @@ mkMachine
         device = "spinningrust";
       };
 
+      services.prometheus.exporters.zfs = {
+        enable = true;
+        listenAddress = "127.0.0.1";
+      };
+
+      environment.etc."alloy/zfs-exporter.alloy".text =
+        let
+          inherit (config.services.prometheus.exporters.zfs) listenAddress port;
+        in
+        ''
+          prometheus.scrape "zfs" {
+            targets = [
+              {"__address__" = "${listenAddress}:${toString port}"},
+            ]
+            scrape_interval = "1m"
+            forward_to = [prometheus.relabel.default.receiver]
+          }
+        '';
+
       hardware.graphics = {
         enable = true;
         enable32Bit = true;
