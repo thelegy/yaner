@@ -111,6 +111,9 @@ mkMachine
             ];
           };
           "admin@0jb.de" = { };
+          "noreply@beinke.cloud" = {
+            sendOnly = true;
+          };
         };
       };
 
