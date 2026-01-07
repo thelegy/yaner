@@ -13,7 +13,7 @@ mkMachine
     with lib;
     let
 
-      networkInterface = "enp6s0";
+      networkInterface = "enp5s0";
       macAddress = "60:cf:84:bf:a4:a0";
 
     in
