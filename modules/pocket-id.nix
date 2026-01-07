@@ -63,7 +63,7 @@ mkModule {
       };
 
       environment.etc."alloy/pocket-id-exporter.alloy".text = ''
-        prometheus.scrape "pocket-id" {
+        prometheus.scrape "pocketId" {
           targets = [{"__address__" = "${host}:${toString prometheus_port}"}]
           forward_to = [prometheus.relabel.default.receiver]
         }
