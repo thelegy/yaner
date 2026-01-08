@@ -52,6 +52,7 @@ mkMachine
       boot.kernelPackages = pkgs.linuxPackages;
       boot.initrd.availableKernelModules = [ "igc" ];
       boot.initrd.network.enable = true;
+      boot.initrd.network.udhcpc.enable = true;
       boot.initrd.network.ssh = {
         enable = true;
         hostKeys = [ "/etc/secrets/initrd_ed25519_host_key" ];

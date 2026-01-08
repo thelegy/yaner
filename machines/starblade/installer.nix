@@ -30,31 +30,6 @@ in
   boot.loader.systemd-boot.enable = mkDefault true;
   boot.loader.systemd-boot.configurationLimit = 15;
 
-  boot.initrd.systemd = {
-    enable = true;
-    services.cryptKeysSetup = {
-      before = [ "cryptsetup-pre.target" ];
-      wants = [ "cryptsetup-pre.target" ];
-      wantedBy = [ "cryptsetup.target" ];
-      unitConfig = {
-        DefaultDependencies = false;
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "/bin/sh -c '/bin/mkdir -p /crypt-keys && /bin/mount -t tmpfs tmpfs /crypt-keys && /bin/chmod 700 /crypt-keys'";
-        RemainAfterExit = true;
-      };
-    };
-    services.cryptKeysCleanup = {
-      after = [ "cryptsetup.target" ];
-      wantedBy = [ "cryptsetup.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "/bin/sh -c '/bin/umount /crypt-keys && /bin/rmdir /crypt-keys'";
-      };
-    };
-  };
-
   boot.swraid = {
     enable = true;
   };
@@ -63,8 +38,6 @@ in
 
   boot.initrd.luks.devices.${hostname} = {
     device = "/dev/disk/by-uuid/${luksUuid}";
-    #fallbackToPassword = true;
-    keyFile = "/crypt-keys/key";
     allowDiscards = true;
   };
 
