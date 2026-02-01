@@ -25,6 +25,10 @@ mkModule {
       configPath = "/etc/alloy";
     };
 
+    wat.thelegy.backup.extraExcludes = [
+      "var/lib/private/alloy"
+    ];
+
     environment.etc."alloy/config.alloy".text = ''
       prometheus.remote_write "default" {
         endpoint {
