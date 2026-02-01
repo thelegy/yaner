@@ -38,6 +38,11 @@ mkMachine
           "storage/ollama"
         ];
       };
+      wat.thelegy.paperless = {
+        enable = true;
+        dataDir = "/storage/paperless";
+        exportDir = "/storage/paperless-export";
+      };
       wat.thelegy.pocket-id.enable = true;
       wat.thelegy.traefik = {
         enable = true;
@@ -153,7 +158,6 @@ mkMachine
 
       systemd.tmpfiles.rules = [
         "d /storage/ollama 0750 ollama ollama -"
-        "d /storage/paperless-sibylle 0750 paperless paperless"
       ];
 
       services.ollama = {
@@ -182,57 +186,57 @@ mkMachine
       users.groups.libvirt = { };
       users.users.beinke.extraGroups = [ "libvirt" ];
 
-      users.groups.paperless-sibylle.gid = 1550;
-      users.users.paperless-sibylle = {
-        isSystemUser = true;
-        uid = 1550;
-        group = "paperless-sibylle";
-      };
-      containers.paperless-sibylle = {
-        autoStart = true;
-        ephemeral = true;
-        bindMounts."/var/lib/paperless" = {
-          hostPath = "/storage/paperless-sibylle";
-          isReadOnly = false;
-        };
-        config = containerArgs: {
-          nixpkgs.pkgs = pkgs;
-          system.stateVersion = "24.11";
-          environment.systemPackages = [
-            containerArgs.config.services.paperless.manage
-          ];
-          users.groups.paperless-sibylle = config.users.groups.paperless-sibylle;
-          users.users.paperless-sibylle = config.users.users.paperless-sibylle;
-          services.paperless = {
-            enable = true;
-            user = "paperless-sibylle";
-            address = "192.168.9.105";
-            settings = {
-              PAPERLESS_CONSUMER_IGNORE_PATTERN = [
-                ".DS_STORE/*"
-                "desktop.ini"
-              ];
-              PAPERLESS_OCR_LANGUAGE = "deu+eng";
-              PAPERLESS_OCR_USER_ARGS = {
-                optimize = 1;
-                pdfa_image_compression = "lossless";
-              };
-              PAPERLESS_URL = "https://docs.sibylle.beinke.cloud";
-              PAPERLESS_TRUSTED_PROXIES = "192.168.9.105";
-            };
-          };
-        };
-      };
-
-      wat.thelegy.traefik.dynamicConfigs.paperless-sibylle = {
-        http.services.paperless-sibylle.loadBalancer = {
-          servers = [ { url = "http://192.168.9.105:28981"; } ];
-        };
-        http.routers.paperless-sibylle = {
-          rule = "Host(`docs.sibylle.beinke.cloud`)";
-          service = "paperless-sibylle";
-        };
-      };
+      # users.groups.paperless-sibylle.gid = 1550;
+      # users.users.paperless-sibylle = {
+      #   isSystemUser = true;
+      #   uid = 1550;
+      #   group = "paperless-sibylle";
+      # };
+      # containers.paperless-sibylle = {
+      #   autoStart = true;
+      #   ephemeral = true;
+      #   bindMounts."/var/lib/paperless" = {
+      #     hostPath = "/storage/paperless-sibylle";
+      #     isReadOnly = false;
+      #   };
+      #   config = containerArgs: {
+      #     nixpkgs.pkgs = pkgs;
+      #     system.stateVersion = "24.11";
+      #     environment.systemPackages = [
+      #       containerArgs.config.services.paperless.manage
+      #     ];
+      #     users.groups.paperless-sibylle = config.users.groups.paperless-sibylle;
+      #     users.users.paperless-sibylle = config.users.users.paperless-sibylle;
+      #     services.paperless = {
+      #       enable = true;
+      #       user = "paperless-sibylle";
+      #       address = "192.168.9.105";
+      #       settings = {
+      #         PAPERLESS_CONSUMER_IGNORE_PATTERN = [
+      #           ".DS_STORE/*"
+      #           "desktop.ini"
+      #         ];
+      #         PAPERLESS_OCR_LANGUAGE = "deu+eng";
+      #         PAPERLESS_OCR_USER_ARGS = {
+      #           optimize = 1;
+      #           pdfa_image_compression = "lossless";
+      #         };
+      #         PAPERLESS_URL = "https://docs.sibylle.beinke.cloud";
+      #         PAPERLESS_TRUSTED_PROXIES = "192.168.9.105";
+      #       };
+      #     };
+      #   };
+      # };
+      #
+      # wat.thelegy.traefik.dynamicConfigs.paperless-sibylle = {
+      #   http.services.paperless-sibylle.loadBalancer = {
+      #     servers = [ { url = "http://192.168.9.105:28981"; } ];
+      #   };
+      #   http.routers.paperless-sibylle = {
+      #     rule = "Host(`docs.sibylle.beinke.cloud`)";
+      #     service = "paperless-sibylle";
+      #   };
+      # };
 
       environment.etc."traefik-ingress/nixos.toml" = {
         mode = "0644";
@@ -268,6 +272,7 @@ mkMachine
             rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
               "auth.beinke.cloud"
               "docs.sibylle.beinke.cloud"
+              "paperless.beinke.cloud"
             ];
             tls.passthrough = true;
             service = "starblade";
