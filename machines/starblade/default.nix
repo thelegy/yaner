@@ -24,6 +24,7 @@ mkMachine
       imports = [
         ./hardware-configuration.nix
         ./installer.nix
+        ./scanner.nix
       ];
 
       hardware.cpu.amd.updateMicrocode = true;
