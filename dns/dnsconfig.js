@@ -140,6 +140,7 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   CNAME_ACME("autoconfig", "agony"),
   INGRESS("docs.sibylle", "starblade"),
   CNAME_ACME("imap", "agony"),
+  INGRESS("paperless", "starblade"),
   CNAME_ACME("pw", "forever"),
   CNAME_ACME("smtp", "agony"),
 
