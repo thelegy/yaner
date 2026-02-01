@@ -43,6 +43,11 @@ mkModule {
       type = types.str;
       default = "borg-passphrase";
     };
+
+    useSnapshot = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
 
   config =
@@ -90,11 +95,11 @@ mkModule {
             fi
           ''}";
         };
-        preHook = ''
+        preHook = mkIf cfg.useSnapshot ''
           ${pkgs.callPackage ./snapshot.nix { }}
           cd /.backup
         '';
-        readWritePaths = [ "/.backup" ] ++ cfg.extraReadWritePaths;
+        readWritePaths = mkIf cfg.useSnapshot ([ "/.backup" ] ++ cfg.extraReadWritePaths);
         exclude = [
           "dev"
           "mnt"
@@ -116,9 +121,10 @@ mkModule {
           "sh:home/*/.cache"
           "sh:home/*/.stack"
           "sh:home/*/.thunderbird"
-        ] ++ cfg.extraExcludes;
+        ]
+        ++ cfg.extraExcludes;
         extraArgs = "--lock-wait 300";
-        extraCreateArgs = "--stats --exclude-caches";
+        extraCreateArgs = "--stats --exclude-caches --exclude-if-present .nobackup --keep-exclude-tags";
         paths = [ "." ];
         prune = {
           keep = {
@@ -152,8 +158,11 @@ mkModule {
         };
       };
 
-      systemd.tmpfiles.rules = [
-        "d /.backup 0700 root root - -"
-      ] ++ (map (x: "d ${x} 0700 root root - -") cfg.extraReadWritePaths);
+      systemd.tmpfiles.rules = mkIf cfg.useSnapshot (
+        [
+          "d /.backup 0700 root root - -"
+        ]
+        ++ (map (x: "d ${x} 0700 root root - -") cfg.extraReadWritePaths)
+      );
     };
 }

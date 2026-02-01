@@ -34,6 +34,7 @@ mkMachine
       wat.thelegy.backup = {
         enable = true;
         borgbaseRepo = "wx7058j2";
+        useSnapshot = false;
         extraExcludes = [
           "var/lib/libvirt/images"
           "storage/ollama"
