@@ -12,47 +12,47 @@ keys:
 - &y c611f29dbc693fae526f32433869ef25ac9942dc
 
 creation_rules:
-- path_regex: machines/agony/.*
+- path_regex: wat/hosts/agony/.*
   key_groups:
   - pgp:
     - *thelegy
     - *agony
-- path_regex: machines/forever/.*
+- path_regex: wat/hosts/forever/.*
   key_groups:
   - pgp:
     - *thelegy
     - *forever
-- path_regex: machines/lll/.*
+- path_regex: wat/hosts/lll/.*
   key_groups:
   - pgp:
     - *thelegy
     - *lll
-- path_regex: machines/mininet/.*
+- path_regex: wat/hosts/mininet/.*
   key_groups:
   - pgp:
     - *thelegy
     - *mininet
-- path_regex: machines/roborock/.*
+- path_regex: wat/hosts/roborock/.*
   key_groups:
   - pgp:
     - *thelegy
     - *roborock
-- path_regex: machines/sirrah/.*
+- path_regex: wat/hosts/sirrah/.*
   key_groups:
   - pgp:
     - *thelegy
     - *sirrah
-- path_regex: machines/starblade/.*
+- path_regex: wat/hosts/starblade/.*
   key_groups:
   - pgp:
     - *thelegy
     - *starblade
-- path_regex: machines/th1/.*
+- path_regex: wat/hosts/th1/.*
   key_groups:
   - pgp:
     - *thelegy
     - *th1
-- path_regex: machines/y/.*
+- path_regex: wat/hosts/y/.*
   key_groups:
   - pgp:
     - *thelegy

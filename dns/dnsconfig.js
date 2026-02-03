@@ -7,7 +7,7 @@ var DNS_HETZNER = NewDnsProvider("hetzner");
 var DNS_INWX = NewDnsProvider("inwx");
 
 
-hosts = require("../modules/hosts/hosts.json");
+hosts = require("../wat/modules/hosts/hosts.json");
 function HOST(record_name, hostname, options) {
   var hostname = hostname || record_name;
   var recs = [];

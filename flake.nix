@@ -1,10 +1,17 @@
 {
 
-  description = "Yet Another Nix Expression Repository";
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   inputs = {
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    flake-parts = {
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+      url = "github:hercules-ci/flake-parts";
+    };
+
+    import-tree.url = "github:vic/import-tree";
 
     wat = {
       url = "github:thelegy/wat";
@@ -54,41 +61,5 @@
     };
 
   };
-
-  outputs =
-    flakes@{ wat, ... }:
-    wat.lib.mkWatRepo flakes (
-      {
-        findModules,
-        findMachines,
-        ...
-      }:
-      rec {
-        namespace = [ "thelegy" ];
-        loadOverlays = [
-          flakes.nix-index-database.overlays.nix-index
-          flakes.nixGL.overlays.default
-        ];
-        loadModules = [
-          flakes.homemanager.nixosModules.home-manager
-          flakes.nix-index-database.nixosModules.nix-index
-          flakes.nixos-nftables-firewall.nixosModules.default
-          flakes.sops-nix.nixosModules.sops
-        ];
-        outputs = {
-
-          overlay = import ./pkgs flakes;
-
-          nixosModules = findModules namespace ./modules;
-
-          nixosConfigurations = findMachines ./machines;
-
-          packages = wat.lib.withPkgsForLinux flakes.nixpkgs [ flakes.self.overlay ] (pkgs: {
-
-          });
-
-        };
-      }
-    );
 
 }
