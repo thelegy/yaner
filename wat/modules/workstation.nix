@@ -61,7 +61,6 @@ mkTrivialModule {
       mqttx-cli
       mumble
       nil
-      nixGL
       nixfmt-rfc-style
       nixfmt-tree
       obsidian

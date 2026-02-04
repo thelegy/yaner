@@ -67,8 +67,6 @@ flakes: final: prev: with final; {
 
   neovim-thelegy = flakes.qed.packages.${system}.qed;
 
-  nixGL = final.nixgl.nixGLCommon final.nixgl.nixGLIntel;
-
   on-demand-shell =
     {
       name,

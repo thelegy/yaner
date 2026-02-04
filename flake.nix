@@ -14,7 +14,7 @@
     import-tree.url = "github:vic/import-tree";
 
     wat = {
-      url = "github:thelegy/wat";
+      url = "github:thelegy/wat/dendritic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -36,11 +36,6 @@
     qed.url = "github:thelegy/qed/dev";
 
     qbar.url = "gitlab:jens/qbar?host=git.c3pb.de";
-
-    nixGL = {
-      url = "github:guibou/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
 
