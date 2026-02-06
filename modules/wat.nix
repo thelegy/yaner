@@ -1,10 +1,10 @@
-{ inputs, ... }:
+{ inputs, config, ... }:
 {
 
-  systems = [
-    "x86_64-linux"
-    "aarch64-linux"
-  ];
+  flake-file.wat = {
+    url = "github:thelegy/wat/dendritic";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   imports = [
     inputs.wat.flakeModules.default
@@ -18,16 +18,13 @@
       inputs.nixos-nftables-firewall.nixosModules.default
       inputs.sops-nix.nixosModules.sops
     ];
-    outputs =
-      { findModules, findMachines, ... }:
-      {
+  };
 
-        overlay = import ../wat/overlay inputs;
+  flake = {
+    overlay = import ../wat/overlay inputs;
 
-        nixosModules = findModules ../wat/modules;
+    nixosModules = config.wat.lib.findModules ../wat/modules;
 
-        nixosConfigurations = findMachines ../wat/hosts;
-
-      };
+    nixosConfigurations = config.wat.lib.findMachines ../wat/hosts;
   };
 }
