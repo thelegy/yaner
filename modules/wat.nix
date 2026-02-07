@@ -1,7 +1,7 @@
 { inputs, config, ... }:
 {
 
-  flake-file.wat = {
+  flake-file.inputs.wat = {
     url = "github:thelegy/wat/dendritic";
     inputs.nixpkgs.follows = "nixpkgs";
   };
