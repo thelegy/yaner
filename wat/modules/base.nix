@@ -21,7 +21,7 @@ mkTrivialModule {
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
   # Restore systemd default
-  services.logind.killUserProcesses = mkDefault true;
+  services.logind.settings.Login.KillUserProcesses = mkDefault true;
 
   sops.defaultSopsFile = config.wat.machines.${config.networking.hostName}."secrets.yaml".file;
 
