@@ -1,10 +1,7 @@
 { inputs, config, ... }:
 {
 
-  flake-file.inputs.wat = {
-    url = "github:thelegy/wat/dendritic";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
+  flake-file.inputs.wat.url = "github:thelegy/wat/dendritic";
 
   imports = [
     inputs.wat.flakeModules.default

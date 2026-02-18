@@ -42,10 +42,7 @@
       url = "github:Mic92/sops-nix";
     };
     systems.url = "github:nix-systems/default";
-    wat = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:thelegy/wat/dendritic";
-    };
+    wat.url = "github:thelegy/wat/dendritic";
   };
 
 }
