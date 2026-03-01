@@ -1,4 +1,9 @@
-flakes: final: prev: with final; {
+flakes: final: prev:
+with final;
+let
+  system = final.stdenv.hostPlatform.system;
+in
+{
   atopile = python-atopile.pkgs.atopile;
 
   bs-oneclick = callPackage ./bs-oneclick.nix { };
