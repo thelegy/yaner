@@ -23,10 +23,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/nix-index-database";
     };
-    nixos-nftables-firewall = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:thelegy/nixos-nftables-firewall";
-    };
+    nixos-nftables-firewall.url = "github:thelegy/nixos-nftables-firewall/dev";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-lib.follows = "nixpkgs";
     nixpkgs-snm.url = "github:NixOS/nixpkgs/nixos-25.11";

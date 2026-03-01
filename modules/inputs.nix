@@ -14,10 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-nftables-firewall = {
-      url = "github:thelegy/nixos-nftables-firewall";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-nftables-firewall.url = "github:thelegy/nixos-nftables-firewall/dev";
 
     qed.url = "github:thelegy/qed/dev";
 
