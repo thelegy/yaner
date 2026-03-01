@@ -4,6 +4,9 @@ flakes:
   pkgs,
   ...
 }:
+let
+  qt = pkgs.qt6;
+in
 {
 
   imports = [
@@ -13,6 +16,12 @@ flakes:
   programs.dankMaterialShell = {
     enable = true;
     systemd.enable = true;
+  };
+
+  systemd.user.services.dms = {
+    Service.Environment = [
+      "NIXPKGS_QT6_QML_IMPORT_PATH=\"${qt.qtwebsockets}/${qt.qtbase.qtQmlPrefix}\""
+    ];
   };
 
   home.packages = [
