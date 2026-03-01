@@ -85,7 +85,6 @@ mkMachine { } (
     ];
 
     users.groups.libvirt = { };
-    programs.adb.enable = true;
     users.users.beinke.extraGroups = [
       "vboxusers"
       "dialout"

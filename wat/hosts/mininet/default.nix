@@ -37,7 +37,7 @@ mkMachine { } (
       config.virtualisation.vswitch.package
       pkgs.xterm
       pkgs.iperf
-      (pkgs.python310.withPackages (p: [
+      (pkgs.python3.withPackages (p: [
         p.greenlet
         p.pip
       ]))

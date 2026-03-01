@@ -1,13 +1,15 @@
 {
   mkTrivialModule,
   pkgs,
+  flakes,
   ...
 }:
 
 let
   hostName = "spoolman.0jb.de";
   port = 7020;
-  bin = pkgs.spoolman;
+  system = pkgs.stdenv.hostPlatform.system;
+  bin = flakes.nixpkgs-stable.legacyPackages.${system}.spoolman;
 in
 mkTrivialModule {
 

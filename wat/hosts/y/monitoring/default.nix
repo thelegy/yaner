@@ -6,8 +6,17 @@ let
   local_ip = "127.0.0.60";
   local_port = 3000;
   domain = "grafana.0jb.de";
+  grafanaSopsSecretKey = "grafana_secret_key";
+  grafanaSecretKeyFile = config.sops.secrets.${grafanaSopsSecretKey}.path;
 in
 {
+
+  sops.secrets.${grafanaSopsSecretKey} = {
+    format = "yaml";
+    owner = "grafana";
+    mode = "0400";
+  };
+
   services.grafana = {
     enable = true;
     settings = {
@@ -19,6 +28,11 @@ in
       };
       database = {
         wal = true;
+      };
+      security = {
+        cookie_secure = true;
+        disable_gravatar = true;
+        secret_key = "$__file{${grafanaSecretKeyFile}}";
       };
     };
     provision.enable = true;
