@@ -16,7 +16,7 @@
         lines = 10000;
       };
 
-      colors = {
+      colors-dark = {
         foreground = "dcd7ba";
         background = "1f1f28";
         selection-foreground = "c8c093";
