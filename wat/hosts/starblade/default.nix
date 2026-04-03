@@ -30,6 +30,7 @@ mkMachine
       hardware.cpu.amd.updateMicrocode = true;
       powerManagement.cpuFreqGovernor = "schedutil";
 
+      wat.thelegy.actual.enable = true;
       wat.thelegy.base.enable = true;
       wat.thelegy.backup = {
         enable = true;
@@ -272,6 +273,7 @@ mkMachine
           };
           tcp.routers.starblade = {
             rule = lib.concatMapStringsSep " || " (x: "HostSNI(`${x}`)") [
+              "actual.beinke.cloud"
               "auth.beinke.cloud"
               "docs.sibylle.beinke.cloud"
               "paperless.beinke.cloud"
