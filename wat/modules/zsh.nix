@@ -37,6 +37,8 @@ mkTrivialModule {
 
     enable = true;
 
+    enableCompletion = true;
+
     histSize = 1000000;
 
     shellInit = ''
@@ -147,6 +149,8 @@ mkTrivialModule {
         [[ ''${1:-} == '-h' || ''${1:-} == '--help' ]] && echo $usage && return 0
         ''${=filer:-cat} ''${1:-} | curl -F'file=@-' $pastebin
       }
+
+      . ${pkgs.zsh-completion-sync}/share/zsh-completion-sync/zsh-completion-sync.plugin.zsh
 
     '';
 
