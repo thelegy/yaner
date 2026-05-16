@@ -43,6 +43,7 @@ mkTrivialModule {
       direnv
       discord
       element-desktop
+      ente-desktop
       entr
       file
       fnm
