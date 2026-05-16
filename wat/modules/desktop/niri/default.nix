@@ -25,6 +25,7 @@ in
   };
 
   home.packages = [
+    pkgs.libqalculate
     pkgs.xwayland-satellite
   ];
 }
