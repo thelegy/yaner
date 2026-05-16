@@ -58,16 +58,43 @@ mkModule {
     in
     {
 
-      boot.initrd.preLVMCommands = mkOrder 300 ''
-        ip link set ${cfg.interface} up;
-        # `{1..10}` is not ash syntax and `1 .. 10` will break with other shells
-        for i in 1 2 3 4 5 6 7 8 9 10; do
-          echo Run udhcpc: $i
-          udhcpc --quit --now -i ${cfg.interface} -O staticroutes --script ${udhcpcScript} || continue
-          echo udhcpc ran successfull
-          break
-        done
-      '';
+      boot.initrd.systemd = {
+        extraBin = {
+          ip = "${pkgs.iproute2}/bin/ip";
+          sed = "${pkgs.gnused}/bin/sed";
+          udhcpc = "${pkgs.busybox}/bin/udhcpc";
+        };
+
+        services.ssh-unlock-dhcp = {
+          description = "Configure initrd DHCP for SSH unlock";
+          wantedBy = [ "network.target" ];
+          before = [
+            "network.target"
+            "sshd.service"
+            "cryptsetup.target"
+            "remote-cryptsetup.target"
+          ];
+          after = [
+            "systemd-udevd.service"
+            "systemd-udev-trigger.service"
+          ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            ip link set ${cfg.interface} up
+            # `{1..10}` is not ash syntax and `1 .. 10` will break with other shells
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              echo Run udhcpc: $i
+              udhcpc --quit --now -i ${cfg.interface} -O staticroutes --script ${udhcpcScript} || continue
+              echo udhcpc ran successfull
+              break
+            done
+          '';
+        };
+      };
 
       boot.initrd.network.enable = true;
       boot.initrd.network.ssh = {
