@@ -57,7 +57,7 @@ mkModule {
       certs.${cfg.defaultCertName} = {
         inherit (cfg) extraDomainNames;
         dnsProvider = cfg.dnsProvider;
-        credentialsFile = config.sops.secrets.${cfg.sopsCredentialsFile}.path;
+        environmentFile = config.sops.secrets.${cfg.sopsCredentialsFile}.path;
         postRun = mkIf (length cfg.reloadUnits > 0) ''
           systemctl reload-or-restart ${concatStringsSep " " cfg.reloadUnits}
         '';
