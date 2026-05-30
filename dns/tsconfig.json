@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": ["es5"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES5",
+    "strict": true,
+    "noEmit": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "dnsconfig.ts",
+    "hosts.json",
+    "types-dnscontrol.d.ts"
+  ]
+}

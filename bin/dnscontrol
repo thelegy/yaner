@@ -1,4 +1,9 @@
-#!/usr/bin/env -S nix shell nixpkgs#zsh nixpkgs#dnscontrol -c zsh
+#!/usr/bin/env -S nix shell nixpkgs#zsh nixpkgs#dnscontrol nixpkgs#nodejs nixpkgs#typescript -c zsh
+
+set -euo pipefail
 
 cd ${0:A:h:h}/dns
+
+dnscontrol write-types
+tsc --project tsconfig.json
 sops exec-env creds.yaml "dnscontrol $*"
