@@ -38,5 +38,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    systems.url = "github:nix-systems/default";
+
+    nixwrap = {
+      url = "github:rti/nixwrap";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
+    };
+
   };
 }

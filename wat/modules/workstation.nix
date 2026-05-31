@@ -1,11 +1,14 @@
 {
   mkTrivialModule,
-  config,
+  flakes,
   lib,
-  options,
   pkgs,
   ...
 }:
+let
+  system = pkgs.stdenv.hostPlatform.system;
+  inputs = flakes;
+in
 mkTrivialModule {
   wat.thelegy.cups.enable = true;
   wat.thelegy.desktop.enable = true;
@@ -84,6 +87,7 @@ mkTrivialModule {
       usbutils
       virt-manager
       vscode
+      inputs.nixwrap.packages.${system}.wrap
       zotero
     ];
   };
