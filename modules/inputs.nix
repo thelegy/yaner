@@ -20,7 +20,7 @@
 
     qbar.url = "gitlab:jens/qbar?host=git.c3pb.de";
 
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     nixpkgs-snm.url = "github:NixOS/nixpkgs/nixos-25.11";
     snm = {

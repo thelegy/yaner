@@ -25,7 +25,7 @@
     nixos-nftables-firewall.url = "github:thelegy/nixos-nftables-firewall/dev";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-snm.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixwrap = {
       url = "github:rti/nixwrap";
       inputs = {

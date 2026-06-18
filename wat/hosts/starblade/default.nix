@@ -59,6 +59,7 @@ mkMachine
 
       boot.kernelPackages = pkgs.linuxPackages;
       boot.initrd.availableKernelModules = [ "igc" ];
+      boot.initrd.systemd.enable = false;
       boot.initrd.network.enable = true;
       boot.initrd.network.udhcpc.enable = true;
       boot.initrd.network.ssh = {

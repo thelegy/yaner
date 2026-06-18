@@ -22,7 +22,7 @@ let
     import sys
     import time
 
-    from PIL import ImageFilter, ImageStat
+    from PIL import Image, ImageFilter, JpegImagePlugin
     from datetime import datetime
 
 
