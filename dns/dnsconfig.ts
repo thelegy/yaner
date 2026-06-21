@@ -41,7 +41,6 @@ function ACME(record_name: string, target: string, options: RecordModifier[] = [
   if (target.substring(0, 7) === "static-") target = target.substring(7);
   if (target === "agony") target = "agony.he.0jb.de.";
   if (target === "ingress") target = "ingress.he.0jb.de.";
-  if (target === "y") target = "y.he.0jb.de.";
   target = target[target.length - 1] === "." ? target : target + ".desec.0jb.de.";
   return [CNAME(challengeRecordName, "_acme-challenge." + target, ...options)];
 }

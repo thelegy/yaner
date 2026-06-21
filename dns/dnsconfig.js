@@ -49,8 +49,6 @@ function ACME(record_name, target, options) {
         target = "agony.he.0jb.de.";
     if (target === "ingress")
         target = "ingress.he.0jb.de.";
-    if (target === "y")
-        target = "y.he.0jb.de.";
     target = target[target.length - 1] === "." ? target : target + ".desec.0jb.de.";
     return [CNAME.apply(void 0, __spreadArray([challengeRecordName, "_acme-challenge." + target], options, false))];
 }

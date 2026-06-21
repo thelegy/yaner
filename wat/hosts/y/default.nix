@@ -39,7 +39,7 @@ mkMachine { } (
         "ender3s1.0jb.de"
         "klipper.0jb.de"
       ];
-      dnsProvider = "hurricane";
+      dnsProvider = "desec";
     };
     wat.thelegy.audiobookshelf.enable = true;
     wat.thelegy.backup = {
@@ -63,7 +63,7 @@ mkMachine { } (
     wat.thelegy.syncthing.enable = true;
     wat.thelegy.traefik = {
       enable = true;
-      dnsProvider = "hurricane";
+      dnsProvider = "desec";
     };
     services.traefik.staticConfigOptions.entryPoints = {
       websecure.proxyProtocol.trustedIPs = [
