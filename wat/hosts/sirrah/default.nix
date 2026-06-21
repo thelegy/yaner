@@ -33,6 +33,11 @@ mkMachine { } (
     wat.thelegy.syncthing.enable = true;
     wat.thelegy.workstation.enable = true;
 
+    wat.thelegy.traefik = {
+      enable = true;
+      dnsProvider = "desec";
+    };
+
     networking.useDHCP = false;
     networking.interfaces.${interface}.useDHCP = true;
 
