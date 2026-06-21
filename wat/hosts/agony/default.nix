@@ -19,6 +19,7 @@ mkMachine
 
       imports = [
         flakes.snm.nixosModule
+        { options.documentation.man.cache.enable = mkEnableOption "dummy"; }
       ];
 
       wat.installer.hcloud = {

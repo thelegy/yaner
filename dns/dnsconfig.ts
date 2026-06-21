@@ -38,7 +38,6 @@ function HOST(record_name: string, hostname?: string, options: RecordModifier[] 
 
 function ACME(record_name: string, target: string, options: RecordModifier[] = []): DomainModifier {
   const challengeRecordName = "_acme-challenge" + (record_name === "@" ? "" : "." + record_name);
-  if (target.substring(0, 7) === "static-") target = target.substring(7);
   if (target === "agony") target = "agony.he.0jb.de.";
   if (target === "ingress") target = "ingress.he.0jb.de.";
   target = target[target.length - 1] === "." ? target : target + ".desec.0jb.de.";
@@ -207,5 +206,8 @@ D("peterbeinke.de", REG_NONE, DnsProvider("inwx"),
 );
 
 for (const hostname of Object.keys(hosts)) {
-  D_EXTEND("0jb.de", HOST(hostname));
+  D_EXTEND("0jb.de", [
+    HOST(hostname),
+    CNAME("*." + hostname, hostname),
+  ]);
 }

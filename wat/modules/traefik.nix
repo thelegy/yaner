@@ -89,7 +89,13 @@ mkModule {
       services.traefik = {
         enable = true;
         staticConfigOptions = {
+          log.level = "INFO";
           providers.file.directory = "/etc/traefik";
+          api = {};
+          experimental.plugins.traefik-oidc-auth = {
+            moduleName = "github.com/sevensolutions/traefik-oidc-auth";
+            version = "v0.20.1";
+          };
           entryPoints = {
             web = {
               address = mkDefault ":80";
@@ -139,6 +145,38 @@ mkModule {
           };
         };
       };
+
+      wat.thelegy.traefik.dynamicConfigs.oidc-host = {
+        http.middlewares.oidc-host.plugin.traefik-oidc-auth = {
+          Secret = "\${OIDC_ENCRYPTION_KEY}";
+          Scopes = [ "openid" ];
+          Provider = {
+            Url = "https://auth.beinke.cloud";
+            ClientId = "\${OIDC_HOST_CLIENT_ID}";
+            ClientSecret = "\${OIDC_HOST_CLIENT_SECRET}";
+            UsePkce = true;
+          };
+        };
+      };
+
+
+      wat.thelegy.traefik.dynamicConfigs.traefik-dashboard =
+        let
+          inherit (config.networking) fqdn;
+        in
+        {
+          http.routers.traefik-dashboard = {
+            rule = "Host(`traefik.${fqdn}`)";
+            middlewares = [ "oidc-host@file" ];
+            service = "api@internal";
+            tls.certResolver = "letsencrypt";
+            tls.domains = [
+              {
+                main = "*.${fqdn}";
+              }
+            ];
+          };
+        };
 
     };
 }

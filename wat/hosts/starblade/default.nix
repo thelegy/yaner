@@ -314,7 +314,7 @@ mkMachine
         autoStart = true;
         privateNetwork = true;
         macvlans = [ "dmz" ];
-        bindMounts."/etc/traefik" = {
+        bindMounts."/etc/traefik/ingress" = {
           hostPath = "/etc/traefik-ingress";
           isReadOnly = true;
         };
@@ -333,6 +333,7 @@ mkMachine
           system.stateVersion = "24.11";
           networking.interfaces.mv-dmz.useDHCP = true;
           networking.useHostResolvConf = false;
+          networking.domain = config.networking.domain;
           services.resolved.enable = true;
           wat.thelegy.monitoring.enable = true;
           wat.thelegy.traefik = {
