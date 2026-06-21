@@ -1,8 +1,9 @@
 {
-  mkModule,
   config,
   lib,
   liftToNamespace,
+  mkModule,
+  pkgs,
   ...
 }:
 with lib;
@@ -11,11 +12,6 @@ mkModule {
   options =
     cfg:
     liftToNamespace {
-
-      sopsPasswordFile = mkOption {
-        type = types.str;
-        default = "syncthing-gui-password";
-      };
 
       passwordFile = mkOption {
         type = types.nullOr types.str;
@@ -33,25 +29,16 @@ mkModule {
         dataDir
         package
         ;
-      usesSops = cfg.passwordFile == null;
-      passwordFile =
-        if usesSops then config.sops.secrets.${cfg.sopsPasswordFile}.path else cfg.passwordFile;
       port = 8384;
     in
     {
-
-      sops.secrets.${cfg.sopsPasswordFile} = mkIf usesSops {
-        format = "yaml";
-        mode = "0600";
-        restartUnits = [ "syncthing.service" ];
-      };
 
       systemd.tmpfiles.rules = [ "d ${dataDir} 0700 ${user} ${group}" ];
 
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;
-        guiAddress = mkForce "0.0.0.0:${toString port}";
+        guiAddress = mkForce "127.0.0.1:${toString port}";
 
         user = mkDefault "beinke";
         group = mkDefault "users";
@@ -76,34 +63,58 @@ mkModule {
         confinement = {
           enable = true;
         };
-        preStart = ''
-          ${package}/bin/syncthing generate \
-            --home=${configDir} \
-            --gui-user=${user} \
-            --gui-password=- \
-            --no-port-probing \
-            < $CREDENTIALS_DIRECTORY/gui-password
-        '';
         serviceConfig = {
           BindPaths = [ dataDir ];
           BindReadOnlyPaths = [
             "/etc/resolv.conf"
+            "/etc/passwd"
             "/etc/ssl/certs/ca-certificates.crt"
             "/etc/static/ssl/certs/ca-certificates.crt"
           ];
-          LoadCredential = "gui-password:${passwordFile}";
+          ExecStartPre = [
+            "+${package}/bin/syncthing generate --home=${configDir} --no-port-probing"
+            "+${pkgs.coreutils}/bin/chown ${user} ${configDir}/config.xml"
+          ];
+          ExecStartPost = [
+            "${pkgs.coreutils}/bin/sleep 10"
+            "+${package}/bin/syncthing cli --home=${configDir} config gui user set ''"
+          ];
         };
       };
+
+      systemd.services.syncthing-init.serviceConfig.Group = "syncthing-api";
+
+      users.groups.syncthing-api = {};
 
       environment.systemPackages = [ package ];
 
       wat.thelegy.backup.extraExcludes = [ "/srv/sync/replica" ];
 
-      networking.nftables.firewall.rules.syncthing-gui = {
-        from = [ "tailscale" ];
-        to = [ "fw" ];
-        allowedTCPPorts = [ port ];
-      };
+      networking.nftables.chains.output_lo.syncthing.rules = [
+        "tcp dport ${toString port} meta skuid != { root, traefik } meta skgid != { syncthing-api } reject"
+      ];
+
+      wat.thelegy.traefik.dynamicConfigs.syncthing =
+        let
+          inherit (config.networking) fqdn;
+        in
+        {
+          http.services.syncthing.loadBalancer = {
+            servers = [ { url = "http://127.0.0.1:${toString port}"; } ];
+            passHostHeader = false;
+          };
+          http.routers.syncthing = {
+            rule = "Host(`syncthing.${fqdn}`)";
+            middlewares = [ "oidc-host@file" ];
+            service = "syncthing";
+            tls.certResolver = "letsencrypt";
+            tls.domains = [
+              {
+                main = "*.${fqdn}";
+              }
+            ];
+          };
+        };
 
     };
 }
