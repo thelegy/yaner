@@ -55,6 +55,11 @@ mkMachine { } (
       localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
     };
 
+    wat.thelegy.traefik = {
+      enable = true;
+      dnsProvider = "desec";
+    };
+
     boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
     boot.supportedFilesystems = [ "ntfs" ];
 
