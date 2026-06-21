@@ -1,6 +1,5 @@
 {
   mkTrivialModule,
-  config,
   lib,
   ...
 }:
@@ -33,6 +32,26 @@ mkTrivialModule {
   networking.nftables.firewall = {
     enable = true;
     snippets.nnf-common.enable = true;
+  };
+
+  networking.nftables.chains.output.hook = {
+    after = lib.mkForce [ "start" ];
+    before = lib.mkForce [ "veryEarly" ];
+    rules = [ "type filter hook output priority filter; policy accept;" ];
+  };
+
+  networking.nftables.chains.output_lo.verdict = {
+    after = lib.mkForce [ "veryLate" ];
+    before = lib.mkForce [ "end" ];
+    rules = [ "accept" ];
+  };
+
+  networking.nftables.chains.output.loopback = {
+    early = true;
+    rules = lib.singleton {
+      onExpression = "oifname { lo }";
+      jump = "output_lo";
+    };
   };
 
 }
