@@ -32,15 +32,6 @@ mkMachine { } (
     hardware.cpu.amd.updateMicrocode = true;
     powerManagement.cpuFreqGovernor = "schedutil";
 
-    wat.thelegy.acme = {
-      enable = true;
-      staging = false;
-      extraDomainNames = [
-        "ender3s1.0jb.de"
-        "klipper.0jb.de"
-      ];
-      dnsProvider = "desec";
-    };
     wat.thelegy.audiobookshelf.enable = true;
     wat.thelegy.backup = {
       enable = true;
@@ -56,7 +47,6 @@ mkMachine { } (
     wat.thelegy.libation.enable = true;
     wat.thelegy.loki.enable = true;
     wat.thelegy.monitoring-server.enable = true;
-    wat.thelegy.nginx.enable = true;
     wat.thelegy.rtlan-net.enable = true;
     wat.thelegy.spoolman.enable = true;
     wat.thelegy.static-net.enable = true;
