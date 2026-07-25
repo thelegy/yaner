@@ -63,6 +63,35 @@ function CAA_LETSENCRYPT(record_name = "@"): DomainModifier {
     issue: ["letsencrypt.org;validationmethods=dns-01"],
     issue_critical: true,
   } as any);
+
+function FASTMAIL_MX(record_name = "@"): DomainModifier {
+  return [
+    MX(record_name, 10, "in1-smtp.messagingengine.com."),
+    MX(record_name, 20, "in2-smtp.messagingengine.com."),
+  ];
+}
+
+interface FastmailProps {
+  extra_spf?: string[],
+}
+
+function FASTMAIL(domain: string, props: FastmailProps = {}): DomainModifier {
+  const extra_spf = props.extra_spf ?? [];
+  return [
+    FASTMAIL_MX(),
+    CNAME("fm1._domainkey", "fm1." + domain + ".dkim.fmhosted.com."),
+    CNAME("fm2._domainkey", "fm2." + domain + ".dkim.fmhosted.com."),
+    CNAME("fm3._domainkey", "fm3." + domain + ".dkim.fmhosted.com."),
+    SPF_BUILDER({
+      parts: [
+        "v=spf1",
+        ...extra_spf,
+        "include:spf.messagingengine.com.",
+        "-all",
+      ],
+    }),
+    TXT("_dmarc", "v=DMARC1; p=reject; rua=mailto:admin+dmarc-aggregate@0jb.de; ruf=mailto:admin+dmarc-forensic@0jb.de; fo=1; adkim=s; aspf=s"),
+  ];
 }
 
 DEFAULTS(
@@ -87,13 +116,11 @@ D("0jb.de", REG_NONE, DnsProvider("desec"),
   IGNORE("_acme-challenge.*.desec", "TXT"),
   CAA("*.desec", "issue", ";"),  // needed to prevent NXDOMAIN in acme lookup
 
-  MX("@", 10, "agony"),
-  TXT("@", "v=spf1 mx -all"),
-  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de; ruf=mailto:admin+dmarc-forensic@0jb.de; fo=1; adkim=s; aspf=s"),
+  FASTMAIL("0jb.de"),
+
   TXT("beinke.cloud._report._dmarc", "v=DMARC1"),
   TXT("janbeinke.com._report._dmarc", "v=DMARC1"),
-  TXT("2018-10._domainkey", "v=DKIM1; k=rsa; p=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmqyppEu6rgRpwRIZ9eVgTiXCP8RIzEoZLve5R7aJDlo9qawiVeG1ReLXvTEcbSGpHMZXg+Ew3OkwF3KbT8xAnPelw8E5DrB1pf3IkQKdYILJRNEdarNOnd03Cs4ZDNnpd/sNFeqKVLfSBY9pq8YJ5k7yFYjgVm5KiuB1dqgffiJZ6PiERfMx9yb79NYCNv3JNkfohgcfZtUEZf/WXdJQQzAGzEUkvih12DjFa6JMliAP2c0+ZquMO6aeL+KxKHaN1gimWi/bxpaLXPXSmnFuTJIxQsRGuL5XHwtW+iKJz/1a0WJfhINQ+nipOzZsUsaeui7zaxYGeeLwbc113pJXKsnMc7fw7htFEupHEXOHvcxaBZre+DyLKK/jjK+lM8rOQPUu1V9lUsZ9R4m1FHafMIXYhWmRp72NZpqtmcjXdqaPgAgGlbzxfn0219H5UDT0Yymd6RZN89AaY/ms3sm8L2RCWbcQk64WM8QmO2L9CHMdbhSDknYx3w6/j7BWQO3O8syXZy3sc3/PySr3nqks9syEekqp6HH48znGJblu/bSjXegtOZ+s+bHLoSKsPKCXYPt6DKfoOrnxNVRElG0Op3Ou3idxFNnZxgfAp9wvYrOui9WIJZ6Xe8GUkvVA8eTDEXHAQc577NrQYNd30puusblfRlZ9xG8JwLkrz1jyq6ECAwEAAQ=="),
-  TXT("mail._domainkey", "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEGcg4iDvOQVOTnGLsZcQgAx2wemqYgyvbDKD3vk05nnd+EL8ta8pq0PVNHzuI75hmVohkAD7HJi4G5hudLLfIlVr8Cams7MKYZn13bmKtlKoiuGx2o8Yb9BRmPTkrbHlv7DIBjS/EQt/mWW64qpv5ED0HwgyNpj7F9NXUXMMJMQIDAQAB"),
+
   TXT("_keybase", "keybase-site-verification=EO_b3ub9rlX1xBO3KbEPfOh6PkrvTZXOOC0EzfIW0TI"),
   TXT("_keybase", "keybase-site-verification=q79aAfVelFuToBXZ8s4I5G1lzFA7JoJanP8np029Z7U"),
 
@@ -129,10 +156,13 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"),
   INWX_PARKING("@"),
   ACME("@", "ingress"),
 
-  MX("@", 10, "agony.0jb.de."),
-  TXT("@", "v=spf1 mx -all"),
-  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de;"),
-  TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdd8tHEdS2GXue5+o131MbV4I8uXYqOxq5qK0oFaChxvUC1sYdXwE+YUsWArT6SFZSADWQIJfvXDtc6JL+dvzQZGsnh9M8CqbIfTo1FHLOWpeKv/wPEbB7fJwqP0mKW9l72DRX7Gyic8VY6ZgTaCA1UjSKlC39FX/AEoyDFpMEwwIDAQAB"),
+  FASTMAIL("beinke.cloud", {
+    extra_spf: [
+      "a:agony.0jb.de."
+    ],
+  }),
+  FASTMAIL_MX("*"),
+  FASTMAIL_MX("sibylle"),
 
   INGRESS("actual", "starblade"),
   INGRESS("audiobooks", "y"),
@@ -151,12 +181,8 @@ D("janbeinke.com", REG_NONE, DnsProvider("inwx"),
   INWX_PARKING("@"),
   ACME("@", "ingress"),
 
-  MX("@", 10, "agony.0jb.de."),
-  TXT("@", "v=spf1 mx -all"),
-  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de;"),
-  TXT("mail._domainkey", "v=DKIM1; h=sha256; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2wZEpewvXaeyQoGkB2sgT1NRfm2zBtX6vge0v2OpP/Ii42R+KC+/IS9a0v79SEa35l+4Oki8fm4I+hwhvNROpQiynJ4rZLE5X2Iu9dQpqjiCBsCTkrbA8TeGsm4jHwMcPgrVs8AgFN854YcWENMDMrEOv2Fw5gAAygPM0gU/ohwIDAQAB"),
-  TXT("mail._domainkey", "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDsz47OcupjnUuIZZv1ktwmcB8eve4tfjFAfnsYjZBkamcu5UuI6BxrAh5toiX82qDO7YOGiIWb9kkVKaJBwxAAXIOJ1L8SkLyf1qnuOE/6cws+qXaU4OIVgRPTcpR4BdQwWIfCjnoaZaXmv4BMhxpGU5zoFEAIm/CkbMzVNuUWkwIDAQAB"),
-  TXT("2018-10._domainkey", "v=DKIM1; k=rsa; p=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmqyppEu6rgRpwRIZ9eVgTiXCP8RIzEoZLve5R7aJDlo9qawiVeG1ReLXvTEcbSGpHMZXg+Ew3OkwF3KbT8xAnPelw8E5DrB1pf3IkQKdYILJRNEdarNOnd03Cs4ZDNnpd/sNFeqKVLfSBY9pq8YJ5k7yFYjgVm5KiuB1dqgffiJZ6PiERfMx9yb79NYCNv3JNkfohgcfZtUEZf/WXdJQQzAGzEUkvih12DjFa6JMliAP2c0+ZquMO6aeL+KxKHaN1gimWi/bxpaLXPXSmnFuTJIxQsRGuL5XHwtW+iKJz/1a0WJfhINQ+nipOzZsUsaeui7zaxYGeeLwbc113pJXKsnMc7fw7htFEupHEXOHvcxaBZre+DyLKK/jjK+lM8rOQPUu1V9lUsZ9R4m1FHafMIXYhWmRp72NZpqtmcjXdqaPgAgGlbzxfn0219H5UDT0Yymd6RZN89AaY/ms3sm8L2RCWbcQk64WM8QmO2L9CHMdbhSDknYx3w6/j7BWQO3O8syXZy3sc3/PySr3nqks9syEekqp6HH48znGJblu/bSjXegtOZ+s+bHLoSKsPKCXYPt6DKfoOrnxNVRElG0Op3Ou3idxFNnZxgfAp9wvYrOui9WIJZ6Xe8GUkvVA8eTDEXHAQc577NrQYNd30puusblfRlZ9xG8JwLkrz1jyq6ECAwEAAQ=="),
+  FASTMAIL("janbeinke.com"),
+
   TXT("_keybase", "keybase-site-verification=zHhKLQ9z6u8O1qIS1irkZmAQng6Z--lzJMyMEjp5KFw")
 );
 
@@ -175,10 +201,7 @@ D("die-cloud.org", REG_NONE, DnsProvider("inwx"),
   INWX_PARKING("@"),
   ACME("@", "ingress"),
 
-  MX("@", 10, "agony.0jb.de."),
-  TXT("@", "v=spf1 mx -all"),
-  TXT("_dmarc", "v=DMARC1; p=none;"),
-  TXT("mail._domainkey", "v=DKIM1; k=rsa; s=email; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsxQl+3emCeP60AckIGqRBo1+lxPeDyV7G1QPBI5nvMWJV8u18oX1m5ULUmJ/8PAbzHerNFP2IEIw2bG+bNiwdyr+dEAJOYIXqwV0atdWFZDjPy2vpYMQcXJXknIjl5SEnj8cz++O8Smn5dXSouvNR7HxRVn3SCX5qZCaPhJ9lswIDAQAB")
+  FASTMAIL("die-cloud.org"),
 );
 
 D("janbeinke.de", REG_NONE, DnsProvider("inwx"),
@@ -186,10 +209,6 @@ D("janbeinke.de", REG_NONE, DnsProvider("inwx"),
 
   INWX_PARKING("@"),
 
-  MX("@", 10, "agony.0jb.de."),
-  TXT("@", "v=spf1 mx -all"),
-  TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:admin+dmarc-aggregate@0jb.de; ruf=mailto:admin+dmarc-forensic@0jb.de; fo=1; adkim=s; aspf=s"),
-  TXT("2018-10._domainkey", "v=DKIM1; k=rsa; p=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmqyppEu6rgRpwRIZ9eVgTiXCP8RIzEoZLve5R7aJDlo9qawiVeG1ReLXvTEcbSGpHMZXg+Ew3OkwF3KbT8xAnPelw8E5DrB1pf3IkQKdYILJRNEdarNOnd03Cs4ZDNnpd/sNFeqKVLfSBY9pq8YJ5k7yFYjgVm5KiuB1dqgffiJZ6PiERfMx9yb79NYCNv3JNkfohgcfZtUEZf/WXdJQQzAGzEUkvih12DjFa6JMliAP2c0+ZquMO6aeL+KxKHaN1gimWi/bxpaLXPXSmnFuTJIxQsRGuL5XHwtW+iKJz/1a0WJfhINQ+nipOzZsUsaeui7zaxYGeeLwbc113pJXKsnMc7fw7htFEupHEXOHvcxaBZre+DyLKK/jjK+lM8rOQPUu1V9lUsZ9R4m1FHafMIXYhWmRp72NZpqtmcjXdqaPgAgGlbzxfn0219H5UDT0Yymd6RZN89AaY/ms3sm8L2RCWbcQk64WM8QmO2L9CHMdbhSDknYx3w6/j7BWQO3O8syXZy3sc3/PySr3nqks9syEekqp6HH48znGJblu/bSjXegtOZ+s+bHLoSKsPKCXYPt6DKfoOrnxNVRElG0Op3Ou3idxFNnZxgfAp9wvYrOui9WIJZ6Xe8GUkvVA8eTDEXHAQc577NrQYNd30puusblfRlZ9xG8JwLkrz1jyq6ECAwEAAQ=="),
   TXT("_keybase", "keybase-site-verification=q79aAfVelFuToBXZ8s4I5G1lzFA7JoJanP8np029Z7U")
 );
 
@@ -197,12 +216,6 @@ D("peterbeinke.de", REG_NONE, DnsProvider("inwx"),
   CAA_LETSENCRYPT(),
 
   INWX_PARKING("@"),
-
-  MX("@", 10, "agony.0jb.de."),
-  TXT("@", "v=spf1 mx -all"),
-  TXT("_dmarc", "v=DMARC1; p=none;"),
-  TXT("2018-10._domainkey", "v=DKIM1; k=rsa; p=MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmqyppEu6rgRpwRIZ9eVgTiXCP8RIzEoZLve5R7aJDlo9qawiVeG1ReLXvTEcbSGpHMZXg+Ew3OkwF3KbT8xAnPelw8E5DrB1pf3IkQKdYILJRNEdarNOnd03Cs4ZDNnpd/sNFeqKVLfSBY9pq8YJ5k7yFYjgVm5KiuB1dqgffiJZ6PiERfMx9yb79NYCNv3JNkfohgcfZtUEZf/WXdJQQzAGzEUkvih12DjFa6JMliAP2c0+ZquMO6aeL+KxKHaN1gimWi/bxpaLXPXSmnFuTJIxQsRGuL5XHwtW+iKJz/1a0WJfhINQ+nipOzZsUsaeui7zaxYGeeLwbc113pJXKsnMc7fw7htFEupHEXOHvcxaBZre+DyLKK/jjK+lM8rOQPUu1V9lUsZ9R4m1FHafMIXYhWmRp72NZpqtmcjXdqaPgAgGlbzxfn0219H5UDT0Yymd6RZN89AaY/ms3sm8L2RCWbcQk64WM8QmO2L9CHMdbhSDknYx3w6/j7BWQO3O8syXZy3sc3/PySr3nqks9syEekqp6HH48znGJblu/bSjXegtOZ+s+bHLoSKsPKCXYPt6DKfoOrnxNVRElG0Op3Ou3idxFNnZxgfAp9wvYrOui9WIJZ6Xe8GUkvVA8eTDEXHAQc577NrQYNd30puusblfRlZ9xG8JwLkrz1jyq6ECAwEAAQ=="),
-  TXT("mail._domainkey", "v=DKIM1; h=sha256; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvqukCYUn/O1sVI06ZBEdHf/azwNgImxOFgaBFwcH9/66S2dJ9PwNX1eeB94r9y4tD1NoeCtfoXLdpbpzq9Suw8HQsuy2GbyJxeIbgtAx+D9o0Tsa+FLL9Bdshh3/5debuVJe5AtLctIEqwnHYIEbSdXDTCI2hJTyTDkaB+ThoewIDAQAB")
 );
 
 for (const hostname of Object.keys(hosts)) {
