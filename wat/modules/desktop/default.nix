@@ -79,11 +79,11 @@ mkTrivialModule {
       foot
       grim
       mpv
-      python3
       qbar
       slurp
       spotify
       translate-shell
+      uv
       wl-clipboard
       wl-mirror
       yt-dlp
