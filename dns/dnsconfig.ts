@@ -62,7 +62,8 @@ function CAA_LETSENCRYPT(record_name = "@"): DomainModifier {
     label: record_name,
     issue: ["letsencrypt.org;validationmethods=dns-01"],
     issue_critical: true,
-  } as any);
+  });
+}
 
 function FASTMAIL_MX(record_name = "@"): DomainModifier {
   return [
