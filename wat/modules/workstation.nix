@@ -46,7 +46,7 @@ mkTrivialModule {
       direnv
       discord
       element-desktop
-      ente-desktop
+      # ente-desktop  # electron-41.10.6 is EOL
       entr
       file
       fnm
