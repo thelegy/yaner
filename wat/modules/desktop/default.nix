@@ -126,7 +126,6 @@ mkTrivialModule {
     mesa-demos
     phinger-cursors
     pinentry-gnome3
-    pinentry-gtk2
   ];
 
 }
