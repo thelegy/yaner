@@ -1,8 +1,6 @@
 {
   mkTrivialModule,
-  config,
   flakes,
-  options,
   pkgs,
   ...
 }:
@@ -108,7 +106,6 @@ mkTrivialModule {
         ./foot.nix
         ./kitty.nix
         ./mako.nix
-        (import ./niri flakes)
         ./sway
       ];
     };
@@ -121,11 +118,43 @@ mkTrivialModule {
     fontconfig.defaultFonts.monospace = [ "FiraCode Nerd Font" ];
   };
 
-  environment.systemPackages = with pkgs; [
-    gsettings-desktop-schemas
-    mesa-demos
-    phinger-cursors
-    pinentry-gnome3
+  environment.systemPackages = [
+    pkgs.gsettings-desktop-schemas
+    pkgs.mesa-demos
+    pkgs.phinger-cursors
+    pkgs.pinentry-gnome3
+    pkgs.libqalculate
+    pkgs.xwayland-satellite
   ];
+
+  services.xserver.xkb = {
+    layout = "de";
+    variant = "nodeadkeys";
+    options = "caps:escape_shifted_capslock,compose:rctrl";
+  };
+
+  programs.dms-shell = {
+    enable = true;
+    plugins = {
+      calculator.enable = true;
+      niriDSA.enable = true;
+      niriWindows.enable = true;
+      quickCapture.enable = true;
+    };
+  };
+
+  programs.dsearch.enable = true;
+
+  # systemd.user.services.dms = {
+  #   Service.Environment = [
+  #     "NIXPKGS_QT6_QML_IMPORT_PATH=\"${qt.qtwebsockets}/${qt.qtbase.qtQmlPrefix}\""
+  #   ];
+  # };
+
+  services.displayManager.dms-greeter = {
+    enable = true;
+    compositor.name = "niri";
+    configHome = "/home/beinke";
+  };
 
 }

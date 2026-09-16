@@ -10,6 +10,7 @@
   wat = {
     namespace = [ "thelegy" ];
     loadModules = [
+      inputs.dms-plugin-registry.nixosModules.default
       inputs.homemanager.nixosModules.home-manager
       inputs.nix-index-database.nixosModules.nix-index
       inputs.nixos-nftables-firewall.nixosModules.default
