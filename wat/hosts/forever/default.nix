@@ -45,10 +45,10 @@ mkMachine { } (
       sopsSecretsFile = "matrix-synapse-keys";
     };
     wat.thelegy.postgresql.package = pkgs.postgresql_14;
-    wat.thelegy.stalwart = {
-      enable = true;
-      reportDomain = "beinke.cloud";
-    };
+    # wat.thelegy.stalwart = {
+    #   enable = true;
+    #   reportDomain = "beinke.cloud";
+    # };
     wat.thelegy.traefik.enable = true;
     wat.thelegy.traefik.dnsProvider = "desec";
     wat.thelegy.traefik.dynamicConfigs.ingress = {
