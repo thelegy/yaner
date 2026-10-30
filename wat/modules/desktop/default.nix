@@ -5,6 +5,10 @@
   ...
 }:
 
+let
+  # pinentry-gnome3 uses DBus connection, thus the curses fallback does not happen reliably over SSH
+  pinentryPackage = pkgs.pinentry-qt;
+in
 mkTrivialModule {
 
   wat.thelegy.base.enable = true;
@@ -33,7 +37,7 @@ mkTrivialModule {
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
+      inherit pinentryPackage;
     };
 
     foot.enable = true;
@@ -119,11 +123,12 @@ mkTrivialModule {
   };
 
   environment.systemPackages = [
+    pinentryPackage
+    pkgs.gearlever
     pkgs.gsettings-desktop-schemas
+    pkgs.libqalculate
     pkgs.mesa-demos
     pkgs.phinger-cursors
-    pkgs.pinentry-gnome3
-    pkgs.libqalculate
     pkgs.xwayland-satellite
   ];
 
