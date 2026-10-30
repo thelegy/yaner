@@ -14,30 +14,30 @@ mkModule {
     cfg:
     liftToNamespace {
 
-      mcu = mkOption {
-        type = types.str;
-        default = "stm32f401";
-      };
+      # mcu = mkOption {
+      #   type = types.str;
+      #   default = "stm32f401";
+      # };
 
-      serial = mkOption {
-        type = types.str;
-        default = "/dev/ender3s1";
-      };
+      # serial = mkOption {
+      #   type = types.str;
+      #   default = "/dev/ender3s1";
+      # };
 
-      companionMcu = mkOption {
-        type = types.str;
-        default = "rp2040";
-      };
+      # companionMcu = mkOption {
+      #   type = types.str;
+      #   default = "rp2040";
+      # };
 
-      companionSerial = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
+      # companionSerial = mkOption {
+      #   type = types.nullOr types.str;
+      #   default = null;
+      # };
 
-      virtualSdcardPath = mkOption {
-        type = types.str;
-        default = "/srv/klipper";
-      };
+      # virtualSdcardPath = mkOption {
+      #   type = types.str;
+      #   default = "/srv/klipper";
+      # };
 
     };
 
