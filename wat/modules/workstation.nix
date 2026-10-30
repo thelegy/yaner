@@ -54,6 +54,7 @@ mkTrivialModule {
       (mkOnDemand { pkg = gitbutler; })
       git-filter-repo
       git-revise
+      github-cli
       (mkOnDemand { pkg = kicad; })
       kubectl
       launch-cadquery
@@ -72,6 +73,7 @@ mkTrivialModule {
       orca-slicer
       pass
       podman
+      podman-compose
       podman-desktop
       prusa-slicer
       pyright
@@ -81,6 +83,7 @@ mkTrivialModule {
       telegram-desktop
       thunderbird
       tinymist
+      typescript-language-server
       typst
       typst-languagetool
       typst-languagetool-lsp
