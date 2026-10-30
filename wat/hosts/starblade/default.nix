@@ -57,6 +57,11 @@ mkMachine
         ];
       };
 
+      wat.thelegy.seaweedfs = {
+        enable = true;
+        master.enable = true;
+      };
+
       boot.kernelPackages = pkgs.linuxPackages;
       boot.initrd.availableKernelModules = [ "igc" ];
       boot.initrd.systemd.enable = false;
