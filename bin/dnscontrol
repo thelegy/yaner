@@ -1,4 +1,6 @@
-#!/usr/bin/env -S nix shell nixpkgs#zsh nixpkgs#dnscontrol nixpkgs#nodejs nixpkgs#typescript -c zsh
+#!/usr/bin/env -S nix shell nixpkgs#zsh nixpkgs#dnscontrol nixpkgs#nodejs github:NixOS/nixpkgs/b6018f87da91d19d0ab4cf979885689b469cdd41#typescript -c zsh
+
+# Pin TypeScript 5.9.3: DNSControl requires ES5 output, which TypeScript 7 removed.
 
 set -euo pipefail
 
