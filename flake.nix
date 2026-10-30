@@ -44,6 +44,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     systems.url = "github:nix-systems/default";
-    wat.url = "github:thelegy/wat/dendritic";
+    wat.url = "github:thelegy/wat/rust";
   };
 }

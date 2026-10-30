@@ -1,7 +1,7 @@
 { inputs, config, ... }:
 {
 
-  flake-file.inputs.wat.url = "github:thelegy/wat/dendritic";
+  flake-file.inputs.wat.url = "github:thelegy/wat/rust";
 
   imports = [
     inputs.wat.flakeModules.default

@@ -474,16 +474,16 @@
     },
     "wat": {
       "locked": {
-        "lastModified": 1780219227,
-        "narHash": "sha256-2D4fcuHB+hBDXZvVY0S5yVuOXORDFVXgnsL3zDj5KG0=",
+        "lastModified": 1783289723,
+        "narHash": "sha256-tJh3kYFHuZjgunzxgRSBJT1DwukjH/7epAW0Qb3D0mc=",
         "owner": "thelegy",
         "repo": "wat",
-        "rev": "95dd461f388371ac273cecc17aee0623a9007e45",
+        "rev": "65e8711feaf956f9af17ef937c7099854df9a364",
         "type": "github"
       },
       "original": {
         "owner": "thelegy",
-        "ref": "dendritic",
+        "ref": "rust",
         "repo": "wat",
         "type": "github"
       }
