@@ -69,6 +69,8 @@ mkMachine { } (
 
     environment.variables.AMD_VULKAN_ICD = "RADV";
 
+    services.hardware.openrgb.enable = true;
+
     services.flatpak.enable = true;
 
     hardware.bluetooth.enable = true;
@@ -77,11 +79,17 @@ mkMachine { } (
       enable = true;
     };
 
+    networking.firewall.allowedUDPPorts = [
+      24727 # AusweisApp
+    ];
+
     networking.firewall.allowedTCPPorts = [
       4321
       8080
       46898
       46899
+
+      11434 # ollama
     ];
 
     boot.binfmt.emulatedSystems = [
@@ -119,6 +127,17 @@ mkMachine { } (
 
     services.ollama = {
       enable = true;
+      host = "[::]";
+      loadModels = [
+        "minicpm-v"
+        "qwen3:8b"
+        "qwen2.5:14b-instruct"
+      ];
+    };
+
+    hardware.sane = {
+      enable = true;
+      drivers.scanSnap.enable = true;
     };
 
   }
