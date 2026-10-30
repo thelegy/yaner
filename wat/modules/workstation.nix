@@ -91,7 +91,6 @@ mkTrivialModule {
       virt-manager
       vscode
       inputs.nixwrap.packages.${system}.wrap
-      zotero
     ];
   };
 

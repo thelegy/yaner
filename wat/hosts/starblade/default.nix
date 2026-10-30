@@ -21,6 +21,21 @@ mkMachine
 
       system.stateVersion = "24.11";
 
+      # fpdf2 2.8.9's resized-image fixture differs with this Pillow build.
+      nixpkgs.overlays = [
+        (final: prev: {
+          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+            (pythonFinal: pythonPrev: {
+              fpdf2 = pythonPrev.fpdf2.overridePythonAttrs (old: {
+                disabledTests =
+                  (old.disabledTests or [ ])
+                  ++ lib.optional (old.version == "2.8.9") "test_image_with_explicit_dimensions";
+              });
+            })
+          ];
+        })
+      ];
+
       imports = [
         ./hardware-configuration.nix
         ./installer.nix
