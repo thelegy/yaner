@@ -303,6 +303,11 @@ mkMachine
             tls.passthrough = true;
             service = "hass";
           };
+          tcp.routers.music-assistant = {
+            rule = "HostSNI(`ma.0jb.de`)";
+            tls.passthrough = true;
+            service = "hass";
+          };
         };
       };
       sops.secrets.ingress-traefik-env = {

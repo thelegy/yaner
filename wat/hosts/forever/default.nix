@@ -64,6 +64,7 @@ mkMachine { } (
           "docs.sibylle.beinke.cloud"
           "grafana.0jb.de"
           "ha.0jb.de"
+          "ma.0jb.de"
           "paperless.beinke.cloud"
         ];
         tls.passthrough = true;
