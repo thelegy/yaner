@@ -15,11 +15,11 @@ mkMachine
     {
 
       system.stateVersion = "22.11";
-      mailserver.stateVersion = 3;
+      # Migrate Sieve scripts with migration-05 before deploying this system.
+      mailserver.stateVersion = 5;
 
       imports = [
         flakes.snm.nixosModule
-        { options.documentation.man.cache.enable = mkEnableOption "dummy"; }
       ];
 
       wat.installer.hcloud = {
@@ -97,9 +97,9 @@ mkMachine
           "die-cloud.org"
           "janbeinke.com"
         ];
-        extraVirtualAliases = { };
+        aliases = { };
         forwards = { };
-        loginAccounts = {
+        accounts = {
           "jan@beinke.cloud" = {
             aliases = [
               "mail@0jb.de"

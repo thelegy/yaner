@@ -49,7 +49,7 @@ mkModule {
     }
     // {
 
-      mailserver.loginAccounts = mkOption {
+      mailserver.accounts = mkOption {
         type = types.attrsOf (
           types.submodule (
             { config, ... }:
@@ -58,6 +58,7 @@ mkModule {
 
                 useSopsHashedPassword = mkOption {
                   type = types.nullOr types.str;
+                  # Keep existing encrypted secret keys after the accounts rename.
                   default = "mailserver/loginAccounts/${config.name}/hashedPassword";
                 };
 
@@ -80,7 +81,6 @@ mkModule {
   config =
     cfg:
     let
-      acmePath = "/var/lib/acme/${cfg.useACMEHost}";
       autoconfigXml = ''
         <?xml version="1.0" encoding="UTF-8"?>
 
@@ -114,7 +114,7 @@ mkModule {
         "postfix.service"
       ];
 
-      sops.secrets = pipe toplevel_cfg.mailserver.loginAccounts [
+      sops.secrets = pipe toplevel_cfg.mailserver.accounts [
         attrValues
         (map (x: x.useSopsHashedPassword))
         (filter isString)
@@ -159,16 +159,12 @@ mkModule {
         # As per the dovecot documentation the following is sane and ensures
         # the greatest level of compability with different clients.
         hierarchySeparator = "/";
-        useFsLayout = true;
+        storage.directoryLayout = "fs";
 
         # How expensive is "_very_ expensive"?
         virusScanning = false;
 
-        #useACMEHost = config.networking.fqdn;  # TODO: use this from 26.05
-        # Manual certificate setup
-        certificateScheme = "manual";
-        keyFile = "${acmePath}/key.pem";
-        certificateFile = "${acmePath}/cert.pem";
+        x509.useACMEHost = cfg.useACMEHost;
       };
 
       systemd.services.dovecot.serviceConfig = {
