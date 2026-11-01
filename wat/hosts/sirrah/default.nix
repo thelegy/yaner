@@ -84,6 +84,7 @@ mkMachine { } (
     ];
 
     networking.firewall.allowedTCPPorts = [
+      3773 # T3
       4321
       8080
       46898
