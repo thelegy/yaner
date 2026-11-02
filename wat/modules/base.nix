@@ -121,6 +121,12 @@ mkTrivialModule {
   ];
 
   nix.settings.auto-optimise-store = true;
+  nix.gc = {
+    automatic = mkDefault true;
+    dates = mkDefault "Mon *-*-* 03:00:00";
+    persistent = mkDefault true;
+    options = mkDefault "--delete-older-than 14d";
+  };
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
