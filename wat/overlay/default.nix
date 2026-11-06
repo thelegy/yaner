@@ -123,8 +123,6 @@ in
     };
   };
 
-  qbar = flakes.qbar.packages.${system}.qbar;
-
   roc-toolkit-sox = roc-toolkit.overrideAttrs (orig: {
     sconsFlags = lib.filter (x: x != "--disable-sox") orig.sconsFlags;
     buildInputs = (orig.buildInputs or [ ]) ++ [ sox ];

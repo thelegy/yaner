@@ -1,15 +1,6 @@
 { lib, pkgs, ... }:
 let
 
-  statusCommand = ''
-    ${pkgs.qbar}/bin/qbar server swaybar \
-    date \
-    battery \
-    cpu \
-    disk '"/ /tmp"' \
-    networkmanager
-  '';
-
   wallpaper = "${pkgs.sway-unwrapped.src}/assets/Sway_Wallpaper_Blue_2048x1536.png";
 
   screenshotTool = pkgs.writeScript "screenshotTool" ''
@@ -31,7 +22,7 @@ let
     position = "top";
     fonts.names = [ "monospace" ];
     fonts.size = 7.0;
-    statusCommand = statusCommand;
+    statusCommand = "-";
     trayOutput = "*";
     extraConfig = ''
       status_padding 0

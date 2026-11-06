@@ -277,22 +277,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1681303793,
-        "narHash": "sha256-JEdQHsYuCfRL2PICHlOiH/2ue3DwoxUX7DJ6zZxZXFk=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "fe2ecaf706a5907b5e54d979fbde4924d84b65fc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1724819573,
         "narHash": "sha256-GnR7/ibgIH1vhoy8cYdmXE6iyZqKqFxQSVkFgosBh6w=",
         "owner": "NixOS",
@@ -331,30 +315,9 @@
         "type": "github"
       }
     },
-    "qbar": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2",
-        "quasar": "quasar"
-      },
-      "locked": {
-        "host": "git.c3pb.de",
-        "lastModified": 1759842304,
-        "narHash": "sha256-tX4woG/95a29nNFa6hSGN6woy2OKshSEyxFvq19Jadk=",
-        "owner": "jens",
-        "repo": "qbar",
-        "rev": "b3b426fedfc76d9c1837aaabe55304fab17aeb45",
-        "type": "gitlab"
-      },
-      "original": {
-        "host": "git.c3pb.de",
-        "owner": "jens",
-        "repo": "qbar",
-        "type": "gitlab"
-      }
-    },
     "qed": {
       "inputs": {
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1733076766,
@@ -371,27 +334,6 @@
         "type": "github"
       }
     },
-    "quasar": {
-      "inputs": {
-        "nixpkgs": [
-          "qbar",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1723342738,
-        "narHash": "sha256-SJB8RGHRanJ5b+QBNL+hyZbx1tuIKTbUHZZ9OAxIa70=",
-        "owner": "queezle42",
-        "repo": "quasar",
-        "rev": "ddbae299c7b2d4979d72ea33879f6d655421e5c2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "queezle42",
-        "repo": "quasar",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "dms-plugin-registry": "dms-plugin-registry",
@@ -405,7 +347,6 @@
         "nixpkgs-snm": "nixpkgs-snm",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixwrap": "nixwrap",
-        "qbar": "qbar",
         "qed": "qed",
         "snm": "snm",
         "sops-nix": "sops-nix",

@@ -33,7 +33,6 @@
         systems.follows = "systems";
       };
     };
-    qbar.url = "gitlab:jens/qbar?host=git.c3pb.de";
     qed.url = "github:thelegy/qed/dev";
     snm = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";

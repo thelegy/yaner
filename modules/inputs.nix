@@ -18,8 +18,6 @@
 
     qed.url = "github:thelegy/qed/dev";
 
-    qbar.url = "gitlab:jens/qbar?host=git.c3pb.de";
-
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     nixpkgs-snm.url = "github:NixOS/nixpkgs/nixos-26.05";

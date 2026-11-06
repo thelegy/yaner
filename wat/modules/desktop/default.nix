@@ -83,7 +83,6 @@ mkTrivialModule {
       foot
       grim
       mpv
-      qbar
       slurp
       spotify
       translate-shell
