@@ -33,7 +33,7 @@
         systems.follows = "systems";
       };
     };
-    qed.url = "github:thelegy/qed/dev";
+    qed.url = "github:thelegy/qed/tmp";
     snm = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";
       inputs.nixpkgs.follows = "nixpkgs-snm";

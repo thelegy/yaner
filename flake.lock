@@ -277,11 +277,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1724819573,
-        "narHash": "sha256-GnR7/ibgIH1vhoy8cYdmXE6iyZqKqFxQSVkFgosBh6w=",
+        "lastModified": 1771008912,
+        "narHash": "sha256-gf2AmWVTs8lEq7z/3ZAsgnZDhWIckkb+ZnAo5RzSxJg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "71e91c409d1e654808b2621f28a327acfdad8dc2",
+        "rev": "a82ccc39b39b621151d6732718e3e250109076fa",
         "type": "github"
       },
       "original": {
@@ -320,16 +320,16 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1733076766,
-        "narHash": "sha256-oP7mEfTOWABAVmzwM32Pm6HP9IeMz8wWsSAY8W1t0lc=",
+        "lastModified": 1771374501,
+        "narHash": "sha256-wRywqBaP84qDoVBOJZly9S1pdyP9Xi8o4gKVmPSksUA=",
         "owner": "thelegy",
         "repo": "qed",
-        "rev": "ba5ea5f496674064c2709a199b7ece43418b9f34",
+        "rev": "43e10331b143a23f453f4aebbd508e666a60361e",
         "type": "github"
       },
       "original": {
         "owner": "thelegy",
-        "ref": "dev",
+        "ref": "tmp",
         "repo": "qed",
         "type": "github"
       }
