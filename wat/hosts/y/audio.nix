@@ -197,15 +197,17 @@ in
 
   services.snapserver = {
     enable = true;
-    port = snapcast-stream-port;
-    settings.stream.source = [
-      "pipe:///run/pipewire/snapfifo?name=wdr2&mode=read"
-    ];
-    tcp = {
-      enable = true;
-      port = snapcast-control-port;
+    settings = {
+      tcp-streaming.port = snapcast-stream-port;
+      stream.source = [
+        "pipe:///run/pipewire/snapfifo?name=wdr2&mode=read"
+      ];
+      tcp-control = {
+        enabled = true;
+        port = snapcast-control-port;
+      };
+      http.enabled = true;
     };
-    http.enable = true;
   };
   systemd.services.snapserver.serviceConfig.SupplementaryGroups = [ "pipewire" ];
 
