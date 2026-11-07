@@ -70,7 +70,7 @@ in
 
   mpv_autospeed = ./mpv_autospeed.lua;
 
-  neovim-thelegy = flakes.qed.packages.${system}.qed;
+  neovim-thelegy = flakes.qed.packages.${system}.default;
 
   on-demand-shell =
     {

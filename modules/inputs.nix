@@ -16,7 +16,10 @@
 
     nixos-nftables-firewall.url = "github:thelegy/nixos-nftables-firewall/dev";
 
-    qed.url = "github:thelegy/qed/tmp";
+    qed = {
+      url = "github:thelegy/qed/tmp";
+      inputs.systems.follows = "systems";
+    };
 
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
 
