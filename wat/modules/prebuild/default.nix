@@ -40,40 +40,16 @@ let
     compare_results() {
       branch=$1
       updateBranch=$branch-${postfix}
-      if ! {git rev-parse origin/$updateBranch &>/dev/null} {
-        # remote branch does not exist yet
-        return 0
-      }
-      if [[ $(git rev-parse origin/$branch) == $(git rev-parse origin/$updateBranch) ]] {
-        # update branch was merged, so restrictions were lifted
-        return 0
-      }
-      oldBuildOutput=$(git show --pretty=format:"%B" --no-patch origin/$updateBranch | tail -n+4)
-      if [[ $2 == $oldBuildOutput ]] {
-        # exactly the same build result, test if repo was changed
-        if {git diff origin/$updateBranch --quiet --exit-code} {
-          # nothing was changed, suppress commit
-          return 1
-        }
-        return 0
-      }
-
-      typeset -A results oldResults
-      for result in ''${(f)2}; {
-        results[$(cut -d' ' -f 3- <<< $result)]=$(cut -d' ' -f 1 <<< $result)
-      }
-      for result in ''${(f)oldBuildOutput}; {
-        oldResults[$(cut -d' ' -f 3 <<< $result)]=$(cut -d' ' -f 1 <<< $result)
-      }
-
-      for target in ''${(k)results}; {
-        if (( $results[$target] > ''${oldResults[$target]:-255} )) {
-          # detected a target that got worse, forbid continuation
-          return 1
-        }
-      }
-
-      return 0
+      report=$2
+      previousReport=$RUNTIME_DIRECTORY/previous-results.json
+      rm -f $previousReport
+      if git rev-parse --verify origin/$updateBranch &>/dev/null && \
+          [[ $(git rev-parse origin/$branch) != $(git rev-parse origin/$updateBranch) ]]; then
+        git show --pretty=format:"%B" --no-patch origin/$updateBranch | tail -n+4 > $previousReport
+        python3 ${./compare-results.py} $report $previousReport
+      else
+        python3 ${./compare-results.py} $report
+      fi
     }
 
     for branch in $(git branch --format '%(refname:strip=2)'); {
@@ -82,12 +58,25 @@ let
         echo Build for branch '"'$branch'"'
         git switch $branch
         nix flake lock --update-input nixpkgs
-        buildResult=$(nix run .#prebuild-script) || true
-        echo $buildResult
-        if {compare_results $branch $buildResult} {
-          echo "Update nixpkgs\n\nAutomated build result:\n$buildResult" |git commit -a -F -
+        report=$RUNTIME_DIRECTORY/build-results.json
+        rm -f $report
+        nix develop -c wat build --all --results-file $report || true
+        if buildResult=$(compare_results $branch $report); then
+          # Avoid duplicate commits when neither the lock nor host outcomes changed.
+          if git rev-parse --verify origin/$branch-${postfix} &>/dev/null && \
+              git diff origin/$branch-${postfix} --quiet --exit-code && \
+              [[ $buildResult == $(git show --pretty=format:"%B" --no-patch origin/$branch-${postfix} | tail -n+4) ]]; then
+            continue
+          fi
+          printf '%s\n\n%s\n%s\n' "Update nixpkgs" "Automated build result:" "$buildResult" |git commit -a -F -
           git push --force-with-lease origin HEAD:refs/heads/$branch-${postfix} || true
-        }
+        else
+          resultStatus=$?
+          # Missing, malformed or incomplete reports are infrastructure failures.
+          if (( resultStatus != 1 )) {
+            exit 1
+          }
+        fi
       }
     }
   '';
@@ -112,6 +101,7 @@ mkTrivialModule {
       gnupg
       lix
       openssh
+      python3
       strace
     ];
     serviceConfig = {
