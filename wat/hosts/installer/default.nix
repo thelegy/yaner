@@ -15,7 +15,7 @@ mkMachine { } (
       (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
     ];
 
-    isoImage.isoBaseName = "nixos-thelegy";
+    image.baseName = "nixos-thelegy";
 
     boot.kernelPackages = pkgs.linuxPackages;
 
