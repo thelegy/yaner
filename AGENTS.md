@@ -6,8 +6,11 @@
 - **Infrastructure**: NixOS configurations for multiple machines with secret management via sops-nix
 
 ## Build/Test/Deploy Commands
-- **Build machine**: `nix build .#nixosConfigurations.<hostname>`
-- **Deploy**: `deploy <switch|boot|reboot|test|dry-activate|build> <hostname>`
+- **Build machine**: `nix develop -c wat build <hostname>`
+- **Deploy**: `nix develop -c wat <switch|boot|reboot|test|dry-activate> <hostname>`
+- **wat CLI**: Use `wat` for builds and deployments. Run it via `nix develop -c wat` to make the development shell tools available. Bare `wat` commands work when direnv has already loaded the development shell.
+- **All hosts**: Pass `--all` (`-A`) to operate on all hosts in the flake, for example `nix develop -c wat build --all`.
+- **Replay files**: wat records runs in `.wat/logs/wat-events-*.jsonl` for later replay and analysis. The recording path is printed when a run starts.
 - **Format code**: `treefmt` (RFC-style Nix formatting)
 - **DNS preview**: `./bin/dnscontrol preview` (ALWAYS preview before push)
 - **DNS deploy**: `./bin/dnscontrol push`
