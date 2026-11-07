@@ -61,8 +61,6 @@ mkMachine { } (
       shell = pkgs.zsh;
       hashedPassword = "$6$rounds=424242$4dgdzqgZPjX9ZH0U$.UMfnUAG2LXFCuuyrKCwH2ORViJ2hZK4coYW1ZzpACjhDsIexhRGHVuOmD/6A5B8/c8ndbdX5jZxfA8NxCcXI0";
       packages = with pkgs; [
-        audacity
-        libreoffice
         xdg-utils
       ];
     };
@@ -83,16 +81,16 @@ mkMachine { } (
 
     environment.systemPackages =
       let
-        r-custom = pkgs.rWrapper.override {
-          packages = with pkgs.rPackages; [
-            rlang
-            tidyverse
-            rstatix
-            ggpubr
-            rcompanion
-            xtable
-          ];
-        };
+        # r-custom = pkgs.rWrapper.override {
+        #   packages = with pkgs.rPackages; [
+        #     rlang
+        #     tidyverse
+        #     rstatix
+        #     ggpubr
+        #     rcompanion
+        #     xtable
+        #   ];
+        # };
       in
       with pkgs;
       [
@@ -104,16 +102,16 @@ mkMachine { } (
         fzf
         git-filter-repo
         git-revise
-        mendeley
+        # mendeley
         mpv
-        mumble
+        # mumble
         obsidian
-        r-custom
+        # r-custom
         spotify
         tcpdump
         telegram-desktop
-        texlive.combined.scheme-full
-        thunderbird
+        # texlive.combined.scheme-full
+        # thunderbird
         viddy
         vscode
       ];
