@@ -137,7 +137,7 @@ mkTrivialModule {
     options = "caps:escape_shifted_capslock,compose:rctrl";
   };
 
-  programs.dms-shell = {
+  programs.dux-shell = {
     enable = true;
     plugins = {
       calculator.enable = true;
@@ -147,7 +147,7 @@ mkTrivialModule {
     };
   };
 
-  programs.dsearch.enable = true;
+  programs.dux-search.enable = true;
 
   # systemd.user.services.dms = {
   #   Service.Environment = [
@@ -155,7 +155,7 @@ mkTrivialModule {
   #   ];
   # };
 
-  services.displayManager.dms-greeter = {
+  services.displayManager.dux-greeter = {
     enable = true;
     compositor.name = "niri";
     configHome = "/home/beinke";
