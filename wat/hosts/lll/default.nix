@@ -72,18 +72,6 @@ mkMachine { } (
       "lisa"
     ];
 
-    services.xserver.enable = true;
-    services.xserver.desktopManager.plasma5.enable = true;
-    services.displayManager.sddm.enable = true;
-    services.displayManager.defaultSession = "plasmawayland";
-
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
-    };
-    environment.sessionVariables.GTK_USE_PORTAL = "1";
-    environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
     programs.ssh.setXAuthLocation = true;
 
     hardware.bluetooth = {
