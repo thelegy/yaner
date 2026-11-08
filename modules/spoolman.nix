@@ -3,16 +3,14 @@
   flake.nixosModules.spoolman = wat.mkModuleWrapped [ "spoolman" ] (
     {
       cfg,
-      pkgs,
-      flakes,
+      inputs',
       ...
     }:
 
     let
       hostName = "spoolman.0jb.de";
       port = 7020;
-      system = pkgs.stdenv.hostPlatform.system;
-      bin = flakes.nixpkgs-stable.legacyPackages.${system}.spoolman;
+      bin = inputs'.nixpkgs-stable.legacyPackages.spoolman;
     in
     {
 

@@ -1,7 +1,7 @@
-{ mkMachine, flakes, ... }:
+{ mkMachine, inputs, ... }:
 mkMachine
   {
-    nixpkgs = flakes.nixpkgs-stable;
+    nixpkgs = inputs.nixpkgs-stable;
   }
   (
     {
@@ -348,11 +348,11 @@ mkMachine
           isReadOnly = true;
         };
         config = containerArgs: {
-          imports = attrValues flakes.self.nixosModules ++ [
-            flakes.homemanager.nixosModules.home-manager
-            flakes.nix-index-database.nixosModules.nix-index
-            flakes.nixos-nftables-firewall.nixosModules.default
-            flakes.sops-nix.nixosModules.sops
+          imports = attrValues inputs.self.nixosModules ++ [
+            inputs.homemanager.nixosModules.home-manager
+            inputs.nix-index-database.nixosModules.nix-index
+            inputs.nixos-nftables-firewall.nixosModules.default
+            inputs.sops-nix.nixosModules.sops
           ];
           nixpkgs.pkgs = pkgs;
           system.stateVersion = "24.11";

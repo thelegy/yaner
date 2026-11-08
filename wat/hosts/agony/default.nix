@@ -1,8 +1,8 @@
-{ mkMachine, flakes, ... }:
+{ mkMachine, inputs, ... }:
 
 mkMachine
   {
-    nixpkgs = flakes.snm.inputs.nixpkgs;
+    nixpkgs = inputs.snm.inputs.nixpkgs;
   }
   (
     {
@@ -19,7 +19,7 @@ mkMachine
       mailserver.stateVersion = 5;
 
       imports = [
-        flakes.snm.nixosModule
+        inputs.snm.nixosModule
       ];
 
       wat.installer.hcloud = {

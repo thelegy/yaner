@@ -3,7 +3,6 @@
   flake.nixosModules.desktop = wat.mkModuleWrapped [ "desktop" ] (
     {
       cfg,
-      flakes,
       pkgs,
       ...
     }:

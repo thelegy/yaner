@@ -3,15 +3,11 @@
   flake.nixosModules.workstation = wat.mkModuleWrapped [ "workstation" ] (
     {
       cfg,
-      flakes,
+      inputs',
       lib,
       pkgs,
       ...
     }:
-    let
-      system = pkgs.stdenv.hostPlatform.system;
-      inputs = flakes;
-    in
     {
       wat.thelegy.cups.enable = true;
       wat.thelegy.desktop.enable = true;
@@ -93,7 +89,7 @@
           pkgs.usbutils
           pkgs.virt-manager
           pkgs.vscode
-          inputs.nixwrap.packages.${system}.wrap
+          inputs'.nixwrap.packages.wrap
         ];
       };
 
