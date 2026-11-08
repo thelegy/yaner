@@ -1,0 +1,47 @@
+{ wat, ... }:
+{
+  flake.nixosModules.spoolman = wat.mkModuleWrapped [ "spoolman" ] (
+    {
+      cfg,
+      pkgs,
+      flakes,
+      ...
+    }:
+
+    let
+      hostName = "spoolman.0jb.de";
+      port = 7020;
+      system = pkgs.stdenv.hostPlatform.system;
+      bin = flakes.nixpkgs-stable.legacyPackages.${system}.spoolman;
+    in
+    {
+
+      systemd.services.spoolman = {
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = "${bin}/bin/spoolman --port ${toString port}";
+          DynamicUser = true;
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateDevices = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          StateDirectory = "spoolman";
+          Environment = "SPOOLMAN_DIR_DATA=/var/lib/spoolman";
+        };
+      };
+
+      wat.thelegy.traefik.dynamicConfigs.spoolman = {
+        http.services.spoolman.loadBalancer = {
+          servers = [ { url = "http://127.0.0.1:${toString port}"; } ];
+        };
+        http.routers.spoolman = {
+          rule = "Host(`${hostName}`)";
+          service = "spoolman";
+        };
+      };
+
+    }
+
+  );
+}
