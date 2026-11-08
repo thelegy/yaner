@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.acme = wat.mkModuleWrapped [ "acme" ] (
+  flake.nixosModules.acme = wat.mkModule [ "acme" ] (
     {
       cfg,
       config,
@@ -10,7 +10,7 @@
     with lib;
 
     {
-      options = {
+      namespaceOptions = {
 
         staging = mkOption {
           type = types.bool;

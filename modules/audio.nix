@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.audio = wat.mkModuleWrapped [ "audio" ] (
+  flake.nixosModules.audio = wat.mkModule [ "audio" ] (
     {
       cfg,
 

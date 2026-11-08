@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.zsh = wat.mkModuleWrapped [ "zsh" ] (
+  flake.nixosModules.zsh = wat.mkModule [ "zsh" ] (
     {
       cfg,
       config,

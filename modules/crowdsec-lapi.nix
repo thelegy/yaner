@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.crowdsec-lapi = wat.mkModuleWrapped [ "crowdsec-lapi" ] (
+  flake.nixosModules.crowdsec-lapi = wat.mkModule [ "crowdsec-lapi" ] (
     {
       cfg,
       config,
@@ -15,7 +15,7 @@
       yaml = pkgs.formats.yaml { };
     in
     {
-      options = { };
+      namespaceOptions = { };
 
       config =
         let

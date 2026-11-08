@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.leg-net = wat.mkModuleWrapped [ "leg-net" ] (
+  flake.nixosModules.leg-net = wat.mkModule [ "leg-net" ] (
     {
       cfg,
       config,

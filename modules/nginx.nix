@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.nginx = wat.mkModuleWrapped [ "nginx" ] (
+  flake.nixosModules.nginx = wat.mkModule [ "nginx" ] (
     {
       cfg,
       config,
@@ -10,7 +10,7 @@
     with lib;
 
     {
-      options = {
+      namespaceOptions = {
 
         port = mkOption {
           type = types.port;

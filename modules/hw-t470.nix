@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.hw-t470 = wat.mkModuleWrapped [ "hw-t470" ] (
+  flake.nixosModules.hw-t470 = wat.mkModule [ "hw-t470" ] (
     {
       cfg,
       lib,

@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.base = wat.mkModuleWrapped [ "base" ] (
+  flake.nixosModules.base = wat.mkModule [ "base" ] (
     {
       cfg,
       lib,

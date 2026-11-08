@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.irb-kerberos = wat.mkModuleWrapped [ "irb-kerberos" ] (
+  flake.nixosModules.irb-kerberos = wat.mkModule [ "irb-kerberos" ] (
     { cfg, pkgs, ... }:
 
     {

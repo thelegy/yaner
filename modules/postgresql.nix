@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.postgresql = wat.mkModuleWrapped [ "postgresql" ] (
+  flake.nixosModules.postgresql = wat.mkModule [ "postgresql" ] (
     {
       cfg,
       lib,
@@ -12,7 +12,7 @@
 
     {
 
-      options = {
+      namespaceOptions = {
         enable = mkOption {
           type = types.bool;
           default = false;

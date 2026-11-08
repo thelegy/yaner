@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.backup = wat.mkModuleWrapped [ "backup" ] (
+  flake.nixosModules.backup = wat.mkModule [ "backup" ] (
     {
       cfg,
       lib,
@@ -10,7 +10,7 @@
     }:
     with lib;
     {
-      options = {
+      namespaceOptions = {
         extraExcludes = mkOption {
           type = with types; listOf str;
           default = [ ];

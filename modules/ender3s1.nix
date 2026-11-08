@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.ender3s1 = wat.mkModuleWrapped [ "ender3s1" ] (
+  flake.nixosModules.ender3s1 = wat.mkModule [ "ender3s1" ] (
     {
       cfg,
       config,
@@ -12,7 +12,7 @@
 
     {
 
-      options = {
+      namespaceOptions = {
 
         # mcu = mkOption {
         #   type = types.str;

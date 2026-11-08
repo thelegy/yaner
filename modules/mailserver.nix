@@ -1,18 +1,18 @@
 { wat, ... }:
 {
-  flake.nixosModules.mailserver =
+  flake.nixosModules.mailserver = wat.mkModule [ "mailserver" ] (
     {
+      cfg,
       config,
       lib,
       ...
     }:
     with lib;
     let
-      cfg = wat.fromNamespace [ "mailserver" ] config;
       sops-secrets = config.sops.secrets;
     in
-    (wat.mkModuleWrapped [ "mailserver" ] {
-      options = {
+    {
+      namespaceOptions = {
 
         useACMEHost = mkOption {
           type = types.str;
@@ -146,8 +146,7 @@
           # TODO: aid with dns config, e.g. generated zonefile, ect.
 
         };
-    })
-    // {
+
       options = {
 
         mailserver.accounts = mkOption {
@@ -179,5 +178,6 @@
         };
 
       };
-    };
+    }
+  );
 }

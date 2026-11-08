@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.monitoring-smart = wat.mkModuleWrapped [ "monitoring-smart" ] (
+  flake.nixosModules.monitoring-smart = wat.mkModule [ "monitoring-smart" ] (
     { cfg, config, ... }:
 
     {

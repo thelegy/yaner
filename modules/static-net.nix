@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.static-net = wat.mkModuleWrapped [ "static-net" ] (
+  flake.nixosModules.static-net = wat.mkModule [ "static-net" ] (
     {
       cfg,
       config,

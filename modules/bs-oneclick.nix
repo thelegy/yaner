@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.bs-oneclick = wat.mkModuleWrapped [ "bs-oneclick" ] (
+  flake.nixosModules.bs-oneclick = wat.mkModule [ "bs-oneclick" ] (
     {
       cfg,
       lib,

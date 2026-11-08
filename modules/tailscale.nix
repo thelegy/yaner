@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.tailscale = wat.mkModuleWrapped [ "tailscale" ] (
+  flake.nixosModules.tailscale = wat.mkModule [ "tailscale" ] (
     {
       cfg,
       lib,
@@ -14,7 +14,7 @@
     # > sudo -u tailscale tailscale up --netfilter-mode=off
 
     {
-      options = {
+      namespaceOptions = {
 
         port = mkOption {
           type = types.port;

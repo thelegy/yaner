@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.rtlan-net = wat.mkModuleWrapped [ "rtlan-net" ] (
+  flake.nixosModules.rtlan-net = wat.mkModule [ "rtlan-net" ] (
     {
       cfg,
       config,

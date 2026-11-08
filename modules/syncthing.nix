@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.syncthing = wat.mkModuleWrapped [ "syncthing" ] (
+  flake.nixosModules.syncthing = wat.mkModule [ "syncthing" ] (
     {
       cfg,
       config,
@@ -11,7 +11,7 @@
     with lib;
 
     {
-      options = {
+      namespaceOptions = {
 
         passwordFile = mkOption {
           type = types.nullOr types.str;

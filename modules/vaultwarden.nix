@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.vaultwarden = wat.mkModuleWrapped [ "vaultwarden" ] (
+  flake.nixosModules.vaultwarden = wat.mkModule [ "vaultwarden" ] (
     {
       cfg,
       lib,
@@ -10,7 +10,7 @@
     }:
     with lib;
     {
-      options = {
+      namespaceOptions = {
         baseDomain = mkOption {
           type = types.str;
           default = "beinke.cloud";

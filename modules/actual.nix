@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.actual = wat.mkModuleWrapped [ "actual" ] (
+  flake.nixosModules.actual = wat.mkModule [ "actual" ] (
     {
       cfg,
 
@@ -11,7 +11,7 @@
     }:
 
     {
-      options = {
+      namespaceOptions = {
         domain = lib.mkOption {
           type = lib.types.str;
           default = "actual.beinke.cloud";

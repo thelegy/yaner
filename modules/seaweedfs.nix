@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.seaweedfs = wat.mkModuleWrapped [ "seaweedfs" ] (
+  flake.nixosModules.seaweedfs = wat.mkModule [ "seaweedfs" ] (
     {
       cfg,
       lib,
@@ -9,7 +9,7 @@
     }:
     {
 
-      options = {
+      namespaceOptions = {
 
         master = {
           enable = lib.mkEnableOption "the seaweedfs master service";

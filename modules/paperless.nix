@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.paperless = wat.mkModuleWrapped [ "paperless" ] (
+  flake.nixosModules.paperless = wat.mkModule [ "paperless" ] (
     {
       cfg,
       config,
@@ -9,7 +9,7 @@
     }:
     {
 
-      options = {
+      namespaceOptions = {
 
         dataDir = lib.mkOption {
           type = lib.types.str;

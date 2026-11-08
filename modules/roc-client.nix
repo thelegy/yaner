@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.roc-client = wat.mkModuleWrapped [ "roc-client" ] (
+  flake.nixosModules.roc-client = wat.mkModule [ "roc-client" ] (
     {
       cfg,
       lib,
@@ -11,7 +11,7 @@
 
     {
 
-      options = {
+      namespaceOptions = {
 
         serverAddress = mkOption {
           type = types.str;

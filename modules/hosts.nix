@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.hosts = wat.mkModuleWrapped [ "hosts" ] (
+  flake.nixosModules.hosts = wat.mkModule [ "hosts" ] (
     {
       cfg,
       config,
@@ -10,7 +10,7 @@
     with lib;
     {
 
-      options = {
+      namespaceOptions = {
         hosts = mkOption {
           type = types.attrsOf (
             types.submodule (

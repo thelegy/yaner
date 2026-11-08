@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.monitoring-server = wat.mkModuleWrapped [ "monitoring-server" ] (
+  flake.nixosModules.monitoring-server = wat.mkModule [ "monitoring-server" ] (
     { cfg, config, ... }:
     let
       domain = "prometheus.0jb.de";

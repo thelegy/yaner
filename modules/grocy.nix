@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.grocy = wat.mkModuleWrapped [ "grocy" ] (
+  flake.nixosModules.grocy = wat.mkModule [ "grocy" ] (
     {
       cfg,
       lib,

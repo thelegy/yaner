@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.loki = wat.mkModuleWrapped [ "loki" ] (
+  flake.nixosModules.loki = wat.mkModule [ "loki" ] (
     { cfg, ... }:
     let
       domain = "loki.0jb.de";

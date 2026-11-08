@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.audiobookshelf = wat.mkModuleWrapped [ "audiobookshelf" ] (
+  flake.nixosModules.audiobookshelf = wat.mkModule [ "audiobookshelf" ] (
     { cfg, config, ... }:
     let
       dir = "/srv/audiobooks";

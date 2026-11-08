@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.workstation = wat.mkModuleWrapped [ "workstation" ] (
+  flake.nixosModules.workstation = wat.mkModule [ "workstation" ] (
     {
       cfg,
       inputs',

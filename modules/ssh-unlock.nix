@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.ssh-unlock = wat.mkModuleWrapped [ "ssh-unlock" ] (
+  flake.nixosModules.ssh-unlock = wat.mkModule [ "ssh-unlock" ] (
     {
       cfg,
       lib,
@@ -10,7 +10,7 @@
     with lib;
 
     {
-      options = {
+      namespaceOptions = {
 
         interface = mkOption {
           description = ''

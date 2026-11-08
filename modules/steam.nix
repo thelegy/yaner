@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.steam = wat.mkModuleWrapped [ "steam" ] (
+  flake.nixosModules.steam = wat.mkModule [ "steam" ] (
     {
       cfg,
       config,

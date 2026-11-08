@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.desktop = wat.mkModuleWrapped [ "desktop" ] (
+  flake.nixosModules.desktop = wat.mkModule [ "desktop" ] (
     {
       cfg,
       pkgs,

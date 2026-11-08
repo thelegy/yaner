@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.prebuild = wat.mkModuleWrapped [ "prebuild" ] (
+  flake.nixosModules.prebuild = wat.mkModule [ "prebuild" ] (
     {
       cfg,
       pkgs,

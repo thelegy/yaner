@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.firewall = wat.mkModuleWrapped [ "firewall" ] (
+  flake.nixosModules.firewall = wat.mkModule [ "firewall" ] (
     { cfg, lib, ... }:
     {
 

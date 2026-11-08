@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.libation = wat.mkModuleWrapped [ "libation" ] (
+  flake.nixosModules.libation = wat.mkModule [ "libation" ] (
     {
       cfg,
       config,

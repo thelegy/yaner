@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.crowdsec = wat.mkModuleWrapped [ "crowdsec" ] (
+  flake.nixosModules.crowdsec = wat.mkModule [ "crowdsec" ] (
     {
       cfg,
       config,
@@ -22,7 +22,7 @@
       };
     in
     {
-      options = {
+      namespaceOptions = {
         lapiDomain = mkOption {
           type = types.str;
           default = "crowdsec.0jb.de";

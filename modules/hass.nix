@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.hass = wat.mkModuleWrapped [ "hass" ] (
+  flake.nixosModules.hass = wat.mkModule [ "hass" ] (
     {
       cfg,
       config,

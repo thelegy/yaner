@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.pocket-id = wat.mkModuleWrapped [ "pocket-id" ] (
+  flake.nixosModules.pocket-id = wat.mkModule [ "pocket-id" ] (
     {
       cfg,
       lib,
@@ -9,7 +9,7 @@
     }:
     with lib;
     {
-      options = {
+      namespaceOptions = {
         domain = mkOption {
           type = types.str;
           default = "auth.beinke.cloud";

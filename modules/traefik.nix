@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.traefik = wat.mkModuleWrapped [ "traefik" ] (
+  flake.nixosModules.traefik = wat.mkModule [ "traefik" ] (
     {
       cfg,
       config,
@@ -15,7 +15,7 @@
     in
     {
 
-      options = {
+      namespaceOptions = {
 
         sopsCredentialsFile = mkOption {
           type = types.nullOr types.str;

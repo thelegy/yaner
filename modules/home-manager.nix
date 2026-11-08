@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.homeManager = wat.mkModuleWrapped [ "homeManager" ] (
+  flake.nixosModules.homeManager = wat.mkModule [ "homeManager" ] (
     {
       cfg,
       lib,

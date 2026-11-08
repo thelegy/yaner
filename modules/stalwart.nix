@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.stalwart = wat.mkModuleWrapped [ "stalwart" ] (
+  flake.nixosModules.stalwart = wat.mkModule [ "stalwart" ] (
     {
       cfg,
       config,
@@ -11,7 +11,7 @@
     with lib;
 
     {
-      options = {
+      namespaceOptions = {
 
         reportDomain = mkOption {
           description = "domain name for use in Delivery Status Notifications";

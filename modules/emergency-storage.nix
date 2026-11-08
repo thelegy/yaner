@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.emergencyStorage = wat.mkModuleWrapped [ "emergencyStorage" ] (
+  flake.nixosModules.emergencyStorage = wat.mkModule [ "emergencyStorage" ] (
     {
       cfg,
       lib,
@@ -11,7 +11,7 @@
 
     {
 
-      options = {
+      namespaceOptions = {
 
         path = mkOption {
           type = types.str;

@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.amnesia = wat.mkModuleWrapped [ "amnesia" ] (
+  flake.nixosModules.amnesia = wat.mkModule [ "amnesia" ] (
     {
       cfg,
 

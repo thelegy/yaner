@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.spoolman = wat.mkModuleWrapped [ "spoolman" ] (
+  flake.nixosModules.spoolman = wat.mkModule [ "spoolman" ] (
     {
       cfg,
       inputs',

@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.matrix = wat.mkModuleWrapped [ "matrix" ] (
+  flake.nixosModules.matrix = wat.mkModule [ "matrix" ] (
     {
       cfg,
       lib,
@@ -12,7 +12,7 @@
 
     {
 
-      options = {
+      namespaceOptions = {
 
         baseDomain = mkOption {
           type = types.str;

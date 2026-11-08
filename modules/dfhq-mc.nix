@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.dfhq-mc = wat.mkModuleWrapped [ "dfhq-mc" ] (
+  flake.nixosModules.dfhq-mc = wat.mkModule [ "dfhq-mc" ] (
     {
       cfg,
       lib,

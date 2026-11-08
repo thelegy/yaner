@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.cups = wat.mkModuleWrapped [ "cups" ] (
+  flake.nixosModules.cups = wat.mkModule [ "cups" ] (
     { cfg, pkgs, ... }:
     {
       services.printing = {

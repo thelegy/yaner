@@ -1,10 +1,10 @@
 { wat, ... }:
 {
-  flake.nixosModules.monitoring = wat.mkModuleWrapped [ "monitoring" ] (
+  flake.nixosModules.monitoring = wat.mkModule [ "monitoring" ] (
     { cfg, lib, ... }:
     with lib;
     {
-      options = {
+      namespaceOptions = {
         remoteWriteUrl = mkOption {
           type = types.str;
           default = "https://prometheus.0jb.de/api/v1/write";

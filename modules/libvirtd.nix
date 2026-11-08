@@ -1,6 +1,6 @@
 { wat, ... }:
 {
-  flake.nixosModules.libvirtd = wat.mkModuleWrapped [ "libvirtd" ] (
+  flake.nixosModules.libvirtd = wat.mkModule [ "libvirtd" ] (
     {
       cfg,
       lib,
