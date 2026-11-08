@@ -1,0 +1,183 @@
+{ wat, ... }:
+{
+  flake.nixosModules.mailserver =
+    {
+      config,
+      lib,
+      ...
+    }:
+    with lib;
+    let
+      cfg = wat.fromNamespace [ "mailserver" ] config;
+      sops-secrets = config.sops.secrets;
+    in
+    (wat.mkModuleWrapped [ "mailserver" ] {
+      options = {
+
+        useACMEHost = mkOption {
+          type = types.str;
+          default = config.networking.fqdn;
+        };
+
+        mailDomain = mkOption {
+          type = types.str;
+          default = "beinke.cloud";
+        };
+
+        imapServer = mkOption {
+          type = types.str;
+          default = "imap.beinke.cloud";
+        };
+
+        smtpServer = mkOption {
+          type = types.str;
+          default = "smtp.beinke.cloud";
+        };
+
+        autoconfigDomains = mkOption {
+          type = types.listOf types.str;
+          default = [ cfg.mailDomain ];
+          # See https://wiki.mozilla.org/Thunderbird:Autoconfiguration
+        };
+
+        defaultQuota = mkOption {
+          type = types.str;
+          default = "5G";
+        };
+
+      };
+      config =
+        let
+          autoconfigXml = ''
+            <?xml version="1.0" encoding="UTF-8"?>
+
+            <clientConfig version="1.1">
+              <emailProvider id="${cfg.mailDomain}">
+                <domain>${cfg.mailDomain}</domain>
+                <displayName>%EMAILADDRESS%</displayName>
+                <displayShortName>%EMAILLOCALPART%</displayShortName>
+                <incomingServer type="imap">
+                  <hostname>${cfg.imapServer}</hostname>
+                  <port>993</port>
+                  <socketType>SSL</socketType>
+                  <authentication>password-cleartext</authentication>
+                  <username>%EMAILADDRESS%</username>
+                </incomingServer>
+                <outgoingServer type="smtp">
+                  <hostname>${cfg.smtpServer}</hostname>
+                  <port>465</port>
+                  <socketType>SSL</socketType>
+                  <authentication>password-cleartext</authentication>
+                  <username>%EMAILADDRESS%</username>
+                </outgoingServer>
+              </emailProvider>
+            </clientConfig>
+          '';
+        in
+        {
+
+          wat.thelegy.acme.reloadUnits = [
+            "dovecot.service"
+            "postfix.service"
+          ];
+
+          sops.secrets = pipe config.mailserver.accounts [
+            attrValues
+            (map (x: x.useSopsHashedPassword))
+            (filter isString)
+            (flip genAttrs (sopsKey: { }))
+          ];
+
+          wat.thelegy.nginx.enable = true;
+          services.nginx.virtualHosts."mail-autoconfig.localhost" = {
+            locations."/mail/config-v1.1.xml".extraConfig = ''
+              default_type application/xml;
+              charset utf8;
+              return 200 '${replaceStrings [ "\n" ] [ "\\n" ] autoconfigXml}';
+            '';
+          };
+
+          wat.thelegy.traefik.dynamicConfigs.mail = {
+            http.services.mail-autoconfig = {
+              loadBalancer.servers = [
+                { url = "http://mail-autoconfig.localhost:${toString config.wat.thelegy.nginx.port}"; }
+              ];
+              loadBalancer.passHostHeader = false;
+            };
+            http.routers.snapcast = {
+              rule =
+                let
+                  hosts_rule = concatMapStringsSep " || " (x: "Host(`autoconfig.${x}`)") cfg.autoconfigDomains;
+                in
+                "( ${hosts_rule} ) && Path(`/mail/config-v1.1.xml`)";
+              service = "mail-autoconfig";
+            };
+          };
+
+          # Use optionalattrs because mkIf pushes the test down into undefined options
+          mailserver = {
+            enable = true;
+
+            # Give the users a tool to manage their sive scripts
+            enableManageSieve = true;
+
+            fqdn = config.networking.fqdn;
+
+            # As per the dovecot documentation the following is sane and ensures
+            # the greatest level of compability with different clients.
+            hierarchySeparator = "/";
+            storage.directoryLayout = "fs";
+
+            # How expensive is "_very_ expensive"?
+            virusScanning = false;
+
+            x509.useACMEHost = cfg.useACMEHost;
+          };
+
+          systemd.services.dovecot.serviceConfig = {
+            SupplementaryGroups = [ "acme" ];
+          };
+          systemd.services.postfix.serviceConfig = {
+            SupplementaryGroups = [ "acme" ];
+          };
+
+          # TODO: snappymail
+          # TODO: dmarc-metrics-exporter
+          # TODO: aid with dns config, e.g. generated zonefile, ect.
+
+        };
+    })
+    // {
+      options = {
+
+        mailserver.accounts = mkOption {
+          type = types.attrsOf (
+            types.submodule (
+              { config, ... }:
+              {
+                options = {
+
+                  useSopsHashedPassword = mkOption {
+                    type = types.nullOr types.str;
+                    # Keep existing encrypted secret keys after the accounts rename.
+                    default = "mailserver/loginAccounts/${config.name}/hashedPassword";
+                  };
+
+                };
+                config = {
+
+                  hashedPasswordFile = mkIf (
+                    !isNull config.useSopsHashedPassword
+                  ) sops-secrets.${config.useSopsHashedPassword}.path;
+
+                  quota = mkDefault cfg.defaultQuota;
+
+                };
+              }
+            )
+          );
+        };
+
+      };
+    };
+}
