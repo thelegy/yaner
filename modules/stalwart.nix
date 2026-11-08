@@ -8,14 +8,12 @@
       ...
     }:
 
-    with lib;
-
     {
       namespaceOptions = {
 
-        reportDomain = mkOption {
+        reportDomain = lib.mkOption {
           description = "domain name for use in Delivery Status Notifications";
-          type = types.str;
+          type = lib.types.str;
         };
 
       };

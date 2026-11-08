@@ -7,8 +7,6 @@ mkMachine { } (
     pkgs,
     ...
   }:
-  with lib;
-
   {
     imports = [
       ./hardware-configuration.nix

@@ -7,16 +7,16 @@
       config,
       ...
     }:
-    with lib;
+
     {
       namespaceOptions = {
-        domain = mkOption {
-          type = types.str;
+        domain = lib.mkOption {
+          type = lib.types.str;
           default = "auth.beinke.cloud";
         };
 
-        sopsSecretsFile = mkOption {
-          type = types.str;
+        sopsSecretsFile = lib.mkOption {
+          type = lib.types.str;
           default = "pocket-id-env";
         };
       };

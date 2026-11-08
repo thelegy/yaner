@@ -7,7 +7,7 @@
       lib,
       ...
     }:
-    with lib;
+
     {
       wat.thelegy.wg-net.static = {
         privateKeyFile = config.sops.secrets.wgPrivateKey.path;

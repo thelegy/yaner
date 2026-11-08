@@ -7,7 +7,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     let
       hostName = "grocy.0jb.de";

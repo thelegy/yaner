@@ -7,7 +7,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     let
       bs-install-dir = "/home/beinke/.local/share/Steam/steamapps/common/Beat Saber";

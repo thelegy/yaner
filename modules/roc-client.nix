@@ -7,37 +7,36 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
 
       namespaceOptions = {
 
-        serverAddress = mkOption {
-          type = types.str;
+        serverAddress = lib.mkOption {
+          type = lib.types.str;
         };
 
-        localAddress = mkOption {
-          type = types.str;
+        localAddress = lib.mkOption {
+          type = lib.types.str;
         };
 
-        sourcePortOut = mkOption {
-          type = types.port;
+        sourcePortOut = lib.mkOption {
+          type = lib.types.port;
           default = 10001;
         };
 
-        repairPortOut = mkOption {
-          type = types.port;
+        repairPortOut = lib.mkOption {
+          type = lib.types.port;
           default = 10002;
         };
 
-        sourcePortIn = mkOption {
-          type = types.port;
+        sourcePortIn = lib.mkOption {
+          type = lib.types.port;
           default = 10011;
         };
 
-        repairPortIn = mkOption {
-          type = types.port;
+        repairPortIn = lib.mkOption {
+          type = lib.types.port;
           default = 10012;
         };
 

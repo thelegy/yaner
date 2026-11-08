@@ -8,27 +8,27 @@
       pkgs,
       ...
     }:
-    with lib;
+
     {
       namespaceOptions = {
-        baseDomain = mkOption {
-          type = types.str;
+        baseDomain = lib.mkOption {
+          type = lib.types.str;
           default = "beinke.cloud";
         };
 
-        domain = mkOption {
-          type = types.str;
+        domain = lib.mkOption {
+          type = lib.types.str;
           default = "pw.${cfg.baseDomain}";
         };
 
-        secretsFile = mkOption {
-          type = with types; nullOr str;
+        secretsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default =
             if isNull cfg.sopsSecretsFile then null else config.sops.secrets.${cfg.sopsSecretsFile}.path;
         };
 
-        sopsSecretsFile = mkOption {
-          type = types.nullOr types.str;
+        sopsSecretsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
       };
@@ -47,10 +47,10 @@
 
           systemd.services.vaultwarden = {
             preStart = "rm -f $STATE_DIRECTORY/config.json";
-            serviceConfig.SupplementaryGroups = mkIf sopsIsUsed [ "keys" ];
+            serviceConfig.SupplementaryGroups = lib.mkIf sopsIsUsed [ "keys" ];
           };
 
-          sops.secrets.${cfg.sopsSecretsFile} = mkIf sopsIsUsed {
+          sops.secrets.${cfg.sopsSecretsFile} = lib.mkIf sopsIsUsed {
             format = "yaml";
             group = group;
             mode = "0640";

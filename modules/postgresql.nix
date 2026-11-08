@@ -8,35 +8,34 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
 
       namespaceOptions = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Enable PostgreSQL backup functionality";
         };
 
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           description = "PostgreSQL package to use";
         };
 
-        backupPath = mkOption {
-          type = types.str;
+        backupPath = lib.mkOption {
+          type = lib.types.str;
           default = "/var/backups/postgresql";
           description = "Path where database dumps will be stored";
         };
       };
 
-      config = mkIf cfg.enable {
+      config = lib.mkIf cfg.enable {
         # Enable and configure PostgreSQL service
         services.postgresql = {
           enable = true;
           package = cfg.package;
-          settings.listen_addresses = mkDefault "";
+          settings.listen_addresses = lib.mkDefault "";
         };
 
         # PostgreSQL dump service for pre-backup

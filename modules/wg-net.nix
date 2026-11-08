@@ -7,7 +7,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     let
       cfg = wat.fromNamespace [ "wg-net" ] config;
@@ -15,50 +14,52 @@
 
       nodeConfigs =
         fileName:
-        pipe config.wat.machines [
-          (mapAttrs (_: v: v.${fileName}.file or null))
-          (filterAttrs (_: v: !isNull v))
-          (mapAttrs (_: import))
+        lib.pipe config.wat.machines [
+          (lib.mapAttrs (_: v: v.${fileName}.file or null))
+          (lib.filterAttrs (_: v: !isNull v))
+          (lib.mapAttrs (_: import))
         ];
 
       nodeType =
         net:
-        types.submodule (
+        lib.types.submodule (
           { name, config, ... }:
           {
             options = {
-              enable = mkOption {
+              enable = lib.mkOption {
                 description = "enable Wireguard network config layer";
-                type = types.bool;
+                type = lib.types.bool;
                 default = true;
               };
-              name = mkOption {
-                type = types.str;
+              name = lib.mkOption {
+                type = lib.types.str;
               };
-              publicKey = mkOption {
-                type = types.str;
+              publicKey = lib.mkOption {
+                type = lib.types.str;
               };
-              allowedIPs = mkOption {
-                type = types.listOf types.str;
-                default = forEach config.addresses (addr: "${head (strings.match "(.+)/[0-9]+" addr)}/32");
+              allowedIPs = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = lib.forEach config.addresses (
+                  addr: "${lib.head (lib.strings.match "(.+)/[0-9]+" addr)}/32"
+                );
               };
-              address = mkOption {
-                type = types.str;
+              address = lib.mkOption {
+                type = lib.types.str;
               };
-              addresses = mkOption {
-                type = types.listOf types.str;
+              addresses = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ config.address ];
               };
-              port = mkOption {
-                type = types.nullOr types.port;
+              port = lib.mkOption {
+                type = lib.types.nullOr lib.types.port;
                 default = net.defaultPort;
               };
-              endpoint = mkOption {
-                type = types.nullOr types.str;
+              endpoint = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
               };
-              persistentKeepalive = mkOption {
-                type = types.int;
+              persistentKeepalive = lib.mkOption {
+                type = lib.types.int;
                 default = 0;
               };
             };
@@ -66,33 +67,33 @@
           }
         );
 
-      netType = types.submodule (
+      netType = lib.types.submodule (
         { name, config, ... }:
         {
           options = {
-            enable = mkOption {
+            enable = lib.mkOption {
               description = "enable Wireguard network config layer";
-              type = types.bool;
+              type = lib.types.bool;
               default = true;
             };
-            name = mkOption {
-              type = types.str;
+            name = lib.mkOption {
+              type = lib.types.str;
             };
-            configFileName = mkOption {
-              type = types.str;
+            configFileName = lib.mkOption {
+              type = lib.types.str;
               default = "${name}-net.nix";
             };
-            privateKeyFile = mkOption {
-              type = types.str;
+            privateKeyFile = lib.mkOption {
+              type = lib.types.str;
             };
-            defaultPort = mkOption {
-              type = types.port;
+            defaultPort = lib.mkOption {
+              type = lib.types.port;
             };
-            nodes = mkOption {
-              type = types.attrsOf (nodeType config);
+            nodes = lib.mkOption {
+              type = lib.types.attrsOf (nodeType config);
               internal = true;
             };
-            thisNode = mkOption {
+            thisNode = lib.mkOption {
               type = nodeType config;
               internal = true;
             };
@@ -103,7 +104,7 @@
             in
             {
               inherit name;
-              nodes = filterAttrs (k: _: k != hostName) nodes;
+              nodes = lib.filterAttrs (k: _: k != hostName) nodes;
               thisNode = nodes.${hostName};
             };
         }
@@ -112,17 +113,19 @@
     in
     {
 
-      options = (wat.toNamespace [ "wg-net" ]) (mkOption {
-        type = types.attrsOf netType;
-        default = { };
-      });
+      options = (wat.toNamespace [ "wg-net" ]) (
+        lib.mkOption {
+          type = lib.types.attrsOf netType;
+          default = { };
+        }
+      );
 
       config =
         let
-          nets = attrValues cfg;
-          anyNetEnabled = any (x: x.enable) nets;
+          nets = lib.attrValues cfg;
+          anyNetEnabled = lib.any (x: x.enable) nets;
 
-          enabledNets = filter (x: x.enable) nets;
+          enabledNets = lib.filter (x: x.enable) nets;
           enabledNetNames = map (x: x.name) enabledNets;
         in
         {
@@ -134,19 +137,19 @@
             }
           ];
 
-          environment.systemPackages = mkIf anyNetEnabled [ pkgs.wireguard-tools ];
+          environment.systemPackages = lib.mkIf anyNetEnabled [ pkgs.wireguard-tools ];
 
           systemd.network.netdevs = (
-            mapAttrs (
+            lib.mapAttrs (
               _: net:
-              mkIf net.enable {
+              lib.mkIf net.enable {
                 netdevConfig.Name = net.name;
                 netdevConfig.Kind = "wireguard";
                 wireguardConfig.PrivateKeyFile = net.privateKeyFile;
                 wireguardConfig.ListenPort = net.thisNode.port;
-                wireguardPeers = pipe net.nodes [
-                  attrValues
-                  (filter (node: node.enable))
+                wireguardPeers = lib.pipe net.nodes [
+                  lib.attrValues
+                  (lib.filter (node: node.enable))
                   (map (node: {
                     PublicKey = node.publicKey;
                     AllowedIPs = node.allowedIPs;
@@ -154,9 +157,9 @@
                       let
                         noEndpoint = isNull node.endpoint;
                         noPort = isNull node.port;
-                        noColon = isNull (strings.match ".*:.*" node.endpoint);
+                        noColon = isNull (lib.strings.match ".*:.*" node.endpoint);
                       in
-                      mkIf (!noEndpoint) (
+                      lib.mkIf (!noEndpoint) (
                         if noEndpoint || noPort || !noColon then node.endpoint else "${node.endpoint}:${toString node.port}"
                       );
                     PersistentKeepalive = net.thisNode.persistentKeepalive;
@@ -167,9 +170,9 @@
           );
 
           systemd.network.networks = (
-            mapAttrs (
+            lib.mapAttrs (
               _: net:
-              mkIf net.enable {
+              lib.mkIf net.enable {
                 name = net.name;
                 address = net.thisNode.addresses;
               }

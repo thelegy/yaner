@@ -8,46 +8,46 @@
       config,
       ...
     }:
-    with lib;
+
     {
       namespaceOptions = {
-        extraExcludes = mkOption {
-          type = with types; listOf str;
+        extraExcludes = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        repo = mkOption {
-          type = types.str;
+        repo = lib.mkOption {
+          type = lib.types.str;
           default = "borg@backup.0jb.de:.";
         };
 
-        borgbaseRepo = mkOption {
-          type = with types; nullOr str;
+        borgbaseRepo = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
 
-        extraReadWritePaths = mkOption {
-          type = with types; listOf str;
+        extraReadWritePaths = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ "/.backup-snapshots" ];
         };
 
-        passphraseFile = mkOption {
-          type = types.str;
+        passphraseFile = lib.mkOption {
+          type = lib.types.str;
           default = "/etc/secrets/borg_passphrase";
         };
 
-        useSops = mkOption {
-          type = types.bool;
+        useSops = lib.mkOption {
+          type = lib.types.bool;
           default = true;
         };
 
-        sopsPassphrase = mkOption {
-          type = types.str;
+        sopsPassphrase = lib.mkOption {
+          type = lib.types.str;
           default = "borg-passphrase";
         };
 
-        useSnapshot = mkOption {
-          type = types.bool;
+        useSnapshot = lib.mkOption {
+          type = lib.types.bool;
           default = true;
         };
       };
@@ -59,16 +59,16 @@
           isBorgBase = !isNull cfg.borgbaseRepo;
         in
         {
-          sops.secrets.${cfg.sopsPassphrase} = mkIf cfg.useSops {
+          sops.secrets.${cfg.sopsPassphrase} = lib.mkIf cfg.useSops {
             format = "yaml";
             mode = "0600";
           };
 
-          programs.ssh.knownHosts.borgbase = mkIf isBorgBase {
+          programs.ssh.knownHosts.borgbase = lib.mkIf isBorgBase {
             hostNames = [ "${cfg.borgbaseRepo}.repo.borgbase.com" ];
             publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMS3185JdDy7ffnr0nLWqVy8FaAQeVh1QYUSiNpW5ESq";
           };
-          wat.thelegy.backup.repo = mkIf isBorgBase "ssh://${cfg.borgbaseRepo}@${cfg.borgbaseRepo}.repo.borgbase.com/./repo";
+          wat.thelegy.backup.repo = lib.mkIf isBorgBase "ssh://${cfg.borgbaseRepo}@${cfg.borgbaseRepo}.repo.borgbase.com/./repo";
 
           # Pre-backup target for services to hook into
           systemd.targets.pre-backup = {
@@ -96,11 +96,11 @@
                 fi
               ''}";
             };
-            preHook = mkIf cfg.useSnapshot ''
+            preHook = lib.mkIf cfg.useSnapshot ''
               ${pkgs.callPackage ./_backup/snapshot.nix { }}
               cd /.backup
             '';
-            readWritePaths = mkIf cfg.useSnapshot ([ "/.backup" ] ++ cfg.extraReadWritePaths);
+            readWritePaths = lib.mkIf cfg.useSnapshot ([ "/.backup" ] ++ cfg.extraReadWritePaths);
             exclude = [
               "dev"
               "mnt"
@@ -159,7 +159,7 @@
             };
           };
 
-          systemd.tmpfiles.rules = mkIf cfg.useSnapshot (
+          systemd.tmpfiles.rules = lib.mkIf cfg.useSnapshot (
             [
               "d /.backup 0700 root root - -"
             ]

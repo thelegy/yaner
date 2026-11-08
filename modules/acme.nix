@@ -7,38 +7,37 @@
       lib,
       ...
     }:
-    with lib;
 
     {
       namespaceOptions = {
 
-        staging = mkOption {
-          type = types.bool;
+        staging = lib.mkOption {
+          type = lib.types.bool;
           default = true;
         };
 
-        defaultCertName = mkOption {
-          type = types.str;
+        defaultCertName = lib.mkOption {
+          type = lib.types.str;
           default = config.networking.fqdn;
         };
 
-        extraDomainNames = mkOption {
-          type = types.listOf types.str;
+        extraDomainNames = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        sopsCredentialsFile = mkOption {
-          type = types.str;
+        sopsCredentialsFile = lib.mkOption {
+          type = lib.types.str;
           default = "acme-credentials-file";
         };
 
-        reloadUnits = mkOption {
-          type = types.listOf types.str;
+        reloadUnits = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
-        dnsProvider = mkOption {
-          type = types.str;
+        dnsProvider = lib.mkOption {
+          type = lib.types.str;
         };
 
       };
@@ -52,14 +51,14 @@
 
         security.acme = {
           acceptTerms = true;
-          defaults.server = mkIf (cfg.staging) "https://acme-staging-v02.api.letsencrypt.org/directory";
+          defaults.server = lib.mkIf (cfg.staging) "https://acme-staging-v02.api.letsencrypt.org/directory";
           defaults.email = "mail+letsencrypt@0jb.de";
           certs.${cfg.defaultCertName} = {
             inherit (cfg) extraDomainNames;
             dnsProvider = cfg.dnsProvider;
             environmentFile = config.sops.secrets.${cfg.sopsCredentialsFile}.path;
-            postRun = mkIf (length cfg.reloadUnits > 0) ''
-              systemctl reload-or-restart ${concatStringsSep " " cfg.reloadUnits}
+            postRun = lib.mkIf (lib.length cfg.reloadUnits > 0) ''
+              systemctl reload-or-restart ${lib.concatStringsSep " " cfg.reloadUnits}
             '';
           };
         };

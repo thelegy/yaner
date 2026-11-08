@@ -8,30 +8,28 @@
       ...
     }:
 
-    with lib;
-
     let
 
       cfg = config.legy.docpages;
-      page_cfgs = attrValues cfg.pages;
+      page_cfgs = lib.attrValues cfg.pages;
 
       perDocpageConfig =
         { name, ... }:
         {
           options = {
-            tag = mkOption {
-              type = types.str;
+            tag = lib.mkOption {
+              type = lib.types.str;
             };
-            flake = mkOption {
-              type = types.str;
+            flake = lib.mkOption {
+              type = lib.types.str;
             };
-            target_dir = mkOption {
-              type = types.str;
+            target_dir = lib.mkOption {
+              type = lib.types.str;
               default = cfg.target_dir;
             };
           };
           config = {
-            tag = mkDefault name;
+            tag = lib.mkDefault name;
           };
         };
 
@@ -52,11 +50,11 @@
             RemainAfterExit = true;
           };
           script = ''
-            mkdir -p ${escapeShellArg docpageCfg.target_dir}
+            mkdir -p ${lib.escapeShellArg docpageCfg.target_dir}
             ${pkgs.nix}/bin/nix build \
               --no-write-lock-file \
-              --out-link ${escapeShellArg "${docpageCfg.target_dir}/${docpageCfg.tag}"} \
-              ${escapeShellArg docpageCfg.flake}
+              --out-link ${lib.escapeShellArg "${docpageCfg.target_dir}/${docpageCfg.tag}"} \
+              ${lib.escapeShellArg docpageCfg.flake}
           '';
         };
       };
@@ -79,13 +77,13 @@
     in
     {
 
-      options.legy.docpages.pages = mkOption {
-        type = with types; loaOf (submodule perDocpageConfig);
+      options.legy.docpages.pages = lib.mkOption {
+        type = lib.types.loaOf (lib.types.submodule perDocpageConfig);
         default = { };
       };
 
-      options.legy.docpages.target_dir = mkOption {
-        type = types.str;
+      options.legy.docpages.target_dir = lib.mkOption {
+        type = lib.types.str;
       };
 
       config = {

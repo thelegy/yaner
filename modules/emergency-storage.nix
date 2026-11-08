@@ -7,19 +7,18 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
 
       namespaceOptions = {
 
-        path = mkOption {
-          type = types.str;
+        path = lib.mkOption {
+          type = lib.types.str;
           default = "/emergencystorage";
         };
 
-        size = mkOption {
-          type = types.int;
+        size = lib.mkOption {
+          type = lib.types.int;
           default = 1000;
         };
 
@@ -29,7 +28,7 @@
 
         systemd.services.emergencyStorage = {
           script = ''
-            ${pkgs.coreutils}/bin/dd if=/dev/random bs=1M count=${toString cfg.size} of=${escapeShellArg cfg.path}
+            ${pkgs.coreutils}/bin/dd if=/dev/random bs=1M count=${toString cfg.size} of=${lib.escapeShellArg cfg.path}
           '';
           serviceConfig = {
             Type = "oneshot";

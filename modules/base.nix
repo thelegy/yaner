@@ -8,27 +8,26 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
 
-      wat.thelegy.emergencyStorage.enable = mkDefault true;
-      wat.thelegy.firewall.enable = mkDefault true;
+      wat.thelegy.emergencyStorage.enable = lib.mkDefault true;
+      wat.thelegy.firewall.enable = lib.mkDefault true;
       wat.thelegy.homeManager.enable = true;
-      wat.thelegy.hosts.enable = mkDefault true;
-      wat.thelegy.monitoring.enable = mkDefault true;
-      wat.thelegy.monitoring-smart.enable = mkDefault true;
-      wat.thelegy.tailscale.enable = mkDefault true;
-      wat.thelegy.zsh.enable = mkDefault true;
+      wat.thelegy.hosts.enable = lib.mkDefault true;
+      wat.thelegy.monitoring.enable = lib.mkDefault true;
+      wat.thelegy.monitoring-smart.enable = lib.mkDefault true;
+      wat.thelegy.tailscale.enable = lib.mkDefault true;
+      wat.thelegy.zsh.enable = lib.mkDefault true;
 
-      boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
+      boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
       # Restore systemd default
-      services.logind.settings.Login.KillUserProcesses = mkDefault true;
+      services.logind.settings.Login.KillUserProcesses = lib.mkDefault true;
 
       sops.defaultSopsFile = config.wat.machines.${config.networking.hostName}."secrets.yaml".file;
 
-      networking.domain = mkDefault "0jb.de";
+      networking.domain = lib.mkDefault "0jb.de";
       networking.search = [ "0jb.de" ];
 
       console = {
@@ -65,17 +64,17 @@
       boot.tmp.useTmpfs = true;
 
       services = {
-        acpid.enable = mkDefault true;
-        avahi.enable = mkDefault true;
+        acpid.enable = lib.mkDefault true;
+        avahi.enable = lib.mkDefault true;
       };
 
-      services.openssh = mkDefault {
+      services.openssh = lib.mkDefault {
         enable = true;
         settings.PasswordAuthentication = true;
         settings.KbdInteractiveAuthentication = true;
       };
 
-      hardware.rasdaemon.enable = mkDefault true;
+      hardware.rasdaemon.enable = lib.mkDefault true;
       systemd.services.rasdaemon = {
         serviceConfig = {
           RestartSec = "20s";
@@ -100,7 +99,7 @@
         export PATH
       '';
 
-      documentation.man.cache.enable = mkDefault true;
+      documentation.man.cache.enable = lib.mkDefault true;
 
       users.mutableUsers = false;
       users.users.beinke = {
@@ -125,10 +124,10 @@
 
       nix.settings.auto-optimise-store = true;
       nix.gc = {
-        automatic = mkDefault true;
-        dates = mkDefault "Mon *-*-* 03:00:00";
-        persistent = mkDefault true;
-        options = mkDefault "--delete-older-than 14d";
+        automatic = lib.mkDefault true;
+        dates = lib.mkDefault "Mon *-*-* 03:00:00";
+        persistent = lib.mkDefault true;
+        options = lib.mkDefault "--delete-older-than 14d";
       };
       nix.extraOptions = ''
         experimental-features = nix-command flakes

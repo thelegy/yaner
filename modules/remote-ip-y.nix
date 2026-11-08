@@ -2,11 +2,11 @@
 {
   flake.nixosModules.remote-ip-y = wat.mkModule [ "remote-ip-y" ] (
     { cfg, lib, ... }:
-    with lib;
+
     {
       namespaceOptions = {
-        role = mkOption {
-          type = types.enum [
+        role = lib.mkOption {
+          type = lib.types.enum [
             "proxy"
             "satelite"
           ];

@@ -7,7 +7,6 @@ mkMachine { } (
     config,
     ...
   }:
-  with lib;
 
   let
     interface = "enp6s0";
@@ -61,10 +60,10 @@ mkMachine { } (
     hardware.cpu.amd.updateMicrocode = true;
     powerManagement.cpuFreqGovernor = "schedutil";
 
-    hardware.graphics.extraPackages = with pkgs; [
+    hardware.graphics.extraPackages = [
       #rocm-opencl-icd
       #rocm-opencl-runtime
-      rocmPackages.clr.icd
+      pkgs.rocmPackages.clr.icd
     ];
 
     environment.variables.AMD_VULKAN_ICD = "RADV";
@@ -106,10 +105,10 @@ mkMachine { } (
       "adbusers"
     ];
 
-    users.users.beinke.packages = with pkgs; [
+    users.users.beinke.packages = [
       #BeatSaberModManager
-      blender
-      patchelf
+      pkgs.blender
+      pkgs.patchelf
     ];
 
     environment.pathsToLink = [ "/libexec" ];

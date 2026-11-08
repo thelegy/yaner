@@ -7,31 +7,31 @@
       lib,
       ...
     }:
-    with lib;
+
     {
 
       namespaceOptions = {
-        hosts = mkOption {
-          type = types.attrsOf (
-            types.submodule (
+        hosts = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule (
               { name, config, ... }:
               {
                 options = {
-                  hostName = mkOption { type = types.str; };
-                  ipv4Addresses = mkOption {
-                    type = types.listOf types.str;
+                  hostName = lib.mkOption { type = lib.types.str; };
+                  ipv4Addresses = lib.mkOption {
+                    type = lib.types.listOf lib.types.str;
                     default = [ ];
                   };
-                  ipv6Addresses = mkOption {
-                    type = types.listOf types.str;
+                  ipv6Addresses = lib.mkOption {
+                    type = lib.types.listOf lib.types.str;
                     default = [ ];
                   };
-                  ipv6Tailscale = mkOption {
-                    type = types.nullOr types.str;
+                  ipv6Tailscale = lib.mkOption {
+                    type = lib.types.nullOr lib.types.str;
                     default = null;
                   };
-                  publicKey = mkOption {
-                    type = types.nullOr types.str;
+                  publicKey = lib.mkOption {
+                    type = lib.types.nullOr lib.types.str;
                     default = null;
                   };
                 };
@@ -49,12 +49,12 @@
         let
           nullableToList = x: if isNull x then [ ] else [ x ];
         in
-        ((wat.toNamespace [ "hosts" ]) { hosts = importJSON ./_hosts/hosts.json; })
+        ((wat.toNamespace [ "hosts" ]) { hosts = lib.importJSON ./_hosts/hosts.json; })
         // {
-          networking.hosts = mkMerge (
-            mapAttrsToList (
+          networking.hosts = lib.mkMerge (
+            lib.mapAttrsToList (
               _: host:
-              genAttrs (
+              lib.genAttrs (
                 if isNull host.ipv6Tailscale then
                   (host.ipv4Addresses ++ host.ipv6Addresses)
                 else
@@ -62,7 +62,7 @@
               ) (_: [ host.hostName ])
             ) cfg.hosts
           );
-          programs.ssh.knownHosts = mapAttrs (_: host: {
+          programs.ssh.knownHosts = lib.mapAttrs (_: host: {
             publicKey = host.publicKey;
             hostNames = [
               host.hostName
@@ -71,7 +71,7 @@
             ++ host.ipv4Addresses
             ++ host.ipv6Addresses
             ++ (nullableToList host.ipv6Tailscale);
-          }) (filterAttrs (_: host: !isNull host.publicKey) cfg.hosts);
+          }) (lib.filterAttrs (_: host: !isNull host.publicKey) cfg.hosts);
         };
 
     }

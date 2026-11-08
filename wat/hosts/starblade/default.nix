@@ -10,7 +10,7 @@ mkMachine
       config,
       ...
     }:
-    with lib;
+
     let
 
       networkInterface = "enp5s0";
@@ -195,9 +195,9 @@ mkMachine
         # rocmOverrideGfx = "9.0.0";
       };
 
-      environment.systemPackages = with pkgs; [
-        cilium-cli
-        kubectl
+      environment.systemPackages = [
+        pkgs.cilium-cli
+        pkgs.kubectl
       ];
 
       networking.nftables.firewall.rules.fwd = {
@@ -348,7 +348,7 @@ mkMachine
           isReadOnly = true;
         };
         config = containerArgs: {
-          imports = attrValues inputs.self.nixosModules ++ [
+          imports = lib.attrValues inputs.self.nixosModules ++ [
             inputs.homemanager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             inputs.nixos-nftables-firewall.nixosModules.default

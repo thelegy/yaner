@@ -17,7 +17,7 @@
 - **Development shell**: `nix develop` (exposes wat tools)
 
 ## Code Style Guidelines
-- **Imports**: Standard function signature `{ lib, config, pkgs, ... }:` with `with lib;`
+- **Imports**: Standard function signature `{ lib, config, pkgs, ... }:` with explicit qualified references (for example, `lib.mkIf`); avoid `with` expressions
 - **Formatting**: RFC-style Nix formatting via treefmt
 - **Modules**: Use `mkTrivialModule` for simple modules, structured attribute sets
 - **Naming**: Use kebab-case for files/directories, camelCase for Nix attributes

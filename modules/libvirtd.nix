@@ -7,7 +7,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
 
@@ -16,7 +15,7 @@
       virtualisation.libvirtd = {
         enable = true;
         qemu.runAsRoot = false;
-        onShutdown = mkDefault "shutdown";
+        onShutdown = lib.mkDefault "shutdown";
       };
 
     }

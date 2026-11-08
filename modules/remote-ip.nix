@@ -8,47 +8,47 @@
       pkgs,
       ...
     }:
-    with lib;
+
     {
       namespaceOptions = {
-        role = mkOption {
-          type = types.enum [
+        role = lib.mkOption {
+          type = lib.types.enum [
             "proxy"
             "satelite"
           ];
         };
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
         };
-        transportZone = mkOption {
-          type = types.str;
+        transportZone = lib.mkOption {
+          type = lib.types.str;
           default = "static";
         };
-        transportNetwork = mkOption {
-          type = types.str;
+        transportNetwork = lib.mkOption {
+          type = lib.types.str;
           default = "static";
         };
-        internetNetwork = mkOption {
-          type = types.str;
+        internetNetwork = lib.mkOption {
+          type = lib.types.str;
           default = "default";
         };
-        tableId = mkOption {
-          type = types.number;
+        tableId = lib.mkOption {
+          type = lib.types.number;
         };
-        staticIp = mkOption {
-          type = types.str;
+        staticIp = lib.mkOption {
+          type = lib.types.str;
         };
-        internalProxyIp = mkOption {
-          type = types.str;
+        internalProxyIp = lib.mkOption {
+          type = lib.types.str;
         };
-        internalSateliteIp = mkOption {
-          type = types.str;
+        internalSateliteIp = lib.mkOption {
+          type = lib.types.str;
         };
-        proxyIp = mkOption {
-          type = types.str;
+        proxyIp = lib.mkOption {
+          type = lib.types.str;
         };
-        sateliteIp = mkOption {
-          type = types.str;
+        sateliteIp = lib.mkOption {
+          type = lib.types.str;
         };
       };
       config =
@@ -76,21 +76,21 @@
             matchConfig.Name = cfg.name;
             address = [
               "${localTunnelIp}/30"
-              (mkIf isSatelite "${cfg.staticIp}/32")
+              (lib.mkIf isSatelite "${cfg.staticIp}/32")
             ];
             linkConfig.RequiredForOnline = "no";
-            networkConfig.IPv4Forwarding = mkIf isProxy true;
+            networkConfig.IPv4Forwarding = lib.mkIf isProxy true;
             routes = [
-              (mkIf isSatelite {
+              (lib.mkIf isSatelite {
                 Table = cfg.tableId;
                 Gateway = cfg.internalProxyIp;
               })
-              (mkIf isProxy {
+              (lib.mkIf isProxy {
                 Destination = cfg.staticIp;
                 Gateway = cfg.internalSateliteIp;
               })
             ];
-            routingPolicyRules = mkIf isSatelite [
+            routingPolicyRules = lib.mkIf isSatelite [
               {
                 routingPolicyRuleConfig = {
                   Family = "ipv4";
@@ -111,7 +111,7 @@
             ];
           };
 
-          systemd.network.networks.${cfg.internetNetwork}.networkConfig = mkIf isProxy {
+          systemd.network.networks.${cfg.internetNetwork}.networkConfig = lib.mkIf isProxy {
             IPv4Forwarding = true;
             IPv4ProxyARP = true;
           };
@@ -121,7 +121,7 @@
             zones.${cfg.name} = {
               ipv4Addresses = [ cfg.staticIp ];
             };
-            rules."${cfg.name}-spoofing" = mkIf isSatelite {
+            rules."${cfg.name}-spoofing" = lib.mkIf isSatelite {
               from = [ "${cfg.name}-interface" ];
               to = "all";
               ruleType = "ban";
@@ -130,7 +130,7 @@
                 "counter drop"
               ];
             };
-            rules."${cfg.name}-proxy" = mkIf isProxy {
+            rules."${cfg.name}-proxy" = lib.mkIf isProxy {
               from = "all";
               to = [ cfg.name ];
               extraLines = [ "counter accept" ];

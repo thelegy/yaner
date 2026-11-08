@@ -8,7 +8,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     # Initial setup (login):
     # > sudo -u tailscale tailscale up --netfilter-mode=off
@@ -16,14 +15,14 @@
     {
       namespaceOptions = {
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 41641;
           description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
         };
 
-        interfaceName = mkOption {
-          type = types.str;
+        interfaceName = lib.mkOption {
+          type = lib.types.str;
           default = "tailscale";
           description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
         };
@@ -46,7 +45,7 @@
             AmbientCapabilities = [
               "CAP_NET_ADMIN"
             ];
-            CapabilityBoundingSet = mkForce AmbientCapabilities;
+            CapabilityBoundingSet = lib.mkForce AmbientCapabilities;
 
             ExecStartPre = "+${pkgs.kmod}/bin/modprobe tun";
             ExecStart = "${pkgs.tailscale}/bin/tailscaled --port ${toString cfg.port} --tun ${lib.escapeShellArg cfg.interfaceName} --no-logs-no-support";

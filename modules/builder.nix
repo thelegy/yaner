@@ -2,7 +2,6 @@
 {
   flake.nixosModules.builder = wat.mkModule [ "builder" ] (
     { cfg, lib, ... }:
-    with lib;
 
     {
 

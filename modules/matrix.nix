@@ -8,29 +8,28 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
 
       namespaceOptions = {
 
-        baseDomain = mkOption {
-          type = types.str;
+        baseDomain = lib.mkOption {
+          type = lib.types.str;
           default = "0jb.de";
         };
 
-        matrixDomain = mkOption {
-          type = types.str;
+        matrixDomain = lib.mkOption {
+          type = lib.types.str;
           default = "matrix.${cfg.baseDomain}";
         };
 
-        elementDomain = mkOption {
-          type = types.str;
+        elementDomain = lib.mkOption {
+          type = lib.types.str;
           default = "element.${cfg.baseDomain}";
         };
 
-        secretsFile = mkOption {
-          type = types.str;
+        secretsFile = lib.mkOption {
+          type = lib.types.str;
           default =
             if isNull cfg.sopsSecretsFile then
               "${config.services.matrix-synapse.dataDir}/secrets.yml"
@@ -38,8 +37,8 @@
               config.sops.secrets.${cfg.sopsSecretsFile}.path;
         };
 
-        sopsSecretsFile = mkOption {
-          type = types.nullOr types.str;
+        sopsSecretsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
 
@@ -51,9 +50,9 @@
         in
         {
 
-          systemd.services.matrix-synapse.serviceConfig.SupplementaryGroups = mkIf sopsIsUsed [ "keys" ];
+          systemd.services.matrix-synapse.serviceConfig.SupplementaryGroups = lib.mkIf sopsIsUsed [ "keys" ];
 
-          sops.secrets.${cfg.sopsSecretsFile} = mkIf sopsIsUsed {
+          sops.secrets.${cfg.sopsSecretsFile} = lib.mkIf sopsIsUsed {
             format = "yaml";
             group = "matrix-synapse";
             mode = "0640";
@@ -76,7 +75,7 @@
             enable = true;
             log.root.level = "WARNING";
 
-            extras = mkForce [
+            extras = lib.mkForce [
               "systemd"
               "postgres"
               "url-preview"

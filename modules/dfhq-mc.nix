@@ -7,7 +7,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     let
       hostname = "mc.dfhq.dedyn.io";

@@ -8,7 +8,7 @@
       pkgs,
       ...
     }:
-    with lib;
+
     let
       dir = "/srv/libation";
       group = config.services.audiobookshelf.group;

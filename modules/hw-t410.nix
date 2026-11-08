@@ -2,12 +2,11 @@
 {
   flake.nixosModules.hw-t410 = wat.mkModule [ "hw-t410" ] (
     { cfg, lib, ... }:
-    with lib;
 
     {
 
       # Enable Microcode updates
-      hardware.cpu.intel.updateMicrocode = mkDefault true;
+      hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
 
       # Enable silent fan profile
       services.thinkfan = {

@@ -8,8 +8,6 @@
       ...
     }:
 
-    with lib;
-
     let
 
       cfg = config.services.kea;
@@ -49,7 +47,7 @@
               ];
             in
             {
-              ExecStart = concatMapStringsSep " " escapeShellArg args;
+              ExecStart = lib.concatMapStringsSep " " lib.escapeShellArg args;
             };
         };
       };
@@ -58,25 +56,25 @@
     {
 
       options.services.kea = {
-        enable = mkEnableOption "Kea service";
-        package = mkOption {
-          type = types.package;
+        enable = lib.mkEnableOption "Kea service";
+        package = lib.mkOption {
+          type = lib.types.package;
           default = pkgs.kea;
           defaultText = "pkgs.kea";
           description = ''
             The package used for the Kea service.
           '';
         };
-        interfaces = mkOption {
-          type = types.listOf types.str;
+        interfaces = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           defaultText = "[]";
           description = ''
             The interfaces Kea should listen on.
           '';
         };
-        additionalConfig = mkOption {
-          type = types.attrs;
+        additionalConfig = lib.mkOption {
+          type = lib.types.attrs;
           default = { };
           defaultText = "{}";
           description = ''

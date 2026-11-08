@@ -4,8 +4,6 @@
   config,
   ...
 }:
-with lib;
-
 let
   rocSourcePortOut = 10001;
   rocRepairPortOut = 10002;
@@ -90,7 +88,7 @@ in
           {
             name = libpipewire-module-roc-source
             args = {
-              local.ip = ${head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address)}
+              local.ip = ${lib.head (lib.splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address)}
               resampler.profile = medium
               sess.latency.msec = 60
               local.source.port = ${toString rocSourcePortOut}
@@ -106,11 +104,13 @@ in
       '')
       (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/60-roc-sender-2_0.conf" ''
         context.modules = [
-        ${concatMapStringsSep "\n" (client: ''
+        ${lib.concatMapStringsSep "\n" (client: ''
           {
             name = libpipewire-module-roc-sink
             args = {
-              remote.ip = ${head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.${client}.address)}
+              remote.ip = ${
+                lib.head (lib.splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.${client}.address)
+              }
               remote.source.port = ${toString rocSourcePortIn}
               remote.repair.port = ${toString rocRepairPortIn}
               sink.props = {
@@ -149,7 +149,7 @@ in
 
   systemd.services.wireplumber.postStart = ''
     ${pkgs.coreutils}/bin/sleep 5s
-    ${concatMapStringsSep "\n" (client: ''
+    ${lib.concatMapStringsSep "\n" (client: ''
       ${pkgs.pipewire}/bin/pw-link proxy-input-2_0:capture_FL roc-sink-${client}:send_FL || true
       ${pkgs.pipewire}/bin/pw-link proxy-input-2_0:capture_FR roc-sink-${client}:send_FR || true
     '') clients}
@@ -189,9 +189,9 @@ in
 
   users.users.beinke = {
     extraGroups = [ "pipewire" ];
-    packages = with pkgs; [
-      pulseaudio
-      pulsemixer
+    packages = [
+      pkgs.pulseaudio
+      pkgs.pulsemixer
     ];
   };
 

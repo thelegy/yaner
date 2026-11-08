@@ -7,7 +7,6 @@ mkMachine { } (
     config,
     ...
   }:
-  with lib;
   {
 
     system.stateVersion = "19.03";
@@ -51,8 +50,8 @@ mkMachine { } (
 
     wat.thelegy.roc-client = {
       enable = true;
-      serverAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.y.address);
-      localAddress = head (splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
+      serverAddress = lib.head (lib.splitString "/" config.wat.thelegy.wg-net.rtlan.nodes.y.address);
+      localAddress = lib.head (lib.splitString "/" config.wat.thelegy.wg-net.rtlan.thisNode.address);
     };
 
     wat.thelegy.traefik = {
@@ -60,7 +59,7 @@ mkMachine { } (
       dnsProvider = "desec";
     };
 
-    boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
     boot.supportedFilesystems = [ "ntfs" ];
 
     wat.thelegy.leg-net.enable = true;
@@ -145,7 +144,7 @@ mkMachine { } (
 
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
+      extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
     };
     environment.sessionVariables.GTK_USE_PORTAL = "1";
 
@@ -158,11 +157,11 @@ mkMachine { } (
     # Enable udev rules for mtp and such
     services.gvfs.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      entr
-      mendeley
-      tcpdump
-      viddy
+    environment.systemPackages = [
+      pkgs.entr
+      pkgs.mendeley
+      pkgs.tcpdump
+      pkgs.viddy
     ];
 
   }

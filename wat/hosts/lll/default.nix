@@ -7,7 +7,6 @@ mkMachine { } (
     config,
     ...
   }:
-  with lib;
   {
 
     system.stateVersion = "23.11";
@@ -49,8 +48,8 @@ mkMachine { } (
       #extraGroups = [ "wheel" ];
       shell = pkgs.zsh;
       hashedPassword = "$6$rounds=424242$n6onp6FmPbfv1VFb$tLW/WVJicio45CYydrhlRKZwmPMOnFZX7YdH8l1gm4Wja7VBVD5pmvG11UB.58m8Lh8DaClF10L.FtRJfKG7R0";
-      packages = with pkgs; [
-        xdg-utils
+      packages = [
+        pkgs.xdg-utils
       ];
     };
 
@@ -60,8 +59,8 @@ mkMachine { } (
       #extraGroups = [ "wheel" ];
       shell = pkgs.zsh;
       hashedPassword = "$6$rounds=424242$4dgdzqgZPjX9ZH0U$.UMfnUAG2LXFCuuyrKCwH2ORViJ2hZK4coYW1ZzpACjhDsIexhRGHVuOmD/6A5B8/c8ndbdX5jZxfA8NxCcXI0";
-      packages = with pkgs; [
-        xdg-utils
+      packages = [
+        pkgs.xdg-utils
       ];
     };
 
@@ -82,38 +81,37 @@ mkMachine { } (
     environment.systemPackages =
       let
         # r-custom = pkgs.rWrapper.override {
-        #   packages = with pkgs.rPackages; [
-        #     rlang
-        #     tidyverse
-        #     rstatix
-        #     ggpubr
-        #     rcompanion
-        #     xtable
+        #   packages = [
+        #     pkgs.rPackages.rlang
+        #     pkgs.rPackages.tidyverse
+        #     pkgs.rPackages.rstatix
+        #     pkgs.rPackages.ggpubr
+        #     pkgs.rPackages.rcompanion
+        #     pkgs.rPackages.xtable
         #   ];
         # };
       in
-      with pkgs;
       [
-        anki-bin
-        chromium
-        element-desktop
-        entr
-        firefox
-        fzf
-        git-filter-repo
-        git-revise
+        pkgs.anki-bin
+        pkgs.chromium
+        pkgs.element-desktop
+        pkgs.entr
+        pkgs.firefox
+        pkgs.fzf
+        pkgs.git-filter-repo
+        pkgs.git-revise
         # mendeley
-        mpv
+        pkgs.mpv
         # mumble
-        obsidian
+        pkgs.obsidian
         # r-custom
-        spotify
-        tcpdump
-        telegram-desktop
+        pkgs.spotify
+        pkgs.tcpdump
+        pkgs.telegram-desktop
         # texlive.combined.scheme-full
         # thunderbird
-        viddy
-        vscode
+        pkgs.viddy
+        pkgs.vscode
       ];
 
   }

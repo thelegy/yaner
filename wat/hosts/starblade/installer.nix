@@ -5,7 +5,6 @@
   config,
   ...
 }:
-with lib;
 let
   disk1 = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_1TB_S6Z1NU0XB24810M";
   disk2 = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_1TB_S6Z1NU0X827864W";
@@ -27,7 +26,7 @@ in
     "xfs"
   ];
 
-  boot.loader.systemd-boot.enable = mkDefault true;
+  boot.loader.systemd-boot.enable = lib.mkDefault true;
   boot.loader.systemd-boot.configurationLimit = 15;
 
   boot.swraid = {
@@ -85,17 +84,17 @@ in
 
     configure = {
       content = ''
-        installDisk1=${escapeShellArg disk1}
-        installDisk2=${escapeShellArg disk2}
-        efiPartUuid1=${escapeShellArg efiPartUuid1}
-        efiPartUuid2=${escapeShellArg efiPartUuid2}
-        systemPartUuid1=${escapeShellArg systemPartUuid1}
-        systemPartUuid2=${escapeShellArg systemPartUuid2}
-        systemSize=${escapeShellArg systemSize}
-        zilSize=${escapeShellArg zilSize}
-        systemUuid=${escapeShellArg systemUuid}
-        systemLabel=${escapeShellArg systemLabel}
-        hostname=${escapeShellArg hostname}
+        installDisk1=${lib.escapeShellArg disk1}
+        installDisk2=${lib.escapeShellArg disk2}
+        efiPartUuid1=${lib.escapeShellArg efiPartUuid1}
+        efiPartUuid2=${lib.escapeShellArg efiPartUuid2}
+        systemPartUuid1=${lib.escapeShellArg systemPartUuid1}
+        systemPartUuid2=${lib.escapeShellArg systemPartUuid2}
+        systemSize=${lib.escapeShellArg systemSize}
+        zilSize=${lib.escapeShellArg zilSize}
+        systemUuid=${lib.escapeShellArg systemUuid}
+        systemLabel=${lib.escapeShellArg systemLabel}
+        hostname=${lib.escapeShellArg hostname}
       '';
     };
 
@@ -103,7 +102,7 @@ in
       after = [ "configure" ];
       before = [ "wipe" ];
       content = ''
-        luksUuid=${escapeShellArg luksUuid}
+        luksUuid=${lib.escapeShellArg luksUuid}
         preData=$(</dev/stdin)
         luksPassphrase=$(${pkgs.jq}/bin/jq -r '.luksPassphrase' <<<$preData)
         unset preData

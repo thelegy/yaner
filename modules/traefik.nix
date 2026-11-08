@@ -8,7 +8,6 @@
       pkgs,
       ...
     }:
-    with lib;
 
     let
       format = pkgs.formats.toml { };
@@ -17,20 +16,20 @@
 
       namespaceOptions = {
 
-        sopsCredentialsFile = mkOption {
-          type = types.nullOr types.str;
+        sopsCredentialsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = "traefik-env";
         };
 
-        dynamicConfigs = mkOption {
-          type = types.attrsOf format.type;
+        dynamicConfigs = lib.mkOption {
+          type = lib.types.attrsOf format.type;
           default = {
             empty = { };
           };
         };
 
-        dnsProvider = mkOption {
-          type = types.str;
+        dnsProvider = lib.mkOption {
+          type = lib.types.str;
         };
 
       };
@@ -48,11 +47,11 @@
         in
         {
           networking.nftables.firewall.rules.traefik = {
-            from = mkDefault "all";
+            from = lib.mkDefault "all";
             to = [ "fw" ];
             inherit allowedTCPPorts allowedUDPPorts;
           };
-          networking.firewall = mkIf (!nft_firewall) {
+          networking.firewall = lib.mkIf (!nft_firewall) {
             inherit allowedTCPPorts allowedUDPPorts;
           };
 
@@ -62,14 +61,14 @@
             restartUnits = [ "traefik.service" ];
           };
 
-          systemd.services.traefik = mkIf (!isNull cfg.sopsCredentialsFile) {
+          systemd.services.traefik = lib.mkIf (!isNull cfg.sopsCredentialsFile) {
             serviceConfig.EnvironmentFile = config.sops.secrets.${cfg.sopsCredentialsFile}.path;
           };
 
-          environment.etc = mkMerge [
-            (mapAttrs' (
+          environment.etc = lib.mkMerge [
+            (lib.mapAttrs' (
               k: v:
-              nameValuePair "traefik/${k}.toml" {
+              lib.nameValuePair "traefik/${k}.toml" {
                 mode = "0644";
                 source = format.generate "traefik-${k}.toml" v;
               }
@@ -97,7 +96,7 @@
               };
               entryPoints = {
                 web = {
-                  address = mkDefault ":80";
+                  address = lib.mkDefault ":80";
                   http.redirections.entryPoint = {
                     to = "websecure";
                     scheme = "https";
@@ -110,8 +109,8 @@
                   };
                 };
                 websecure = {
-                  address = mkDefault ":443";
-                  asDefault = mkDefault true;
+                  address = lib.mkDefault ":443";
+                  asDefault = lib.mkDefault true;
                   http.tls.certResolver = "letsencrypt";
                   http3 = true;
                 };
@@ -137,7 +136,7 @@
                     provider = cfg.dnsProvider;
                   };
                 };
-                letsencrypt-staging = recursiveUpdate letsencrypt {
+                letsencrypt-staging = lib.recursiveUpdate letsencrypt {
                   acme.storage = "/var/lib/traefik/acme-staging.json";
                   acme.caServer = "https://acme-staging-v02.api.letsencrypt.org/directory";
                 };

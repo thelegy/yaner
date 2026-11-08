@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 {
   # wat.thelegy.rtlan-net.enable = true;
   # wat.thelegy.roc-client = {

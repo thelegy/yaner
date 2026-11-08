@@ -2,7 +2,7 @@
 
 mkMachine { } (
   { lib, config, ... }:
-  with lib;
+
   let
     yggdrasil-port = 42042;
   in

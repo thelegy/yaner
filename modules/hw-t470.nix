@@ -7,11 +7,10 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
       # Enable Microcode updates
-      hardware.cpu.intel.updateMicrocode = mkDefault true;
+      hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
 
       # Undervolting the cpu for less energy consumation and more power
       services.undervolt = {

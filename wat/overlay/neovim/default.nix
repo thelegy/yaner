@@ -74,20 +74,20 @@ neovim.override {
 
       colorscheme gruvbox
     '';
-    packages.myVimPackage = with vimPlugins; {
+    packages.myVimPackage = {
       start = [
-        LanguageClient-neovim
-        deoplete-nvim
-        fzf-vim
-        fzfWrapper
-        gruvbox-community
-        nerdtree
-        vim-devicons
-        vim-easymotion
-        vim-highlightedyank
-        vim-nix
-        vim-sneak
-        vim-surround
+        vimPlugins.LanguageClient-neovim
+        vimPlugins.deoplete-nvim
+        vimPlugins.fzf-vim
+        vimPlugins.fzfWrapper
+        vimPlugins.gruvbox-community
+        vimPlugins.nerdtree
+        vimPlugins.vim-devicons
+        vimPlugins.vim-easymotion
+        vimPlugins.vim-highlightedyank
+        vimPlugins.vim-nix
+        vimPlugins.vim-sneak
+        vimPlugins.vim-surround
       ];
       opt = [ ];
     };

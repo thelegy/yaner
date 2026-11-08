@@ -8,13 +8,12 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
       namespaceOptions = {
 
-        passwordFile = mkOption {
-          type = types.nullOr types.str;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
         };
 
@@ -37,11 +36,11 @@
           services.syncthing = {
             enable = true;
             openDefaultPorts = true;
-            guiAddress = mkForce "127.0.0.1:${toString port}";
+            guiAddress = lib.mkForce "127.0.0.1:${toString port}";
 
-            user = mkDefault "beinke";
-            group = mkDefault "users";
-            dataDir = mkDefault "/srv/sync";
+            user = lib.mkDefault "beinke";
+            group = lib.mkDefault "users";
+            dataDir = lib.mkDefault "/srv/sync";
 
             overrideDevices = false;
             overrideFolders = false;

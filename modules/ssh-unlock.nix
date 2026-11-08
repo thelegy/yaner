@@ -7,24 +7,23 @@
       pkgs,
       ...
     }:
-    with lib;
 
     {
       namespaceOptions = {
 
-        interface = mkOption {
+        interface = lib.mkOption {
           description = ''
             Name of the interface that dhcp should be configured for in the initrd.
           '';
-          type = types.str;
+          type = lib.types.str;
         };
 
-        hostKeyFiles = mkOption {
+        hostKeyFiles = lib.mkOption {
           description = ''
             Host key files to copy into the unencrypted initrd and allow ssh
             access in the initrd from.
           '';
-          type = with types; listOf str;
+          type = lib.types.listOf lib.types.str;
           default = [ "/etc/secrets/initrd_ed25519_host_key" ];
         };
 

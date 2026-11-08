@@ -7,41 +7,41 @@
       lib,
       ...
     }:
-    with lib;
+
     let
       sops-secrets = config.sops.secrets;
     in
     {
       namespaceOptions = {
 
-        useACMEHost = mkOption {
-          type = types.str;
+        useACMEHost = lib.mkOption {
+          type = lib.types.str;
           default = config.networking.fqdn;
         };
 
-        mailDomain = mkOption {
-          type = types.str;
+        mailDomain = lib.mkOption {
+          type = lib.types.str;
           default = "beinke.cloud";
         };
 
-        imapServer = mkOption {
-          type = types.str;
+        imapServer = lib.mkOption {
+          type = lib.types.str;
           default = "imap.beinke.cloud";
         };
 
-        smtpServer = mkOption {
-          type = types.str;
+        smtpServer = lib.mkOption {
+          type = lib.types.str;
           default = "smtp.beinke.cloud";
         };
 
-        autoconfigDomains = mkOption {
-          type = types.listOf types.str;
+        autoconfigDomains = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ cfg.mailDomain ];
           # See https://wiki.mozilla.org/Thunderbird:Autoconfiguration
         };
 
-        defaultQuota = mkOption {
-          type = types.str;
+        defaultQuota = lib.mkOption {
+          type = lib.types.str;
           default = "5G";
         };
 
@@ -81,11 +81,11 @@
             "postfix.service"
           ];
 
-          sops.secrets = pipe config.mailserver.accounts [
-            attrValues
+          sops.secrets = lib.pipe config.mailserver.accounts [
+            lib.attrValues
             (map (x: x.useSopsHashedPassword))
-            (filter isString)
-            (flip genAttrs (sopsKey: { }))
+            (lib.filter lib.isString)
+            (lib.flip lib.genAttrs (sopsKey: { }))
           ];
 
           wat.thelegy.nginx.enable = true;
@@ -93,7 +93,7 @@
             locations."/mail/config-v1.1.xml".extraConfig = ''
               default_type application/xml;
               charset utf8;
-              return 200 '${replaceStrings [ "\n" ] [ "\\n" ] autoconfigXml}';
+              return 200 '${lib.replaceStrings [ "\n" ] [ "\\n" ] autoconfigXml}';
             '';
           };
 
@@ -107,7 +107,7 @@
             http.routers.snapcast = {
               rule =
                 let
-                  hosts_rule = concatMapStringsSep " || " (x: "Host(`autoconfig.${x}`)") cfg.autoconfigDomains;
+                  hosts_rule = lib.concatMapStringsSep " || " (x: "Host(`autoconfig.${x}`)") cfg.autoconfigDomains;
                 in
                 "( ${hosts_rule} ) && Path(`/mail/config-v1.1.xml`)";
               service = "mail-autoconfig";
@@ -149,15 +149,15 @@
 
       options = {
 
-        mailserver.accounts = mkOption {
-          type = types.attrsOf (
-            types.submodule (
+        mailserver.accounts = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule (
               { config, ... }:
               {
                 options = {
 
-                  useSopsHashedPassword = mkOption {
-                    type = types.nullOr types.str;
+                  useSopsHashedPassword = lib.mkOption {
+                    type = lib.types.nullOr lib.types.str;
                     # Keep existing encrypted secret keys after the accounts rename.
                     default = "mailserver/loginAccounts/${config.name}/hashedPassword";
                   };
@@ -165,11 +165,11 @@
                 };
                 config = {
 
-                  hashedPasswordFile = mkIf (
+                  hashedPasswordFile = lib.mkIf (
                     !isNull config.useSopsHashedPassword
                   ) sops-secrets.${config.useSopsHashedPassword}.path;
 
-                  quota = mkDefault cfg.defaultQuota;
+                  quota = lib.mkDefault cfg.defaultQuota;
 
                 };
               }

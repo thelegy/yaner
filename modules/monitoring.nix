@@ -2,15 +2,15 @@
 {
   flake.nixosModules.monitoring = wat.mkModule [ "monitoring" ] (
     { cfg, lib, ... }:
-    with lib;
+
     {
       namespaceOptions = {
-        remoteWriteUrl = mkOption {
-          type = types.str;
+        remoteWriteUrl = lib.mkOption {
+          type = lib.types.str;
           default = "https://prometheus.0jb.de/api/v1/write";
         };
-        lokiUrl = mkOption {
-          type = types.nullOr types.str;
+        lokiUrl = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = "https://loki.0jb.de/loki/api/v1/push";
         };
       };

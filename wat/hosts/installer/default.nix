@@ -8,7 +8,6 @@ mkMachine { } (
     config,
     ...
   }:
-  with lib;
   {
 
     imports = [

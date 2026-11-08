@@ -7,7 +7,6 @@
       lib,
       ...
     }:
-    with lib;
 
     let
       jobName = "yaner-prebuild";

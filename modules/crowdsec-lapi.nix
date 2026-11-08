@@ -8,7 +8,7 @@
       pkgs,
       ...
     }:
-    with lib;
+
     let
       lapi_credentials_path = "/etc/crowdsec/local_api_credentials.yaml";
       port = 8080;

@@ -7,13 +7,12 @@
       lib,
       ...
     }:
-    with lib;
 
     {
       namespaceOptions = {
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 17382;
         };
 

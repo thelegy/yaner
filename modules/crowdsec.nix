@@ -8,7 +8,7 @@
       pkgs,
       ...
     }:
-    with lib;
+
     let
       toYAML = lib.generators.toYAML { };
       yaml = pkgs.formats.yaml { };
@@ -23,28 +23,28 @@
     in
     {
       namespaceOptions = {
-        lapiDomain = mkOption {
-          type = types.str;
+        lapiDomain = lib.mkOption {
+          type = lib.types.str;
           default = "crowdsec.0jb.de";
         };
-        sopsLapiCredentialsFile = mkOption {
-          type = types.str;
+        sopsLapiCredentialsFile = lib.mkOption {
+          type = lib.types.str;
           default = "crowdsec-lapi-credentials";
         };
-        sopsBouncerCredentialsFile = mkOption {
-          type = types.str;
+        sopsBouncerCredentialsFile = lib.mkOption {
+          type = lib.types.str;
           default = "crowdsec-bouncer-credentials";
         };
-        parsers = mkOption {
-          type = types.listOf types.str;
+        parsers = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
-        scenarios = mkOption {
-          type = types.listOf types.str;
+        scenarios = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
-        journalctlFilters = mkOption {
-          type = types.listOf types.str;
+        journalctlFilters = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
       };
@@ -87,7 +87,7 @@
 
             "${configDir}/acquisition/journal.yaml".text = toYAML {
               source = "journalctl";
-              journalctl_filter = intersperse "+" cfg.journalctlFilters;
+              journalctl_filter = lib.intersperse "+" cfg.journalctlFilters;
               labels.type = "syslog";
             };
 
@@ -146,9 +146,9 @@
                 rm -rf /etc/crowdsec/{parsers,scenarios}/* || true
                 # mkdir -p /etc/crowdsec/{parsers,scenarios}
 
-                ${pkgs.crowdsec}/bin/cscli parsers install ${escapeShellArgs cfg.parsers}
+                ${pkgs.crowdsec}/bin/cscli parsers install ${lib.escapeShellArgs cfg.parsers}
 
-                ${pkgs.crowdsec}/bin/cscli scenarios install ${escapeShellArgs cfg.scenarios}
+                ${pkgs.crowdsec}/bin/cscli scenarios install ${lib.escapeShellArgs cfg.scenarios}
               '';
             in
             {
@@ -179,7 +179,7 @@
               };
             };
 
-          networking.nftables.ruleset = mkBefore ''
+          networking.nftables.ruleset = lib.mkBefore ''
             table inet firewall {
               set crowdsec-blacklists {
                 type ipv4_addr
