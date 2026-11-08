@@ -21,8 +21,6 @@
   flake = {
     overlay = import ../wat/overlay inputs;
 
-    nixosModules = config.wat.lib.findModules ../wat/modules;
-
     nixosConfigurations = config.wat.lib.findMachines ../wat/hosts;
   };
 }
