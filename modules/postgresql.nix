@@ -41,6 +41,8 @@
         # PostgreSQL dump service for pre-backup
         systemd.services.postgresql-dump = {
           description = "Dump PostgreSQL databases before backup";
+          requires = [ "postgresql.service" ];
+          after = [ "postgresql.service" ];
           serviceConfig = {
             Type = "oneshot";
             User = "postgres";
