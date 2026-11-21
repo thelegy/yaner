@@ -10,7 +10,7 @@
   },
   "include": [
     "dnsconfig.ts",
-    "hosts.json",
+    ".hosts.json",
     "types-dnscontrol.d.ts"
   ]
 }

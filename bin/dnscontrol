@@ -6,6 +6,8 @@ set -euo pipefail
 
 cd ${0:A:h:h}/dns
 
+# DNSControl confines require() to this directory, including symlink targets.
+cp ../modules/_hosts/hosts.json .hosts.json
 dnscontrol write-types
 tsc --project tsconfig.json
 sops exec-env creds.yaml "dnscontrol $*"

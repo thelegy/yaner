@@ -12,7 +12,7 @@ type HostData = {
   ipv6Tailscale?: string | null;
 };
 
-const hosts = require("hosts.json") as Record<string, HostData>;
+const hosts = require(".hosts.json") as Record<string, HostData>;
 
 function HOST(record_name: string, hostname?: string, options: RecordModifier[] = []): DomainModifier {
   const resolvedHostname = hostname || record_name;

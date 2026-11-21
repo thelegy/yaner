@@ -3,3 +3,6 @@
 result
 result-*
 .direnv
+
+# Local copy of modules/_hosts/hosts.json made by bin/dnscontrol.
+/dns/.hosts.json

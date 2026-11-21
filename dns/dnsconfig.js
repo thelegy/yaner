@@ -14,7 +14,7 @@ var DNS_DESEC = NewDnsProvider("desec");
 var DNS_HE = NewDnsProvider("he");
 var DNS_HETZNER = NewDnsProvider("hetzner");
 var DNS_INWX = NewDnsProvider("inwx");
-var hosts = require("hosts.json");
+var hosts = require(".hosts.json");
 function HOST(record_name, hostname, options) {
     var _a;
     if (options === void 0) { options = []; }
