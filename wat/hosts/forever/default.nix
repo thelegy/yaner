@@ -44,6 +44,7 @@ mkMachine { } (
       sopsSecretsFile = "matrix-synapse-keys";
     };
     wat.thelegy.postgresql.package = pkgs.postgresql_14;
+    wat.thelegy.mealie.enable = true;
     # wat.thelegy.stalwart = {
     #   enable = true;
     #   reportDomain = "beinke.cloud";

@@ -105,7 +105,7 @@ D("beinke.cloud", REG_NONE, DnsProvider("inwx"), CAA_LETSENCRYPT(), INWX_PARKING
     extra_spf: [
         "a:agony.0jb.de."
     ],
-}), FASTMAIL_MX("*"), FASTMAIL_MX("sibylle"), INGRESS("actual", "starblade"), INGRESS("audiobooks", "y"), INGRESS("auth", "starblade"), CNAME_ACME("autoconfig", "agony"), INGRESS("docs.sibylle", "starblade"), CNAME_ACME("imap", "agony"), INGRESS("paperless", "starblade"), CNAME_ACME("pw", "forever"), CNAME_ACME("smtp", "agony"));
+}), FASTMAIL_MX("*"), FASTMAIL_MX("sibylle"), INGRESS("actual", "starblade"), INGRESS("audiobooks", "y"), INGRESS("auth", "starblade"), CNAME_ACME("autoconfig", "agony"), CNAME_ACME("food", "forever"), INGRESS("docs.sibylle", "starblade"), CNAME_ACME("imap", "agony"), INGRESS("paperless", "starblade"), CNAME_ACME("pw", "forever"), CNAME_ACME("smtp", "agony"));
 D("janbeinke.com", REG_NONE, DnsProvider("inwx"), CAA_LETSENCRYPT(), INWX_PARKING("@"), ACME("@", "ingress"), FASTMAIL("janbeinke.com"), TXT("_keybase", "keybase-site-verification=zHhKLQ9z6u8O1qIS1irkZmAQng6Z--lzJMyMEjp5KFw"));
 D("thelegy.de", REG_NONE, DnsProvider("inwx"), CAA_LETSENCRYPT(), INWX_PARKING("@"), ACME("@", "ingress"), TXT("_keybase", "keybase-site-verification=EO_b3ub9rlX1xBO3KbEPfOh6PkrvTZXOOC0EzfIW0TI"));
 D("die-cloud.org", REG_NONE, DnsProvider("inwx"), CAA_LETSENCRYPT(), INWX_PARKING("@"), ACME("@", "ingress"), FASTMAIL("die-cloud.org"));
