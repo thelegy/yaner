@@ -62,6 +62,7 @@
 
       xdg.portal = {
         enable = true;
+        config.niri."org.freedesktop.impl.portal.FileChooser" = [ "dfiles" ];
         extraPortals = [
           pkgs.xdg-desktop-portal-gtk
           pkgs.xdg-desktop-portal-wlr
@@ -149,6 +150,14 @@
         };
       };
 
+      programs.dux-calendar = {
+        enable = true;
+        systemd.enable = true;
+      };
+      programs.dux-files = {
+        enable = true;
+        portal.enable = true;
+      };
       programs.dux-search.enable = true;
 
       # systemd.user.services.dms = {
