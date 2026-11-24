@@ -3,6 +3,22 @@ let
   system = final.stdenv.hostPlatform.system;
 in
 {
+  appimage-run = prev.appimage-run.override {
+    buildFHSEnv =
+      args:
+      final.buildFHSEnv (
+        args
+        // {
+          # Share host trust without loading SSH config whose root-owned
+          # Includes fail ownership checks in bubblewrap's user namespace.
+          extraBwrapArgs = (args.extraBwrapArgs or [ ]) ++ [
+            "--dir /etc/ssh"
+            "--symlink /.host-etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts"
+          ];
+        }
+      );
+  };
+
   atopile = final.python-atopile.pkgs.atopile;
 
   bs-oneclick = final.callPackage ./bs-oneclick.nix { };
