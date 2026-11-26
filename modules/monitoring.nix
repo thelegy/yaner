@@ -21,6 +21,9 @@
           configPath = "/etc/alloy";
         };
 
+        # Keep the tunnel up while Alloy flushes telemetry on shutdown.
+        systemd.services.alloy.after = [ "tailscaled.service" ];
+
         wat.thelegy.backup.extraExcludes = [
           "var/lib/private/alloy"
         ];
