@@ -48,9 +48,9 @@
           if git rev-parse --verify origin/$updateBranch &>/dev/null && \
               [[ $(git rev-parse origin/$branch) != $(git rev-parse origin/$updateBranch) ]]; then
             git show --pretty=format:"%B" --no-patch origin/$updateBranch | tail -n+4 > $previousReport
-            python3 ${./_prebuild/compare-results.py} $report $previousReport
+            ${pkgs.python3}/bin/python3 ${./_prebuild/compare-results.py} $report $previousReport
           else
-            python3 ${./_prebuild/compare-results.py} $report
+            ${pkgs.python3}/bin/python3 ${./_prebuild/compare-results.py} $report
           fi
         }
 
@@ -59,7 +59,7 @@
           if {git verify-commit $branch} {
             echo Build for branch '"'$branch'"'
             git switch $branch
-            nix flake lock --update-input nixpkgs
+            nix flake update nixpkgs
             report=$RUNTIME_DIRECTORY/build-results.json
             rm -f $report
             nix develop -c wat build --all --results-file $report || true
@@ -103,7 +103,6 @@
           pkgs.gnupg
           pkgs.lix
           pkgs.openssh
-          pkgs.python3
           pkgs.strace
         ];
         serviceConfig = {
