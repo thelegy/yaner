@@ -37,6 +37,9 @@
           <devices>
             <emulator>/run/libvirt/nix-emulators/qemu-kvm</emulator>
             <console type="pty" />
+            <channel type="unix">
+              <target type="virtio" name="org.qemu.guest_agent.0" />
+            </channel>
             <disk type="file" device="disk">
               <driver name="qemu" type="qcow2" />
               <source file="${targetDir}/${fileName}" />
@@ -80,7 +83,14 @@
         '';
         preStop = ''
           while true; do
-            state="$(${pkgs.libvirt}/bin/virsh domstate hass)"
+            if ! state="$(${pkgs.libvirt}/bin/virsh domstate hass 2>&1)"; then
+              domains="$(${pkgs.libvirt}/bin/virsh list --all --uuid)" || exit 1
+              if ! ${pkgs.ripgrep}/bin/rg -Fxq '${machineUuid}' <<< "$domains"; then
+                exit 0
+              fi
+              printf '%s\n' "$state" >&2
+              exit 1
+            fi
             case "$state" in
               running)
                 ${pkgs.libvirt}/bin/virsh shutdown hass
